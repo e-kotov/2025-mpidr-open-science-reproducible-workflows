@@ -3,6 +3,7 @@ title: "1. R packages version management"
 from: markdown+emoji
 code-annotations: hover
 eval: false
+number-sections: true
 ---
 
 [Skip to exercise \>\>](#exercise)
@@ -55,9 +56,37 @@ It can also serve as a so-called "backend" for [`{renv}`](#renv), that is it wil
 
 The goal of this exercise is setup a new blank project with isolated R packages library using [`{renv}`](#renv) and [`{pak}`](#pak) in such a way, so that all the specific package versions can be restored on a new computer or in a new folder.
 
+The tutorial is long and detailed, however in essence it is just a few steps. In @fig-tutorial-overiew you can find a summary of the steps and can click on them to get directly to the corresponding section of the exercise.
+
+```{mermaid}
+%%| label: fig-tutorial-overiew
+%%| fig-cap: "Tutorial steps overview"
+%%| eval: true
+flowchart TD
+    A["Create project folder & set package repository"] --> B["Initialize renv: **renv::init()**"]
+    B --> C["Configure renv: set snapshot type to 'all' and enable Posit Package Manager"]
+    C --> D["Install **pak** to speed up package installs and instruct **renv** to use it"]
+    D --> E["Install packages (e.g., targets)"]
+    E --> F["Snapshot package versions: **renv::snapshot()**"]
+    F --> G["Test restoration: copy project, delete renv/library, run **renv::restore()**"]
+
+    click A "#create-project"
+    click B "#renv-init"
+    click C "#renv-config"
+    click D "#install-pak"
+    click E "#install-packages"
+    click F "#snapshot"
+    click G "#test-restore"
+```
+
+
+::: {.callout-note}
+You can find the repository with the expected end result of the exercise at [https://github.com/e-kotov/2025-mpidr-workflows-reference-01](https://github.com/e-kotov/2025-mpidr-workflows-reference-01){target="_blank"}. If you would like to skip the exercise and just see how the package restoration process with `{renv}` works, feel free to download/clone this repository and follow the instructions starting with the [Test R packages restoration](#test-restore) step.
+:::
+
 ## Instructions
 
-### Create a new project folder
+### Create a new project folder {#create-project}
 
 Create a new folder wherever you would normally create a folder for a new research project.
 
@@ -73,6 +102,45 @@ In any case, once you are ready, run the following command in the R console to m
 getwd()
 ```
 
+### Setup packages repository
+
+By default, your `R` installation probably installs packages from CRAN ( https://cran.r-project.org/ ) or from CRAN mirror hosted by RStudio/Posit ( https://cran.rstudio.com/ ). These repositories are updated every day with latest R package versions, so you never know, which version of a package you will get when you install it. You can check which repository is used with:
+
+```{r}
+getOption("repos")
+```
+
+You will probably see:
+
+```r
+CRAN 
+"https://cran.rstudio.com" 
+```
+
+or:
+
+```r
+ CRAN
+"@CRAN@"
+```
+
+To have more control over which versions are installed, you may set the repository to [Posit Package Manager](https://packagemanager.posit.co/){target="_blank"} and constrain it to a certain date:
+
+```{r}
+options(repos = "https://packagemanager.posit.co/cran/2025-02-28")
+```
+
+If you run `getOption("repos")` again, you should see the URL you have entered above. If it is set, the package versions you install will always correspond to the date you used. This allows you to freeze the packages you use for your project in time and prevent installation of new versions which may break your code. You may change the date for this setting later and update the packages, test your code with newer versions and decide if you need to revert to older versions.
+
+::: {.callout-note}
+Unlike CRAN, Posit Package Manager provides pre-compiled binaries of R packages for Linux. This is particularly beneficial for Linux users and for last steps in this tutorial, where we build containers that are also based on Linux. Typically, R packages on Linux are installed from source, which can be time-consuming, and installing pre-compiled binaries speeds up the installation process significantly.
+:::
+
+::: {.callout-important}
+The `repos` option should be set before you move to the next step and initialise `{renv}`, as at the time of initialisation, `{renv}` will use the current value of the `repos` option. The option may be changed later, including manually in the `renv.lock` file.
+:::
+
+
 ### Install `{renv}`
 
 Install `{renv}` as you normally would. You should not install any other packages at this point, as after installing and initizalising `{renv}`, you would need to install then again, as R will start using your project directory as a package library and will not see any previously user-installed packages anymore.
@@ -82,7 +150,7 @@ install.packages("renv")
 ```
 
 
-### Initialise `{renv}`
+### Initialise `{renv}` {#renv-init}
 
 Initialise `{renv}` in the current project/working directory:
 
@@ -111,7 +179,33 @@ At this point, you need to restart the R session for `{renv}` to work. Do not ig
 
 Feel free to double check if the `{renv}` related files have been created in your project, as was shown in @fig-renv-files in the previous section.
 
-### Install `{pak}` 
+
+### Customize the `{renv}` configuration {#renv-config}
+
+Before you proceed, a few options related to `{renv}` operation should be set manually.
+
+#### Force `{renv}` to record all packages
+
+By default, `{renv}` tries to automatically identify which packages you actually use in your project and adds those to the lockfile `renv.lock` which would later be used to restore the package versions on a new computer. It does this by scanning all `*.R` script files in your project/working directory and tries to find lines like `library(ggplot2)`. Unfortunately, it does not always do it well, and you may also have another way of loading the packages that `{renv}` does not recognize.
+
+Therefore, it is better to just force `{renv}` to keep track not just the packages it "thinks" you use, but all packages you install while working with the current project. To do that, run the folliwing code in the `R` console:
+
+```{r}
+renv::settings$snapshot.type(value = "all")
+```
+
+This will change the setting in the `renv/settings.json` file. You could of course also open the file in editor and change the setting manually. You can find more information on this setting in the official [`{renv}` documentation](https://rstudio.github.io/renv/reference/snapshot.html){target="_blank"}.
+
+#### Instruct `{renv}` to use Posit Package Manager
+
+We have already set the `repos` option above to the Posit Package Manager, but it is also worth enabling the corresponding option in `{renv}` with:
+
+```{r}
+renv::settings$ppm.enabled(value = TRUE)
+```
+
+
+### Install `{pak}` {#install-pak}
 
 Now install `{pak}` as you normally would. We also suggest that you install `usethis` package, as it provides some useful functions to easily edit configuration some files and setup certain files in the project from templates:
 
@@ -120,7 +214,7 @@ install.packages(c("pak", "usethis"))
 ```
 
 ::: {.callout-note}
-Note that even though you are using `install.packages()`, the installation process will look slightly different.
+Note that even though you are using `install.packages()`, the installation process will look slightly different because `{renv}` is active in the current project.
 
 ```r
 # Downloading packages -------------------------------------------------------
@@ -182,7 +276,8 @@ options("renv.config.pak.enabled" = TRUE)
 Alternatively, you can also restart the R session to make the changes take effect.
 :::
 
-### Try installing packages
+
+### Try installing packages {#install-packages}
 
 Now you can try to install a new package to see if `{renv}` works with `{pak}`. In the next exercise, we will need the `{targets}` package, so we can try installing it:
 
@@ -192,11 +287,11 @@ install.packages("targets")
 
 If you have setup both `{renv}` and `{pak}` correctly, you should see a new interface of the package installation process. You will be presented with the installation plan (@fig-package-installation-process1) and asked to confirm.
 
-![Package installation process with `{renv}` and `{pak}` - installation plan preview](media/images/install-targets-with-renv-pak-1.png){#fig-package-installation-process1}
+![Package installation process with `{renv}` and `{pak}` - installation plan preview](media/images/install-targets-with-renv-pak-1.png){#fig-package-installation-process1 width=70%}
 
 Once you confirm with "Y" and "Enter/Return", packages will be installed:
 
-![Package installation process with `{renv}` and `{pak}` - executing installation plan](media/images/install-targets-with-renv-pak-2.png){#fig-package-installation-process2}
+![Package installation process with `{renv}` and `{pak}` - executing installation plan](media/images/install-targets-with-renv-pak-2.png){#fig-package-installation-process2 width=70%}
 
 You can check that the `{targets}` package is installed by trying to load it:
 
@@ -208,11 +303,104 @@ library(targets)
 If you have not had `targets` installed prior to starting this exercise, it does not exist in your default user R library, but only exists in the `{renv}` R package cache and in the current project directory. If you would like to check this, you can start another `R`/`RStudio` session in a differnt project directory and try to load `targets` there. It should fail, as there is no `targets` package in the default user R library.
 :::
 
-### Save the package versions into lock file
+### Save the package versions into lockfile {#snapshot}
 
-While you were installing packages as described above, `{renv}` was also quietly saving all the package verions and installation sources into the `renv.lock` file.
+You can install and remove packages as usual while working with your project. Whenever you are done with testing your code and are certain that the installed packages are suffient to reproduce your code, you can "lock" the package list and their versions with `{renv}`.
+
+To check the current status of the R package versions snapshot, you can run the following command:
+
+```{r}
+renv::status()
+```
+
+You should get something like this:
+
+```r
+The following package(s) are in an inconsistent state:
+
+package     installed recorded used
+askpass     y         n        y   
+backports   y         n        y   
+....
+yaml        y         n        y   
+zip         y         n        y   
+
+See `?renv::status` for advice on resolving these issues.
+```
+
+As you can see from the `recorded` column, none of the package versions are currently recorded (snapshotted) in the `renv.lock` lockfile. To save the package list and their versions into the lockfile, you can run the following command:
+
+```{r}
+renv::snapshot()
+```
+
+You may get a warning message for some missing dependencies, which you may have to install manually. For example:
+
+```r
+The following required packages are not installed:
+- cpp11  [required by igraph]
+Consider reinstalling these packages before snapshotting the lockfile.
+```
+
+If you get something like this, you should install the missing package(s) and then run `renv::snapshot()` again.
+
+```{r}
+install.packages("cpp11")
+renv::snapshot()
+```
+
+Then check the status again:
+
+```{r}
+renv::status()
+```
+
+You should repeat this until after running `renv::status()` you get:
+
+```r
+No issues found -- the project is in a consistent state.
+```
+
+::: {.callout-note}
+You can also manually open the `renv.lock` file in the editor and search for pacakges such as `targets` to see if they were snapshotted successfully.
+:::
 
 
-### Test R packages restoration
+### Test R packages restoration {#test-restore}
 
-In the steps above you have
+In the steps above you have created a project directory with fully isolated independent R package library. Now is the time to do a simple test, whether you can restore the R package environment of a project on a new computer, or at least in a new folder.
+
+To quickly test with the new folder, close your `R`/`RStudio` (or whichever other editor you are using) and create a of the the project folder in a new location on your computer. Once copied, manually delete the `renv/library` folder at this new location. Now open the new project folder with the deleted `renv/library` folder in your editor.
+
+::: {.callout-note}
+Instead of using your own project, you can also use the [https://github.com/e-kotov/2025-mpidr-workflows-reference-01](https://github.com/e-kotov/2025-mpidr-workflows-reference-01){target="_blank"} repository for the test. Just download/clone it to your computer and proceed with the steps below.
+:::
+
+Once `R` starts in this new project directory you should see the following message:
+
+```r
+OK
+- Installing renv  ... OK
+
+- Project 'path/to/your/project-copy' loaded. [renv 1.1.1]
+- One or more packages recorded in the lockfile are not installed.
+- Use `renv::status()` for more details.
+```
+
+This means that `R` found the `.Rrofile` file in the project root and exectuted all of the commands there. The first command was to run all the code in `renv/activate.R` which would automatically install `{renv}` on a new computer if it was not installed yet. It has also checked briefly the installation status of the packages recorded in the `renv.lock` file against the project package library, ignoring any packages installed by the user into the system wide user R packages library.
+
+Feel free to run `renv::status()` to check the status of the packages, but this is optional.
+
+To restore all pacakge versions, run `renv::restore(prompt = FALSE)`. Agree to installing `{pak}`, and the installation of the rest of the packages will be handled without further prompts. Once the process finishes, you should be able to check the status again:
+
+```{r}
+renv::status()
+```
+
+You may get a warning message for the `{pak}` package version, which is normall. You can either reinstall the package and make a snapshot again, or just make a snapshot with `renv::snapshot()`.
+
+In the end you should be able to get `No issues found -- the project is in a consistent state.` when running `renv::status()`.
+
+::: {.callout-note}
+You can also manually check if the `renv/library` folder has been created in this new copy of the original project and if it contains subfolders for the packages.
+:::
