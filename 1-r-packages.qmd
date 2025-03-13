@@ -1,5 +1,5 @@
 ---
-title: "1. R packages version management"
+title: "1. R packages version management with `renv` and `pak`"
 from: markdown+emoji
 code-annotations: hover
 eval: false
