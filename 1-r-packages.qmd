@@ -1,0 +1,218 @@
+---
+title: "1. R packages version management"
+from: markdown+emoji
+code-annotations: hover
+eval: false
+---
+
+[Skip to exercise \>\>](#exercise)
+
+# Key packages summary
+
+
+|  |  |
+|--------------------------------|----------------------------------------------------|
+| [`{renv}`](#renv) | Sets up an R package library on a per-project level. Each project where you activate `renv` with [`renv::init()`](https://rstudio.github.io/renv/reference/init.html){target="_blank"} will have it's own independent library with specific R package versions that will not interfere with either your default system/user libraries or with any other project. |
+| [`{pak}`](#pak) | Significantly speeds up R package installation by using multiple threads to download and install both requested packages and their dependencies. Can be used to install [CRAN](https://cran.r-project.org/){target="_blank"} and [Bioconductor](https://www.bioconductor.org/){target="_blank"} packages, as well as packages from GitHub or any other repository. Can be used independently from `{renv}`, or as a companion of `{renv}` . |
+: {tbl-colwidths="[15,85]"}
+
+## `{renv}` {#renv}
+
+### What does `{renv}` do?
+
+[`{renv}`](https://rstudio.github.io/renv/){target="_blank"} takes over the location of the R package installation and the command `install.packages()`. After initialising `{renv}` for a particular project/working directory, all your packages installations and removals will be taken care of by `{renv}`. From now on, whenever you use `install.packages()` in that project, `{renv}` will install the package into the project directory.
+
+::: callout-note
+Actually, `{renv}` will install the packages into user cache folder defined by the operating system (this is different from the default user folder for R package installation), and will "link" the packages into your project (or projects) directory(-ies). For example, you have two projects with different versions of `{ggplot2}`, but the same versions of `{dplyr}`. The `{renv}` packages cache will have two versions of `{ggplot2}` and one version of `{dplyr}`. Your projects however, will only contain "links" to the cache, therefore, you will not have two identical copies of `{dplyr}` on disk in two project directories, as they will both just point to the cached version of `{dplyr}` in `{renv}`'s cache folder. You can read more about it [here](https://rstudio.github.io/renv/articles/package-install.html#cache){target="_blank"}
+:::
+
+### Under the hood of `renv`
+
+When you install `{renv}` and run [`renv::init()`](https://rstudio.github.io/renv/reference/init.html){target="_blank"} in the current project/working directory, it reates several files and directories in your current project/working directory (see @fig-renv-files).
+
+![Files and folders created by `renv` when initialized](media/images/renv-files.png){#fig-renv-files}
+
+-   `{renv}` creates an invisible `.Rprofile` text file your current project/working directory. This file may contain any R code, and when `R`/`RStudio` is started in that directory, the commands in this file get executed. `{renv}` adds a line `source("renv/activate.R")` which runs a script that activates `{renv}` for this particular project every time `R`/`RStudio` is started in this directory.
+
+-   `{renv}` also creates an `renv` folder, where it will store all R scripts that it requires to function, and also the packages that you install for this particular project.
+
+-   `{renv}` also creates an `renv.lock` file, which stores the exact versions of R packages you install, as well as the sources where you install them from. That is, it keeps track if the package was installed from CRAN, Bioconductor, GitHub repository, or any other source.
+
+
+
+
+## `{pak}` {#pak}
+
+### What does `{pak}` do?
+
+[`{pak}`](https://pak.r-lib.org/){target="_blank"} can be used instead of R's default `install.packages()` to install R packages and their dependencies faster.
+
+It can also serve as a so-called "backend" for [`{renv}`](#renv), that is it will help `{renv}` to install packages and their dependencies much faster when you, or someone who reproduces your code, such as your collaborator, use [`{renv}`](#renv) to fully restore the R package environment of a project on a new computer.
+
+# Exercise {#exercise}
+
+## Goal
+
+The goal of this exercise is setup a new blank project with isolated R packages library using [`{renv}`](#renv) and [`{pak}`](#pak) in such a way, so that all the specific package versions can be restored on a new computer or in a new folder.
+
+## Instructions
+
+### Create a new project folder
+
+Create a new folder wherever you would normally create a folder for a new research project.
+
+If you are using RStudio, use the menu `File -> New Project`, then select `New Directory -> New Project` and set the folder name and location. You may select `Use renv with this project` in the end of the project creation wizard, but we would advice to skip it for now, as we will set this up in the next step.
+
+If you are using [`Visual Studio Code`](https://code.visualstudio.com/){target="_blank"} or the new [`Positron`](https://positron.posit.co/){target="_blank"} (the future replacement for `RStudio` based on `Visual Studio Code`), just create a folder manually and open it in the respective editor.
+
+If you are using some other editor, follow the usual procedure you know to create a new project.
+
+In any case, once you are ready, run the following command in the R console to make sure that the current working directory is the project directory you intended to create and use:
+
+```{r}
+getwd()
+```
+
+### Install `{renv}`
+
+Install `{renv}` as you normally would. You should not install any other packages at this point, as after installing and initizalising `{renv}`, you would need to install then again, as R will start using your project directory as a package library and will not see any previously user-installed packages anymore.
+
+```{r}
+install.packages("renv")
+```
+
+
+### Initialise `{renv}`
+
+Initialise `{renv}` in the current project/working directory:
+
+```{r}
+renv::init()
+```
+
+You should get a message like this (your `R` and `{renv}` versions may be different):
+
+```r
+The following package(s) will be updated in the lockfile:
+
+# CRAN -----------------------------------------------------------------------
+- renv   [* -> 1.1.1]
+
+The version of R recorded in the lockfile will be updated:
+- R      [* -> 4.4.3]
+
+- Lockfile written to "path-to-your-project/renv.lock".
+- renv activated -- please restart the R session.
+```
+
+::: {.callout-important}
+At this point, you need to restart the R session for `{renv}` to work. Do not ignore this instruction, as otherwise the rest of the steps will not work.
+:::
+
+Feel free to double check if the `{renv}` related files have been created in your project, as was shown in @fig-renv-files in the previous section.
+
+### Install `{pak}` 
+
+Now install `{pak}` as you normally would. We also suggest that you install `usethis` package, as it provides some useful functions to easily edit configuration some files and setup certain files in the project from templates:
+
+```{r}
+install.packages(c("pak", "usethis"))
+```
+
+::: {.callout-note}
+Note that even though you are using `install.packages()`, the installation process will look slightly different.
+
+```r
+# Downloading packages -------------------------------------------------------
+- Downloading jsonlite from CRAN ...            OK [1.1 Mb in 0.66s]
+- Downloading httr2 from CRAN ...               OK [718.6 Kb in 0.61s]
+Successfully downloaded 2 packages in 4.9 seconds.
+```
+
+You will also be asked if you would like to install extra packages, to which you should agree. This is because `{renv}` is taking over the package installation process.
+
+```r
+The following package(s) will be installed:
+- askpass     [1.2.1]
+- cli         [3.6.4]
+...
+- yaml        [2.3.10]
+- zip         [2.3.2]
+These packages will be installed into "path-to-your-project/renv/library/macos/R-4.4/aarch64-apple-darwin20".
+
+Do you want to proceed? [Y/n]:
+```
+
+:::
+
+### Enable `{pak}` as a backend for `{renv}`
+
+To make `{renv}` use `{pak}` as a "backend" and therefore install packages and their dependencies faster, you need to add another line to your `.Rprofile` file in the current project/working directory. Either locate and edit the file manually (you may need to enable the display of hidden files in your editor or system), or you can run this command to open it in the editor automatically:
+
+```{r}
+usethis::proj_set(".", force = TRUE) # force sets the current direcotry as a project
+usethis::edit_r_profile("project") # opens the project level .Rprofile file in the editor
+```
+
+In line with the [`{renv}` documentation](https://rstudio.github.io/renv/reference/config.html#renv-config-pak-enabled), add this line to the end of the file:
+
+```r
+options("renv.config.pak.enabled" = TRUE)
+```
+
+::: {.callout-warning}
+`{renv}`'s support for `{pak}` is still officially experimental, even though in practice it is quite stable. However, it may not work correctly in all cases. If something does not work, simply remove the line from the `.Rprofile` file. Everything will work fine without it, it's just that the package installation process will be slower.
+:::
+
+
+So your new `.Rprofile` file should look like this:
+
+```r
+source("renv/activate.R")
+options("renv.config.pak.enabled" = TRUE)
+```
+
+As these lines are only executed when `R` starts in the project directory, to apply it in the current `R` session, you will need to run the same command in the `R` console:
+
+```{r}
+options("renv.config.pak.enabled" = TRUE)
+```
+
+::: {.callout-note}
+Alternatively, you can also restart the R session to make the changes take effect.
+:::
+
+### Try installing packages
+
+Now you can try to install a new package to see if `{renv}` works with `{pak}`. In the next exercise, we will need the `{targets}` package, so we can try installing it:
+
+```{r}
+install.packages("targets")
+```
+
+If you have setup both `{renv}` and `{pak}` correctly, you should see a new interface of the package installation process. You will be presented with the installation plan (@fig-package-installation-process1) and asked to confirm.
+
+![Package installation process with `{renv}` and `{pak}` - installation plan preview](media/images/install-targets-with-renv-pak-1.png){#fig-package-installation-process1}
+
+Once you confirm with "Y" and "Enter/Return", packages will be installed:
+
+![Package installation process with `{renv}` and `{pak}` - executing installation plan](media/images/install-targets-with-renv-pak-2.png){#fig-package-installation-process2}
+
+You can check that the `{targets}` package is installed by trying to load it:
+
+```{r}
+library(targets)
+```
+
+::: callout-note
+If you have not had `targets` installed prior to starting this exercise, it does not exist in your default user R library, but only exists in the `{renv}` R package cache and in the current project directory. If you would like to check this, you can start another `R`/`RStudio` session in a differnt project directory and try to load `targets` there. It should fail, as there is no `targets` package in the default user R library.
+:::
+
+### Save the package versions into lock file
+
+While you were installing packages as described above, `{renv}` was also quietly saving all the package verions and installation sources into the `renv.lock` file.
+
+
+### Test R packages restoration
+
+In the steps above you have

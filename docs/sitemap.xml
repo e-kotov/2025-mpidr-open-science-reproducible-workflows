@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://e-kotov.github.io/2025-mpidr-open-science-reproducible-workflows/1-r-packages.html</loc>
+    <lastmod>2025-03-12T20:22:52.323Z</lastmod>
+  </url>
+  <url>
+    <loc>https://e-kotov.github.io/2025-mpidr-open-science-reproducible-workflows/3c-reproducible-github-repo-in-binder.html</loc>
+    <lastmod>2025-03-12T18:36:29.067Z</lastmod>
+  </url>
+  <url>
+    <loc>https://e-kotov.github.io/2025-mpidr-open-science-reproducible-workflows/license.html</loc>
+    <lastmod>2024-07-11T12:53:27.854Z</lastmod>
+  </url>
+  <url>
+    <loc>https://e-kotov.github.io/2025-mpidr-open-science-reproducible-workflows/3b-build-docker-container-image.html</loc>
+    <lastmod>2025-03-12T18:36:18.733Z</lastmod>
+  </url>
+  <url>
+    <loc>https://e-kotov.github.io/2025-mpidr-open-science-reproducible-workflows/3a-how-docker-and-binder-work.html</loc>
+    <lastmod>2025-03-12T18:36:36.655Z</lastmod>
+  </url>
+  <url>
+    <loc>https://e-kotov.github.io/2025-mpidr-open-science-reproducible-workflows/2-analysis-pipeline.html</loc>
+    <lastmod>2025-03-12T18:34:42.814Z</lastmod>
+  </url>
+  <url>
+    <loc>https://e-kotov.github.io/2025-mpidr-open-science-reproducible-workflows/index.html</loc>
+    <lastmod>2025-03-12T19:16:03.054Z</lastmod>
+  </url>
+</urlset>

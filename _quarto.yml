@@ -1,0 +1,70 @@
+project:
+  type: website
+  output-dir: docs
+
+
+lang: en
+website:
+  title: "Containers for Computational Reproducibility"
+  site-url: https://e-kotov.github.io/2025-mpidr-open-science-reproducible-workflows/
+  repo-url: https://github.com/e-kotov/2025-mpidr-open-science-reproducible-workflows
+  page-navigation: true
+  page-footer: 
+      border: true
+      left: "Copyright 2024, Egor Kotov & Esther Denecke" 
+      center:
+       - license.qmd
+      right: 
+        - icon: github
+          href: https://github.com/e-kotov/2025-mpidr-open-science-reproducible-workflows
+
+  sidebar:
+    style: "docked"
+    search: true
+    tools: 
+      - icon: github
+        text: Github
+        href: https://github.com/e-kotov/2025-mpidr-open-science-reproducible-workflows
+    contents:
+      - index.qmd
+      - 1-r-packages.qmd
+      - 2-analysis-pipeline.qmd
+      - section: "3. Docker"
+        contents:
+          - 3a-how-docker-and-binder-work.qmd
+          - 3b-build-docker-container-image.qmd
+          - 3c-reproducible-github-repo-in-binder.qmd
+
+
+
+format:
+  html:
+    link-external-icon: true
+    include-in-header:
+        file: analytics.html
+    theme:
+      light: zephyr
+      dark: slate
+    css: styles.css
+    toc: true
+    toc-depth: 4
+    toc-expand: 4
+    toc-location: right
+    code-overflow: wrap
+    grid:
+      body-width: 800px
+    mermaid:
+      theme: neutral
+
+bibliography: references.bib
+bibliographystyle: mla
+
+editor: source
+
+editor_options:
+  markdown:
+    wrap: 72
+    canonical: true
+
+execute:
+  freeze: auto
