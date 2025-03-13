@@ -5,13 +5,13 @@ project:
 
 lang: en
 website:
-  title: "Containers for Computational Reproducibility"
+  title: "Projects’ workflow for reproducibility and replicability using R"
   site-url: https://e-kotov.github.io/2025-mpidr-open-science-reproducible-workflows/
   repo-url: https://github.com/e-kotov/2025-mpidr-open-science-reproducible-workflows
   page-navigation: true
   page-footer: 
       border: true
-      left: "Copyright 2024, Egor Kotov & Esther Denecke" 
+      left: "Authors: Egor Kotov & Jonas Schöley" 
       center:
        - license.qmd
       right: 
