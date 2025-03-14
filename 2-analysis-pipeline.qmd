@@ -16,7 +16,7 @@ The `{targets}` package is a framework for building data processing, analysis an
 
 Consider the following minimal example:
 
-```{r}
+```r
 library(targets)
 
 list(
@@ -52,7 +52,7 @@ This script has three steps. It loads the data, computes a simple statistic, and
 
 To quickly run the pipeline above in R console without setting up `targets` properly and creating an R script file, you can use the code below, that can be pasted in to the R console (and it will make the pipeline run in a temporary directory):
 
-```{r}
+```r
 tar_dir({
   # runs the code in a temporary directory
   tar_script(
@@ -112,7 +112,7 @@ It would mean that all steps have been executed successfully.
 
 Similarly, if you replace `tar_make()` with `tar_visnetwork()`, you will get a visualization of the pipeline:
 
-```{r}
+```r
 tar_dir({
   # runs the code in a temporary directory
   tar_script(
