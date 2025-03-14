@@ -1,10 +1,10 @@
 ---
-title: "3c. Make your own git repository reproducible in Binder"
+title: "3c. Make your own git repository reproducible in `Binder`"
 from: markdown+emoji
 code-annotations: hover
 ---
 
-First, make sure you got [familiar with how Docker containers work](0-how-docker-and-binder-work.qmd).
+First, make sure you got [familiar with how Docker containers work](3a-how-docker-and-binder-work.qmd).
 
 ### The Goal
 

@@ -1,10 +1,10 @@
 ---
-title: "3b. Build your own Docker container image and run it (locally or in the academic cluster)"
+title: "3b. Build your own `Docker` container image and run it (locally or in the academic cluster)"
 from: markdown+emoji
 code-annotations: hover
 ---
 
-First, make sure you got [familiar with how Docker containers work](0-how-docker-and-binder-work.qmd).
+First, make sure you got [familiar with how Docker containers work](3a-how-docker-and-binder-work.qmd).
 
 This task can be done on your own computer or on a cloud-based [Play with Docker](https://www.docker.com/play-with-docker/){target="_blank"} environment.
 Specifically, for this tutorial we will use the [Play with Docker Labs Environment](https://labs.play-with-docker.com/){target="_blank"}, however you are free to follow along on your own computer, if you have [Docker](https://docs.docker.com/get-docker/){target="_blank"}, [OrbStack](https://orbstack.dev/download){target="_blank"}, or other Docker-compatible software installed.

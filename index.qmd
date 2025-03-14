@@ -28,13 +28,13 @@ affiliations:
 
 ---
 
-This website provides supporting materials for the part 2 of the workshop **Projects’ workflow for reproducibility and replicability using R** which is part of the [Second Rostock Open Science Workshop](https://www.demogr.mpg.de/en/news_events_6123/calendar_1921/second_rostock_open_science_workshop_13282){target="_blank"} organized by the [Max Planck Institute for Demographic Research](https://demogr.mpg.de/){target="_blank"} in Rostock, Germany. This tutorial is [licensed under CC0](license.qmd).
+This website provides supporting materials for the part 2 of the workshop **Projects’ workflow for reproducibility and replicability using R** held at the [Second Rostock Open Science Workshop](https://www.demogr.mpg.de/en/news_events_6123/calendar_1921/second_rostock_open_science_workshop_13282){target="_blank"} organized by the [Max Planck Institute for Demographic Research](https://demogr.mpg.de/){target="_blank"} in Rostock, Germany. This tutorial is [licensed under CC0](license.qmd).
 
-This tutorial covers the use of:
+This tutorial includes the following sections:
 
-1. [`{renv}`](https://rstudio.github.io/renv/){target="_blank"} and [`{pak}`](https://pak.r-lib.org/){target="_blank"} for `R` packages version management;
-2. [`{targets}`](https://docs.ropensci.org/targets/){target="_blank"} for structuring the analysis code in a clean and modular way;
-3. `Docker` (or `Docker`-compatible tools) for building containers that include all operating system files, R installation, any additional system depenencies and R packages in a single file that can be used to run the analysis even if some software becomes outdated or even unavailable for installation in the future.
+1. ["R packages version management with `renv` and `pak`"](1-r-packages.qmd), which covers [`{renv}`](https://rstudio.github.io/renv/){target="_blank"} and [`{pak}`](https://pak.r-lib.org/){target="_blank"} for `R` packages version management;
+2. ["Building analysis pipelines with `targets`"](2-analysis-pipeline.qmd), which covers the [`{targets}`](https://docs.ropensci.org/targets/){target="_blank"} R package for structuring the analysis code in a clean and modular way;
+3. ["Containerizing R and R Packages for Ultimate Reproducibility"](3-containers.qmd), which covers `Docker` (or `Docker`-compatible tools) for building containers that include all operating system files, R installation, any additional system depenencies and R packages in a single file that can be used to run the analysis even if some software becomes outdated or even unavailable for installation in the future.
 
 To participate in the workshop, we recommend that you have a [GitHub](https://github.com/){target="_blank"} account and a [Docker Hub](https://hub.docker.com/){target="_blank"} account (the latter is optional and only needed for the last section on `Docker`).
 

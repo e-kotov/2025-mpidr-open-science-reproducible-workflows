@@ -1,0 +1,15 @@
+---
+title: "3. Containerizing R and R Packages for Ultimate Reproducibility"
+from: markdown+emoji
+code-annotations: hover
+eval: false
+number-sections: true
+---
+
+This section consists of three parts. Part *a* is a reference material, parts *b* and *c* are tutorials, but you probably will not have time to go through both in class, so choose one of them to do in class and the other one to do at home.
+
+a. The overview of how containers work: [3a-how-docker-and-binder-work.qmd](3a-how-docker-and-binder-work.qmd). This is more of a reference material that explains some technicalities of `Docker` (one of the popular containerization software) and `Binder` (an online service that allows you to run a container with `R` and `RStudio` in the cloud with just a web browser).
+
+b. A tutorial for [building your own `Docker` container image with `R` and R packages pre-installed and run it locally](3b-build-docker-container-image.qmd). It covers the process of customizing the `Dockerfile` and building the container image. You do not have to have `Docker` installed on the computer as you can use the [Play with Docker](https://www.docker.com/play-with-docker/){target="_blank"} environment in the web browser. You would normally use such container image for everyday work locally on in the academic High Performance Computing (HPC) cluster.
+
+c. A tutorial for [making your own git repository reproducible in `Binder`](3c-reproducible-github-repo-in-binder.qmd). It focuses on how to setup your `git` repository in such a way, so that anyone can run it in the cloud using `Binder` with just a web browser. The primary use case for this is publishing a reproducible repository for a research project, primarily with code that reproduces figures from raw data or pre-calculated and cached modelling results. `Binder` is limited in memory and compute power, so it will not handle long running resource intensive computation.

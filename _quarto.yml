@@ -29,7 +29,7 @@ website:
       - index.qmd
       - 1-r-packages.qmd
       - 2-analysis-pipeline.qmd
-      - section: "3. Docker"
+      - section: "3. Containerizing R and R Packages for Ultimate Reproducibility"
         contents:
           - 3a-how-docker-and-binder-work.qmd
           - 3b-build-docker-container-image.qmd

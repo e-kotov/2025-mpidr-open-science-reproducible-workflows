@@ -1,5 +1,5 @@
 ---
-title: "3a. Get Familiar with Docker and Binder"
+title: "3a. Get Familiar with `Docker` and `Binder`"
 from: markdown+emoji
 code-annotations: hover
 ---
