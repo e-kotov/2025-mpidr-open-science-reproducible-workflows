@@ -1,0 +1,180 @@
+---
+title: "2. Building analysis pipelines with `targets`"
+from: markdown+emoji
+code-annotations: hover
+eval: false
+number-sections: true
+---
+
+[Skip to exercise \>\>](#exercise)
+
+# The `targets` package {#targets}
+
+## What does the `targets` package do?
+
+The `{targets}` package is a framework for building data processing, analysis and visualization pipelines in R. It helps you structure your code by splitting it onto logical chunks that follow each other in a logical order. `{targets}` also manages the intermediate results of each step, so you do not have to do it manually. It also minimizes the time it takes to update the results if any step changes, be it some change in the source data, or in the code. `{targets}` knows which steps are up-to-date, and which are not, and only runs the steps that are outdated.
+
+Consider the following minimal example:
+
+```{r}
+library(targets)
+
+list(
+  # 1. Load the mtcars dataset.
+  tar_target(
+    name = mtcars_data,
+    command = data(mtcars)
+  ),
+
+  # 2. Compute the mean of the mpg column.
+  tar_target(
+    name = mpg_mean,
+    command = mean(mtcars_data$mpg)
+  ),
+
+  # 3. Create a histogram plot of mpg using base R.
+  tar_target(
+    name = hist_mpg,
+    packages = c("ggplot2"),
+    command = {
+      ggplot(mtcars_data, aes(x = mpg)) +
+        geom_histogram(binwidth = 1) +
+        labs(title = "Histogram of MPG", x = "Miles Per Gallon", y = "Count")
+    }
+  )
+)
+```
+
+This script has three steps. It loads the data, computes a simple statistic, and creates a plot. To run this pipeline with `targets` you would need to save this script to the `_targets.R` file in the root of the project directory and run `targets::tar_make()` in R console.
+
+<details>
+<summary>Code to try `targets` in R console interactively</summary>
+
+To quickly run the pipeline above in R console without setting up `targets` properly and creating an R script file, you can use the code below, that can be pasted in to the R console (and it will make the pipeline run in a temporary directory):
+
+```{r}
+tar_dir({
+  # runs the code in a temporary directory
+  tar_script(
+    {
+      library(targets)
+
+      list(
+        # 1. Load the mtcars dataset.
+        tar_target(
+          name = mtcars_data,
+          command = data(mtcars)
+        ),
+
+        # 2. Compute the mean of the mpg column.
+        tar_target(
+          name = mpg_mean,
+          command = mean(mtcars_data$mpg)
+        ),
+
+        # 3. Create a histogram plot of mpg using base R.
+        tar_target(
+          name = hist_mpg,
+          packages = c("ggplot2"),
+          command = {
+            ggplot(mtcars_data, aes(x = mpg)) +
+              geom_histogram(binwidth = 1) +
+              labs(
+                title = "Histogram of MPG",
+                x = "Miles Per Gallon",
+                y = "Count"
+              )
+          }
+        )
+      )
+    },
+    ask = FALSE
+  )
+
+  # Run all targets defined in the pipeline.
+  tar_make()
+})
+```
+
+You will get output similar to this:
+
+```r
+▶ dispatched target mtcars_data
+● completed target mtcars_data [0 seconds, 1.225 kilobytes]
+▶ dispatched target plot_mpg
+● completed target plot_mpg [0.011 seconds, 65 bytes]
+▶ dispatched target mpg_mean
+● completed target mpg_mean [0 seconds, 52 bytes]
+▶ ended pipeline [0.059 seconds]
+```
+
+It would mean that all steps have been executed successfully.
+
+Similarly, if you replace `tar_make()` with `tar_visnetwork()`, you will get a visualization of the pipeline:
+
+```{r}
+tar_dir({
+  # runs the code in a temporary directory
+  tar_script(
+    {
+      library(targets)
+
+      list(
+        # 1. Load the mtcars dataset.
+        tar_target(
+          name = mtcars_data,
+          command = data(mtcars)
+        ),
+
+        # 2. Compute the mean of the mpg column.
+        tar_target(
+          name = mpg_mean,
+          command = mean(mtcars_data$mpg)
+        ),
+
+        # 3. Create a histogram plot of mpg using base R.
+        tar_target(
+          name = hist_mpg,
+          packages = c("ggplot2"),
+          command = {
+            ggplot(mtcars_data, aes(x = mpg)) +
+              geom_histogram(binwidth = 1) +
+              labs(
+                title = "Histogram of MPG",
+                x = "Miles Per Gallon",
+                y = "Count"
+              )
+          }
+        )
+      )
+    },
+    ask = FALSE
+  )
+
+  # Run all targets defined in the pipeline.
+  tar_visnetwork()
+})
+```
+
+You would get output similar to the one in the @fig-mtcars-visnet below.
+</details>
+
+!["Pipeline visualization example"](media/images/mtcars-visnet.png){#fig-mtcars-visnet width=80%}
+
+As you can see in @fig-mtcars-visnet, `{targets}` knows that the summary statistic and the plot depend on the data. If you were to change the first step of the pipeline, then the next time you ask `{targets}` to update the pipeline, it will only run steps two and three. If, however, instead of changing the data, you will change the code for the plot (e.g. change the title), then the pipeline will only re-run step three. This way, you do not have to manually keep track of what might have changed in the data or the code, or, in more complex pipelines, in the intermediate data (such as cross-validation folds for machine learning models) - `{targets}` will figure it out for you.
+
+# Exercise {#exercise}
+
+## Goal
+
+The goal of this exercise is to use the project folder that you have set up in the previous exercise with `{renv}` and `{pak}` to create a simple analysis pipeline using `{targets}`.
+
+::: {.callout-note}
+If you have not successfully completed the previous exercise, you can start the current one by downloading the repository [https://github.com/e-kotov/2025-mpidr-workflows-reference-01](https://github.com/e-kotov/2025-mpidr-workflows-reference-01){target="_blank"} and extracting it to your computer.
+:::
+
+## Instructions
+
+## Open the project folder in your editor
+
+If no
