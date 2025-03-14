@@ -144,13 +144,13 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./2-analysis-pipeline.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2-analysis-pipeline.html</span></a>
+ <span class="menu-text">2. Building analysis pipelines with <code>targets</code></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">3. Docker</span></a>
+ <span class="menu-text">3. Containerizing R and R Packages for Ultimate Reproducibility</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -159,19 +159,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./3a-how-docker-and-binder-work.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3a. Get Familiar with Docker and Binder</span></a>
+ <span class="menu-text">3a. Get Familiar with <code>Docker</code> and <code>Binder</code></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./3b-build-docker-container-image.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3b. Build your own Docker container image and run it (locally or in the academic cluster)</span></a>
+ <span class="menu-text">3b. Build your own <code>Docker</code> container image and run it (locally or in the academic cluster)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./3c-reproducible-github-repo-in-binder.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3c. Make your own git repository reproducible in Binder</span></a>
+ <span class="menu-text">3c. Make your own git repository reproducible in <code>Binder</code></span></a>
   </div>
 </li>
       </ul>
@@ -242,12 +242,12 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>This website provides supporting materials for the part 2 of the workshop <strong>Projects’ workflow for reproducibility and replicability using R</strong> which is part of the <a href="https://www.demogr.mpg.de/en/news_events_6123/calendar_1921/second_rostock_open_science_workshop_13282" target="_blank">Second Rostock Open Science Workshop</a> organized by the <a href="https://demogr.mpg.de/" target="_blank">Max Planck Institute for Demographic Research</a> in Rostock, Germany. This tutorial is <a href="./license.html">licensed under CC0</a>.</p>
-<p>This tutorial covers the use of:</p>
+<p>This website provides supporting materials for the part 2 of the workshop <strong>Projects’ workflow for reproducibility and replicability using R</strong> held at the <a href="https://www.demogr.mpg.de/en/news_events_6123/calendar_1921/second_rostock_open_science_workshop_13282" target="_blank">Second Rostock Open Science Workshop</a> organized by the <a href="https://demogr.mpg.de/" target="_blank">Max Planck Institute for Demographic Research</a> in Rostock, Germany. This tutorial is <a href="./license.html">licensed under CC0</a>.</p>
+<p>This tutorial includes the following sections:</p>
 <ol type="1">
-<li><a href="https://rstudio.github.io/renv/" target="_blank"><code>{renv}</code></a> and <a href="https://pak.r-lib.org/" target="_blank"><code>{pak}</code></a> for <code>R</code> packages version management;</li>
-<li><a href="https://docs.ropensci.org/targets/" target="_blank"><code>{targets}</code></a> for structuring the analysis code in a clean and modular way;</li>
-<li><code>Docker</code> (or <code>Docker</code>-compatible tools) for building containers that include all operating system files, R installation, any additional system depenencies and R packages in a single file that can be used to run the analysis even if some software becomes outdated or even unavailable for installation in the future.</li>
+<li><a href="./1-r-packages.html">“R packages version management with <code>renv</code> and <code>pak</code>”</a>, which covers <a href="https://rstudio.github.io/renv/" target="_blank"><code>{renv}</code></a> and <a href="https://pak.r-lib.org/" target="_blank"><code>{pak}</code></a> for <code>R</code> packages version management;</li>
+<li><a href="./2-analysis-pipeline.html">“Building analysis pipelines with <code>targets</code>”</a>, which covers the <a href="https://docs.ropensci.org/targets/" target="_blank"><code>{targets}</code></a> R package for structuring the analysis code in a clean and modular way;</li>
+<li><a href="./3-containers.html">“Containerizing R and R Packages for Ultimate Reproducibility”</a>, which covers <code>Docker</code> (or <code>Docker</code>-compatible tools) for building containers that include all operating system files, R installation, any additional system depenencies and R packages in a single file that can be used to run the analysis even if some software becomes outdated or even unavailable for installation in the future.</li>
 </ol>
 <p>To participate in the workshop, we recommend that you have a <a href="https://github.com/" target="_blank">GitHub</a> account and a <a href="https://hub.docker.com/" target="_blank">Docker Hub</a> account (the latter is optional and only needed for the last section on <code>Docker</code>).</p>
 <p>For the section 3 on <code>Docker</code>, you may also want to install <a href="https://docs.docker.com/get-docker/" target="_blank">Docker</a> on your computer (for Windows, macOS or Linux). For macOS we also highly recommend the free version of <a href="https://orbstack.dev/download" target="_blank">OrbStack</a> as a complete and lightweight Docker Desktop replacement. In the workshop we will also show how to try <code>Docker</code> using just a web browser and the website <a href="https://labs.play-with-docker.com/" target="_blank">https://labs.play-with-docker.com/</a> without installing any additional software on your computer.</p>

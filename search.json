@@ -6,8 +6,8 @@
     "section": "",
     "text": "First, make sure you got familiar with how Docker containers work.\nThis task can be done on your own computer or on a cloud-based Play with Docker environment. Specifically, for this tutorial we will use the Play with Docker Labs Environment, however you are free to follow along on your own computer, if you have Docker, OrbStack, or other Docker-compatible software installed. Using the Play with Docker Labs Environment is free and does not require any installation, only a web browser and a Docker Hub account.\n\nThe Goal\nBuild your own Docker container image for your hypothetical project. Imagine, that for this project you need 1 or 2 R packages that were archived from CRAN and are not available in the Rocker container image.\nTo achieve this goal, find a few archived R packages on CRAN. A few notable examples are rgdal, MortalitySmooth and many others. Remember, “40% of all packages ever in CRAN got at one point archived”[^1]. CRAN does not have it’s own section with archived packages, so you might want to look at CRANhaven Dashboard where you can find recently archived packages.\n\n\nChoose the Rocker Image version\nDepending on which archived package you selected, you must first find out which Rocker image version to use. For example, the package MortalitySmooth was archived on 2020-12-10. If you would use Rocker RStudio container image with R v4.1.0 released on 18th May 2021, the R package installer in the container will think it is 18th May 2021 and will try to install the package from the CRAN snapshot from that date. Since MortalitySmooth was archived after that date, you will not be able to install it using the standard install.packages() function. You will have to use remotes::install_version() function from the remotes package. Use internet search to find the release dates of R versions released just before the date the R package was archived. Rocker images are configured to use CRAN snapshot on the date of the R version release.\nSo your options are:\n\nUse more recent R version (and consequently Rocker image) and try to installing MortalitySmooth using remotes::install_version() function.\nUse strictly the R version that was released just before the package was archived and try to install the package using install.packages() function.\n\n\n\nStart the Play with Docker Environment\nGo to https://labs.play-with-docker.com/ and log in with your Docker Hub account.\n\n\n\n\n\nIf it is the first time you are logging in, Play With Docker will request access to your Docker account. Click on the “Accept” button to proceed. Than click the large green “Start” button to start the environment.\nClick on the “Add New Instance” button to start a new Docker container instance.\n\n\n\n\n\nYou should get a new terminal window with a prompt that looks like this:\n\n\n\n\n\n\n\nClone the Repository\nGo to the minimal example repository and copy the URL as shown below:\n\n\n\n\n\nNow clone the repository by pasting the following command into the terminal:\ngit clone https://github.com/Population-Dynamics-Lab/grid-sample-containerized.git\nCheck which folders you have in the current directory:\nls\nYou should see the grid-sample-containerized folder. Change the directory to the repository (you can type cd g and press Tab to autocomplete the folder name):\ncd grid-sample-containerized\nYou can check the contents of the repository by listing the files in the directory using in terminal again:\nls -al\n\n\nEdit the Dockerfile\nNow that you have selected the Rocker image version, you can edit the Dockerfile in the repository. The Dockerfile is a text file that contains instructions for building a Docker container image. Unlike in tutorial 1, In this tutorial, ignore the install.R file, we will be installing packages right in the Dockerfile.\nFind the editor button in the middle of the screen and click on it.\n\n\n\n\n\nA very simple file browser and editor (displayed when you click a file) will appear. You can edit the files in the repository directly in the browser. Remember to save changes.\n\n\n\n\n\nTo install the MortalitySmooth package in the Dockerfile add this in the second line:\nRUN install2.r --error --skipinstalled MortalitySmooth\nSo your final Dockerfile should look like this:\nFROM rocker/rstudio:4.0.0\nRUN install2.r --error --skipinstalled MortalitySmooth\nIf you were installing two packages, you would add them like this:\nFROM rocker/rstudio:4.0.0\nRUN install2.r --error --skipinstalled MortalitySmooth ggplot2\nRemember to save the changes.\n\n\nBuild the Docker Container Image\nUnlike in tutorial 1, you will not be using Binder web service to build the Docker container image automatically for you. Instead, you will use the docker command. The docker command is a command-line tool that allows you to interact with Docker containers and images. You can use the docker command to build a Docker image from the Dockerfile in the repository.\nFirst make sure you are in a folder that has the Dockerfile in it. You can check the contents of the current directory by running:\nls -al\nAnd you can quickly check what is in the Dockerfile by running:\ncat Dockerfile\nTo build the Docker image, run the following command in the terminal:\ndocker build -t r-mort-smooth:4.0.0 .\nLet us break down this command:\n\n\n\n\n\n\n\npart of command\nwhat it does\n\n\n\n\ndocker build\nThis is the base command used to build a Docker image from a Dockerfile.\n\n\n-t r-mort-smooth:4.0.0\nThe -t flag stands for “tag”. r-mort-smooth:4.0.0 is the name and tag given to the image. r-mort-smooth is the name of the image. 4.0.0 is the tag, which often represents the version of the image. You can choose any name and version here can also be anything, but we use the same version we used in the Dockerfile just so that we know which R version is going to be inside the container.\n\n\n.\nthis very important . (dot) specifies the build context, which is the current directory. Docker will look for a Dockerfile in this directory to create the image.\n\n\n\nThe container image will take about 3-6 minutes to build.\nWhen the build is finished, you can check that it was added to the local container image storage:\ndocker images\n\n\nRun the Docker Container from your Image\nNow you have a Docker container image with the MortalitySmooth package installed. To run it, you can use the docker run command in the following way:\ndocker run --rm -p 8787:8787 -v $(pwd):/home/rstudio/my-project -e PASSWORD=somepass r-mort-smooth:4.0.0\nLet us break down this command:\n\n\n\npart of command\nwhat it does\n\n\n\n\ndocker run\nThis is the base command used to run a Docker container from local or remote container image storage.\n\n\n--rm\nThis makes the container temporary. It will be destroyed after you stop it. You can explore other options (e.g. how to name containers, make them persistent and re-run the same ones after stopping) in the Docker documentation. But for now we want a disposable container that is destroyed after stopping.\n\n\n-p 8787:8787\nThis flag specifies that the port inside the container is mapped to your computer, so that you can access RStudio in a web browser. Briefly, RStudio in a container is actually a server software that works over a network and it is not exactly the same as RStudio on your laptop, even though it feels that way. This is why ports are necessary, but do not worry about it too much at the moment.\n\n\n-v $(pwd):/home/rstudio/my-project\nThis maps the current directory (designated by $(pwd)) from which you are running the command to a folder inside the container (/home/rstudio/my-project). Thanks to this, when you use the containerized RStudio, you will have access to your local folder and will be able to run scripts and edit them. The /home/rstudio/ is default for Rocker containers, and the my-project part can be replaced with anything. Instead of the current directory (designated by $(pwd)) you can provide /path/to/any/folder/on/your/computer.\n\n\n-e PASSWORD=somepass\nSets the password. Better use a good password, even though you are running locally.\n\n\nr-mort-smooth:4.0.0\nThe final part is the name and tag that you assigned earlier when you were creating the container image.\n\n\n\nThe container starts almost instantly. In case with Play with Docker service, you will see a button with a port pop-up:\n\n\n\n\n\nClick on the port number to open RStudio in a new tab. Use the default login rstudio and the password you set in the docker run command.\nIf you are following along on your own computer, you can open a web browser and go to http://localhost:8787 to access RStudio. Use the default login rstudio and the password you set in the docker run command.\nYou can now use RStudio in the browser to check if the MortalitySmooth package is installed by running:\nlibrary(MortalitySmooth)\n\n\nStop the container\nTo stop the container, click the “power” button in the top right corner of the RStudio window. Close the web browser tab with RStudio. In the Play with Docker browser tab, click in the terminal and press Ctrl+C or Ctrl+\\ to stop the container.\n\n\nVideo reference\nFor reference, here is the whole process in a sped up sequence:\n\n\n\n\n\nAnd her is a video in a more leisurely pace, where only the building of the Dockerfile is sped up, but you can watch and rewind to any steps:\n\n\n\nDiscussion\nNow that you have created your own reproducible repository, think for a moment, how future proof is it really? What does the reproducibility of your repository depend on? How can you further future-proof it?",
     "crumbs": [
-      "3. Docker",
-      "3b. Build your own Docker container image and run it (locally or in the academic cluster)"
+      "3. Containerizing R and R Packages for Ultimate Reproducibility",
+      "3b. Build your own `Docker` container image and run it (locally or in the academic cluster)"
     ]
   },
   {
@@ -22,7 +22,7 @@
     "href": "index.html",
     "title": "Workshop Introduction",
     "section": "",
-    "text": "This website provides supporting materials for the part 2 of the workshop Projects’ workflow for reproducibility and replicability using R which is part of the Second Rostock Open Science Workshop organized by the Max Planck Institute for Demographic Research in Rostock, Germany. This tutorial is licensed under CC0.\nThis tutorial covers the use of:\nTo participate in the workshop, we recommend that you have a GitHub account and a Docker Hub account (the latter is optional and only needed for the last section on Docker).\nFor the section 3 on Docker, you may also want to install Docker on your computer (for Windows, macOS or Linux). For macOS we also highly recommend the free version of OrbStack as a complete and lightweight Docker Desktop replacement. In the workshop we will also show how to try Docker using just a web browser and the website https://labs.play-with-docker.com/ without installing any additional software on your computer.",
+    "text": "This website provides supporting materials for the part 2 of the workshop Projects’ workflow for reproducibility and replicability using R held at the Second Rostock Open Science Workshop organized by the Max Planck Institute for Demographic Research in Rostock, Germany. This tutorial is licensed under CC0.\nThis tutorial includes the following sections:\nTo participate in the workshop, we recommend that you have a GitHub account and a Docker Hub account (the latter is optional and only needed for the last section on Docker).\nFor the section 3 on Docker, you may also want to install Docker on your computer (for Windows, macOS or Linux). For macOS we also highly recommend the free version of OrbStack as a complete and lightweight Docker Desktop replacement. In the workshop we will also show how to try Docker using just a web browser and the website https://labs.play-with-docker.com/ without installing any additional software on your computer.",
     "crumbs": [
       "Workshop Introduction"
     ]
@@ -38,14 +38,71 @@
     ]
   },
   {
+    "objectID": "3-containers.html",
+    "href": "3-containers.html",
+    "title": "3. Containerizing R and R Packages for Ultimate Reproducibility",
+    "section": "",
+    "text": "This section consists of three parts. Part a is a reference material, parts b and c are tutorials, but you probably will not have time to go through both in class, so choose one of them to do in class and the other one to do at home.\n\nThe overview of how containers work: 3a-how-docker-and-binder-work.qmd. This is more of a reference material that explains some technicalities of Docker (one of the popular containerization software) and Binder (an online service that allows you to run a container with R and RStudio in the cloud with just a web browser).\nA tutorial for building your own Docker container image with R and R packages pre-installed and run it locally. It covers the process of customizing the Dockerfile and building the container image. You do not have to have Docker installed on the computer as you can use the Play with Docker environment in the web browser. You would normally use such container image for everyday work locally on in the academic High Performance Computing (HPC) cluster.\nA tutorial for making your own git repository reproducible in Binder. It focuses on how to setup your git repository in such a way, so that anyone can run it in the cloud using Binder with just a web browser. The primary use case for this is publishing a reproducible repository for a research project, primarily with code that reproduces figures from raw data or pre-calculated and cached modelling results. Binder is limited in memory and compute power, so it will not handle long running resource intensive computation."
+  },
+  {
+    "objectID": "2-analysis-pipeline.html",
+    "href": "2-analysis-pipeline.html",
+    "title": "2. Building analysis pipelines with targets",
+    "section": "",
+    "text": "Skip to exercise &gt;&gt;",
+    "crumbs": [
+      "2. Building analysis pipelines with `targets`"
+    ]
+  },
+  {
+    "objectID": "2-analysis-pipeline.html#what-does-the-targets-package-do",
+    "href": "2-analysis-pipeline.html#what-does-the-targets-package-do",
+    "title": "2. Building analysis pipelines with targets",
+    "section": "1.1 What does the targets package do?",
+    "text": "1.1 What does the targets package do?\nThe {targets} package is a framework for building data processing, analysis and visualization pipelines in R. It helps you structure your code by splitting it onto logical chunks that follow each other in a logical order. {targets} also manages the intermediate results of each step, so you do not have to do it manually. It also minimizes the time it takes to update the results if any step changes, be it some change in the source data, or in the code. {targets} knows which steps are up-to-date, and which are not, and only runs the steps that are outdated.\nConsider the following minimal example:\nlibrary(targets)\n\nlist(\n  # 1. Load the mtcars dataset.\n  tar_target(\n    name = mtcars_data,\n    command = data(mtcars)\n  ),\n\n  # 2. Compute the mean of the mpg column.\n  tar_target(\n    name = mpg_mean,\n    command = mean(mtcars_data$mpg)\n  ),\n\n  # 3. Create a histogram plot of mpg using base R.\n  tar_target(\n    name = hist_mpg,\n    packages = c(\"ggplot2\"),\n    command = {\n      ggplot(mtcars_data, aes(x = mpg)) +\n        geom_histogram(binwidth = 1) +\n        labs(title = \"Histogram of MPG\", x = \"Miles Per Gallon\", y = \"Count\")\n    }\n  )\n)\nThis script has three steps. It loads the data, computes a simple statistic, and creates a plot. To run this pipeline with targets you would need to save this script to the _targets.R file in the root of the project directory and run targets::tar_make() in R console.\n\n\nCode to try targets in R console interactively\n\nTo quickly run the pipeline above in R console without setting up targets properly and creating an R script file, you can use the code below, that can be pasted in to the R console (and it will make the pipeline run in a temporary directory):\ntar_dir({\n  # runs the code in a temporary directory\n  tar_script(\n    {\n      library(targets)\n\n      list(\n        # 1. Load the mtcars dataset.\n        tar_target(\n          name = mtcars_data,\n          command = data(mtcars)\n        ),\n\n        # 2. Compute the mean of the mpg column.\n        tar_target(\n          name = mpg_mean,\n          command = mean(mtcars_data$mpg)\n        ),\n\n        # 3. Create a histogram plot of mpg using base R.\n        tar_target(\n          name = hist_mpg,\n          packages = c(\"ggplot2\"),\n          command = {\n            ggplot(mtcars_data, aes(x = mpg)) +\n              geom_histogram(binwidth = 1) +\n              labs(\n                title = \"Histogram of MPG\",\n                x = \"Miles Per Gallon\",\n                y = \"Count\"\n              )\n          }\n        )\n      )\n    },\n    ask = FALSE\n  )\n\n  # Run all targets defined in the pipeline.\n  tar_make()\n})\nYou will get output similar to this:\n▶ dispatched target mtcars_data\n● completed target mtcars_data [0 seconds, 1.225 kilobytes]\n▶ dispatched target plot_mpg\n● completed target plot_mpg [0.011 seconds, 65 bytes]\n▶ dispatched target mpg_mean\n● completed target mpg_mean [0 seconds, 52 bytes]\n▶ ended pipeline [0.059 seconds]\nIt would mean that all steps have been executed successfully.\nSimilarly, if you replace tar_make() with tar_visnetwork(), you will get a visualization of the pipeline:\ntar_dir({\n  # runs the code in a temporary directory\n  tar_script(\n    {\n      library(targets)\n\n      list(\n        # 1. Load the mtcars dataset.\n        tar_target(\n          name = mtcars_data,\n          command = data(mtcars)\n        ),\n\n        # 2. Compute the mean of the mpg column.\n        tar_target(\n          name = mpg_mean,\n          command = mean(mtcars_data$mpg)\n        ),\n\n        # 3. Create a histogram plot of mpg using base R.\n        tar_target(\n          name = hist_mpg,\n          packages = c(\"ggplot2\"),\n          command = {\n            ggplot(mtcars_data, aes(x = mpg)) +\n              geom_histogram(binwidth = 1) +\n              labs(\n                title = \"Histogram of MPG\",\n                x = \"Miles Per Gallon\",\n                y = \"Count\"\n              )\n          }\n        )\n      )\n    },\n    ask = FALSE\n  )\n\n  # Run all targets defined in the pipeline.\n  tar_visnetwork()\n})\nYou would get output similar to the one in the Figure 1 below.\n\n\n\n\n\n\n\nFigure 1: “Pipeline visualization example”\n\n\n\nAs you can see in Figure 1, {targets} knows that the summary statistic and the plot depend on the data. If you were to change the first step of the pipeline, then the next time you ask {targets} to update the pipeline, it will only run steps two and three. If, however, instead of changing the data, you will change the code for the plot (e.g. change the title), then the pipeline will only re-run step three. This way, you do not have to manually keep track of what might have changed in the data or the code, or, in more complex pipelines, in the intermediate data (such as cross-validation folds for machine learning models) - {targets} will figure it out for you.",
+    "crumbs": [
+      "2. Building analysis pipelines with `targets`"
+    ]
+  },
+  {
+    "objectID": "2-analysis-pipeline.html#goal",
+    "href": "2-analysis-pipeline.html#goal",
+    "title": "2. Building analysis pipelines with targets",
+    "section": "2.1 Goal",
+    "text": "2.1 Goal\nThe goal of this exercise is to use the project folder that you have set up in the previous exercise with {renv} and {pak} to create a simple analysis pipeline using {targets}.\n\n\n\n\n\n\nNote\n\n\n\nIf you have not successfully completed the previous exercise, you can start the current one by downloading the repository https://github.com/e-kotov/2025-mpidr-workflows-reference-01 and extracting it to your computer.",
+    "crumbs": [
+      "2. Building analysis pipelines with `targets`"
+    ]
+  },
+  {
+    "objectID": "2-analysis-pipeline.html#instructions",
+    "href": "2-analysis-pipeline.html#instructions",
+    "title": "2. Building analysis pipelines with targets",
+    "section": "2.2 Instructions",
+    "text": "2.2 Instructions",
+    "crumbs": [
+      "2. Building analysis pipelines with `targets`"
+    ]
+  },
+  {
+    "objectID": "2-analysis-pipeline.html#open-the-project-folder-in-your-editor",
+    "href": "2-analysis-pipeline.html#open-the-project-folder-in-your-editor",
+    "title": "2. Building analysis pipelines with targets",
+    "section": "2.3 Open the project folder in your editor",
+    "text": "2.3 Open the project folder in your editor\nIf no",
+    "crumbs": [
+      "2. Building analysis pipelines with `targets`"
+    ]
+  },
+  {
     "objectID": "3c-reproducible-github-repo-in-binder.html",
     "href": "3c-reproducible-github-repo-in-binder.html",
     "title": "3c. Make your own git repository reproducible in Binder",
     "section": "",
     "text": "First, make sure you got familiar with how Docker containers work.",
     "crumbs": [
-      "3. Docker",
-      "3c. Make your own git repository reproducible in Binder"
+      "3. Containerizing R and R Packages for Ultimate Reproducibility",
+      "3c. Make your own git repository reproducible in `Binder`"
     ]
   },
   {
@@ -55,8 +112,8 @@
     "section": "Footnotes",
     "text": "Footnotes\n\n\nCRANhaven: Study: Many Archived Packages Return to CRAN↩︎",
     "crumbs": [
-      "3. Docker",
-      "3c. Make your own git repository reproducible in Binder"
+      "3. Containerizing R and R Packages for Ultimate Reproducibility",
+      "3c. Make your own git repository reproducible in `Binder`"
     ]
   },
   {
@@ -116,8 +173,8 @@
     "section": "",
     "text": "The goal of this tutorial is to show you how to create a reproducible GitHub repository that can be run in Binder. This is a great way to share your code with others, as they can run your code in the cloud using just their web browser without having to install anything on their local machine. There are some limitations, such operating memory limit of 1-2 GB and temporary nature of such environment, but for most small to medium-sized projects and for someone to just quickly inspect your code, this should be sufficient.",
     "crumbs": [
-      "3. Docker",
-      "3a. Get Familiar with Docker and Binder"
+      "3. Containerizing R and R Packages for Ultimate Reproducibility",
+      "3a. Get Familiar with `Docker` and `Binder`"
     ]
   },
   {
@@ -127,8 +184,8 @@
     "section": "Real world examples",
     "text": "Real world examples\nBelow you can find real-world examples of such repositories that accompany scientific papers:\n\nhttps://github.com/Gchism94/NestArchOrg\nhttps://github.com/bbartholdy/mb11CalculusPilot\nhttps://github.com/parkgayoung/racisminarchy\n\nThere is also a minimal example (Kotov and Deneke 2024) that you can see in action below. Mind you, that the video is sped up, and in reality, it may takes a few minutes to start the container.\n\n\n\nPerforming gridsample technique in a cloud cointainer in Binder",
     "crumbs": [
-      "3. Docker",
-      "3a. Get Familiar with Docker and Binder"
+      "3. Containerizing R and R Packages for Ultimate Reproducibility",
+      "3a. Get Familiar with `Docker` and `Binder`"
     ]
   },
   {
@@ -138,8 +195,8 @@
     "section": "Try the example repository live-demo",
     "text": "Try the example repository live-demo\nGo to this example repository. Try to run the contents of the repository in a container in the cloud using Binder by clicking on the badge that looks like this: .\nWhen you do so, you will be presented with an RStudio interface in your web browser. The actual RStudio and R will be running in a container on a server provided by one of the participants of the The BinderHub Federation.\nHow does this magic happen?\n\n\n\n\n\nflowchart TB\n  A[User passes GitHub repository URL to mybinder.org]\n  A --&gt; Z[BinderHub starts a cloud server with Docker software]\n  Z --&gt; B[BinderHub downloads files from given repository to create a Docker image]\n  B --&gt; C{Docker image already in temp storage?}\n  C -- Yes --&gt; D[BinderHub pulls Docker image from temp storage]\n  C -- No --&gt; E[BinderHub Builds Docker image]\n  E --&gt; F[BinderHub pushes Docker image to temp storage]\n  F --&gt; D\n  D --&gt; G[BinderHub runs the Docker image]\n  G --&gt; H[User gets access to the running image in a web browser]",
     "crumbs": [
-      "3. Docker",
-      "3a. Get Familiar with Docker and Binder"
+      "3. Containerizing R and R Packages for Ultimate Reproducibility",
+      "3a. Get Familiar with `Docker` and `Binder`"
     ]
   },
   {
@@ -149,8 +206,8 @@
     "section": "Explore how containers work",
     "text": "Explore how containers work\nIf you look inside the example repository, you will see that it contains a Dockerfile and a few other essential files to create and run a container with RStudio. Here’s a breakdown of what each file does and how you can change them to set up your container.\n\nDockerfile\nDockerfile defines how your container is created. It is an instruction set that container building software, such as Docker, uses to create a container image. It is similar to how you can type commands in the terminal to install software on your computer, but in this case, you are installing software inside a container and the syntax of a Dockerfile is a bit different, as it prefixes each command with a keyword such as FROM, COPY, RUN, etc. You can find more details in the Docker documentation.\n\nFirst we tell the container software to use the rocker/binder:4.0.0 container image as a base. This is a container image that someone has already created and shared with the community. In this case it’s created by the Rocker Project. It already has Linux operating system, R, RStudio and many R packages installed.\n\nFROM rocker/binder:4.0.0\nIf you were building your own highly specialised container, you would probably start with a more basic container image, such as ubuntu:20.04 or debian:bullseye, and then install all the software you need from scratch. This is more work, but it gives you more control over what is installed in the container.\n\nNext we copy all the files from the repository into the container. This is done with the COPY command. This way, when the container is started, all the files from the repository are available inside the container.\n\nCOPY --chown=${NB_USER} . ${HOME}\nIf you were to build a container not for the GitHub repository and Binder, but for use in the high-performance computing cluster or on your own computer, you would probably want to copy only the essential files and not the whole repository. You would also not include the data or the analysis code, but would only include configuration files that define which software should be inside the container.\n\nThe last line of the Dockerfile is the RUN command that installs R packages that are not part of the Rocker container image. You can find out empirically which packages are missing by trying to run your code in the container and seeing which packages are missing. Or you can read the source code of the container creation script (e.g. for Rocker Verse, Rocker Tidyverse, or Rocker Geospatial) and see which packages are pre-installed there.\n\nRUN if [ -f install.R ]; then R --quiet -f install.R; fi\n\n\ninstall.R\ninstall.R file contains the R code that installs the GridSample package. This package is not included in the Rocker container image, so we need to install it manually. In this case, a very specific version of the package is installed, because this specific version had a certain bug fixed.\nremotes::install_github(\"nrukt00vt/gridsample@03c2d10134cbf94dc8c7452c3a5967c8624e260a\", force = TRUE, dependencies = TRUE)\nHowever, this install.R file can contain any R code. You can install packages in all the usual ways, for example:\nTo install from CRAN:\ninstall.packages(\"ggplot2\")\nTo install a certain package version from CRAN or install versions of packages that were archived on CRAN (by default, installs the latest available version, even if the package is archived):\nremotes:install_version(\"MortalitySmooth\")\nTo install any package from GitHub:\nremotes::install_github(\"MPIDR/rsocsim\")",
     "crumbs": [
-      "3. Docker",
-      "3a. Get Familiar with Docker and Binder"
+      "3. Containerizing R and R Packages for Ultimate Reproducibility",
+      "3a. Get Familiar with `Docker` and `Binder`"
     ]
   }
 ]

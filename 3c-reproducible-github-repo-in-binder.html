@@ -100,7 +100,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./3a-how-docker-and-binder-work.html">3. Docker</a></li><li class="breadcrumb-item"><a href="./3c-reproducible-github-repo-in-binder.html">3c. Make your own git repository reproducible in Binder</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./3a-how-docker-and-binder-work.html">3. Containerizing R and R Packages for Ultimate Reproducibility</a></li><li class="breadcrumb-item"><a href="./3c-reproducible-github-repo-in-binder.html">3c. Make your own git repository reproducible in <code>Binder</code></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -144,13 +144,13 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./2-analysis-pipeline.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2-analysis-pipeline.html</span></a>
+ <span class="menu-text">2. Building analysis pipelines with <code>targets</code></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">3. Docker</span></a>
+ <span class="menu-text">3. Containerizing R and R Packages for Ultimate Reproducibility</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -159,19 +159,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./3a-how-docker-and-binder-work.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3a. Get Familiar with Docker and Binder</span></a>
+ <span class="menu-text">3a. Get Familiar with <code>Docker</code> and <code>Binder</code></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./3b-build-docker-container-image.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3b. Build your own Docker container image and run it (locally or in the academic cluster)</span></a>
+ <span class="menu-text">3b. Build your own <code>Docker</code> container image and run it (locally or in the academic cluster)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./3c-reproducible-github-repo-in-binder.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">3c. Make your own git repository reproducible in Binder</span></a>
+ <span class="menu-text">3c. Make your own git repository reproducible in <code>Binder</code></span></a>
   </div>
 </li>
       </ul>
@@ -203,9 +203,9 @@ ul.task-list li input[type="checkbox"] {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./3a-how-docker-and-binder-work.html">3. Docker</a></li><li class="breadcrumb-item"><a href="./3c-reproducible-github-repo-in-binder.html">3c. Make your own git repository reproducible in Binder</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./3a-how-docker-and-binder-work.html">3. Containerizing R and R Packages for Ultimate Reproducibility</a></li><li class="breadcrumb-item"><a href="./3c-reproducible-github-repo-in-binder.html">3c. Make your own git repository reproducible in <code>Binder</code></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">3c. Make your own git repository reproducible in Binder</h1>
+<h1 class="title">3c. Make your own git repository reproducible in <code>Binder</code></h1>
 </div>
 
 
@@ -222,7 +222,7 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>First, make sure you got <a href="0-how-docker-and-binder-work.qmd">familiar with how Docker containers work</a>.</p>
+<p>First, make sure you got <a href="./3a-how-docker-and-binder-work.html">familiar with how Docker containers work</a>.</p>
 <section id="the-goal" class="level3">
 <h3 class="anchored" data-anchor-id="the-goal">The Goal</h3>
 <p>Create your own repository for a hypothetical research project. Make it future proof with a Docker container that can be run in the cloud using Binder. Imagine, that for this project you need 1 or 2 R packages that were archived from CRAN and are not available in the Rocker container image.</p>
@@ -913,8 +913,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./3b-build-docker-container-image.html" class="pagination-link" aria-label="3b. Build your own Docker container image and run it (locally or in the academic cluster)">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">3b. Build your own Docker container image and run it (locally or in the academic cluster)</span>
+      <a href="./3b-build-docker-container-image.html" class="pagination-link" aria-label="3b. Build your own `Docker` container image and run it (locally or in the academic cluster)">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">3b. Build your own <code>Docker</code> container image and run it (locally or in the academic cluster)</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
