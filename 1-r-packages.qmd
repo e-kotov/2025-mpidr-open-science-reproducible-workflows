@@ -124,13 +124,18 @@ or:
 "@CRAN@"
 ```
 
-To have more control over which versions are installed, you may set the repository to [Posit Package Manager](https://packagemanager.posit.co/){target="_blank"} and constrain it to a certain date:
+To have more control over which versions are installed, you may set the repository to [Posit Package Manager](https://packagemanager.posit.co/){target="_blank"} and constrain it to a certain date. We also add the [rOpenSci](https://ropensci.r-universe.dev/){target="_blank"} repository to install a certain package that is only available from there.
 
 ```{r}
-options(repos = "https://packagemanager.posit.co/cran/2025-02-28")
+options(
+  repos = c(
+    "CRAN" = "https://packagemanager.posit.co/cran/2025-02-28",
+    "rOpenSci" = "https://ropensci.r-universe.dev"
+  )
+)
 ```
 
-If you run `getOption("repos")` again, you should see the URL you have entered above. If it is set, the package versions you install will always correspond to the date you used. This allows you to freeze the packages you use for your project in time and prevent installation of new versions which may break your code. You may change the date for this setting later and update the packages, test your code with newer versions and decide if you need to revert to older versions.
+If you run `getOption("repos")` again, you should see the URLs you have entered above. If it is set, the package versions you install will always correspond to the date you used. This allows you to freeze the packages you use for your project in time and prevent installation of new versions which may break your code. You may change the date for this setting later and update the packages, test your code with newer versions and decide if you need to revert to older versions.
 
 ::: {.callout-note}
 Unlike CRAN, Posit Package Manager provides pre-compiled binaries of R packages for Linux. This is particularly beneficial for Linux users and for last steps in this tutorial, where we build containers that are also based on Linux. Typically, R packages on Linux are installed from source, which can be time-consuming, and installing pre-compiled binaries speeds up the installation process significantly.
