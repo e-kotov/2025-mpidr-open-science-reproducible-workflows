@@ -303,6 +303,17 @@ library(targets)
 If you have not had `targets` installed prior to starting this exercise, it does not exist in your default user R library, but only exists in the `{renv}` R package cache and in the current project directory. If you would like to check this, you can start another `R`/`RStudio` session in a differnt project directory and try to load `targets` there. It should fail, as there is no `targets` package in the default user R library.
 :::
 
+Now go to [https://github.com/jschoeley/openscience25/tree/main/layer2-communal/example_2-1/code](https://github.com/jschoeley/openscience25/tree/main/layer2-communal/example_2-1/code){target="_blank"}, find the relevant `R` script, and check all the packages that are needed to run Jonas's code and install them into the project just like you have just done with `targets`.
+
+::: {.callout-note}
+Notice that some packages are installed from CRAN, but there is one package that is installed from *https://ropensci.r-universe.dev*. This is not a problem at all for `{renv}`, as it is able to memorise where each package is coming from, even if it is from multiple repositories.
+:::
+
+::: {.callout-tip collapse="true"}
+## Hint
+You basically need all lines from [https://github.com/jschoeley/openscience25/blob/main/layer2-communal/example_2-1/code/00-install_dependencies.R](https://github.com/jschoeley/openscience25/blob/main/layer2-communal/example_2-1/code/00-install_dependencies.R){target="_blank"} except for the last three where Jonas saves the package list to a csv file. You do not need it, as we are using `{renv}` to manage packages.
+:::
+
 ### Save the package versions into lockfile {#snapshot}
 
 You can install and remove packages as usual while working with your project. Whenever you are done with testing your code and are certain that the installed packages are suffient to reproduce your code, you can "lock" the package list and their versions with `{renv}`.
@@ -339,13 +350,15 @@ You may get a warning message for some missing dependencies, which you may have 
 ```r
 The following required packages are not installed:
 - cpp11  [required by igraph]
+- progress       [required by readxl, vroom]
+- RcppArmadillo  [required by bayesm]
 Consider reinstalling these packages before snapshotting the lockfile.
 ```
 
 If you get something like this, you should install the missing package(s) and then run `renv::snapshot()` again.
 
 ```{r}
-install.packages("cpp11")
+install.packages(c("cpp11", "progress", "RcppArmadillo"))
 renv::snapshot()
 ```
 
