@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>1. R packages version management with renv and pak – Projects’ workflow for reproducibility and replicability using R</title>
+<title>1. R packages version management with renv – Projects’ workflow for reproducibility and replicability using R</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -139,7 +139,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./1-r-packages.html">1. R packages version management with <code>renv</code> and <code>pak</code></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./1-r-packages.html">1. R packages version management with <code>renv</code></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -177,7 +177,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./1-r-packages.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">1. R packages version management with <code>renv</code> and <code>pak</code></span></a>
+ <span class="menu-text">1. R packages version management with <code>renv</code></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -251,11 +251,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#force-renv-to-record-all-packages" id="toc-force-renv-to-record-all-packages" class="nav-link" data-scroll-target="#force-renv-to-record-all-packages"><span class="header-section-number">2.2.5.1</span> Force <code>{renv}</code> to record all packages</a></li>
   <li><a href="#instruct-renv-to-use-posit-package-manager" id="toc-instruct-renv-to-use-posit-package-manager" class="nav-link" data-scroll-target="#instruct-renv-to-use-posit-package-manager"><span class="header-section-number">2.2.5.2</span> Instruct <code>{renv}</code> to use Posit Package Manager</a></li>
   </ul></li>
-  <li><a href="#install-pak" id="toc-install-pak" class="nav-link" data-scroll-target="#install-pak"><span class="header-section-number">2.2.6</span> Install <code>{pak}</code></a></li>
-  <li><a href="#enable-pak-as-a-backend-for-renv" id="toc-enable-pak-as-a-backend-for-renv" class="nav-link" data-scroll-target="#enable-pak-as-a-backend-for-renv"><span class="header-section-number">2.2.7</span> Enable <code>{pak}</code> as a backend for <code>{renv}</code></a></li>
-  <li><a href="#install-packages" id="toc-install-packages" class="nav-link" data-scroll-target="#install-packages"><span class="header-section-number">2.2.8</span> Try installing packages</a></li>
-  <li><a href="#snapshot" id="toc-snapshot" class="nav-link" data-scroll-target="#snapshot"><span class="header-section-number">2.2.9</span> Save the package versions into lockfile</a></li>
-  <li><a href="#test-restore" id="toc-test-restore" class="nav-link" data-scroll-target="#test-restore"><span class="header-section-number">2.2.10</span> Test R packages restoration</a></li>
+  <li><a href="#install-packages" id="toc-install-packages" class="nav-link" data-scroll-target="#install-packages"><span class="header-section-number">2.2.6</span> Try installing packages</a></li>
+  <li><a href="#snapshot" id="toc-snapshot" class="nav-link" data-scroll-target="#snapshot"><span class="header-section-number">2.2.7</span> Save the package versions into lockfile</a></li>
+  <li><a href="#test-restore" id="toc-test-restore" class="nav-link" data-scroll-target="#test-restore"><span class="header-section-number">2.2.8</span> Test R packages restoration</a></li>
   </ul></li>
   </ul></li>
   </ul>
@@ -266,7 +264,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">1. R packages version management with <code>renv</code> and <code>pak</code></h1>
+<h1 class="title">1. R packages version management with <code>renv</code></h1>
 </div>
 
 
@@ -298,7 +296,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="even">
 <td><a href="#pak"><code>{pak}</code></a></td>
-<td>Significantly speeds up R package installation by using multiple threads to download and install both requested packages and their dependencies. Can be used to install <a href="https://cran.r-project.org/" target="_blank">CRAN</a> and <a href="https://www.bioconductor.org/" target="_blank">Bioconductor</a> packages, as well as packages from GitHub or any other repository. Can be used independently from <code>{renv}</code>, or as a companion of <code>{renv}</code> .</td>
+<td>Significantly speeds up R package installation by using multiple threads to download and install both requested packages and their dependencies. Can be used to install <a href="https://cran.r-project.org/" target="_blank">CRAN</a> and <a href="https://www.bioconductor.org/" target="_blank">Bioconductor</a> packages, as well as packages from GitHub or any other repository. Can be used independently from <code>{renv}</code>, or as a companion of <code>{renv}</code> . Using <code>{pak}</code> as “backend” for <a href="#renv"><code>{renv}</code></a> is still experimental and only recommended for advanced users. We do not recommend it for beginners and for this particular exercise.</td>
 </tr>
 </tbody>
 </table>
@@ -346,7 +344,8 @@ Figure&nbsp;1: Files and folders created by <code>renv</code> when initialized
 <section id="what-does-pak-do" class="level3" data-number="1.2.1">
 <h3 data-number="1.2.1" class="anchored" data-anchor-id="what-does-pak-do"><span class="header-section-number">1.2.1</span> What does <code>{pak}</code> do?</h3>
 <p><a href="https://pak.r-lib.org/" target="_blank"><code>{pak}</code></a> can be used instead of R’s default <code>install.packages()</code> to install R packages and their dependencies faster.</p>
-<p>It can also serve as a so-called “backend” for <a href="#renv"><code>{renv}</code></a>, that is it will help <code>{renv}</code> to install packages and their dependencies much faster when you, or someone who reproduces your code, such as your collaborator, use <a href="#renv"><code>{renv}</code></a> to fully restore the R package environment of a project on a new computer.</p>
+<p>It can also serve as a so-called “backend” for <a href="#renv"><code>{renv}</code></a>, that is it will help <code>{renv}</code> to install packages and their dependencies much faster when you, or someone who reproduces your code, such as your collaborator, use <code>{renv}</code> to fully restore the R package environment of a project on a new computer.</p>
+<p>If you would like to enable <code>{pak}</code> as a backend for <code>{renv}</code>, you can find which <code>{renv}</code> options to set in the <a href="https://rstudio.github.io/renv/reference/config.html?q=pak#renv-config-pak-enabled" target="_blank"><code>{renv}</code> documentation</a>, however, as this is still experimental, please do not use it in this tutorial, as we will not have time to debug it if something does not work.</p>
 </section>
 </section>
 </section>
@@ -354,7 +353,7 @@ Figure&nbsp;1: Files and folders created by <code>renv</code> when initialized
 <h1 data-number="2"><span class="header-section-number">2</span> Exercise</h1>
 <section id="goal" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="goal"><span class="header-section-number">2.1</span> Goal</h2>
-<p>The goal of this exercise is setup a new blank project with isolated R packages library using <a href="#renv"><code>{renv}</code></a> and <a href="#pak"><code>{pak}</code></a> in such a way, so that all the specific package versions can be restored on a new computer or in a new folder.</p>
+<p>The goal of this exercise is setup a new blank project with isolated R packages library using <a href="#renv"><code>{renv}</code></a> in such a way, so that all the specific package versions can be restored on a new computer or in a new folder.</p>
 <p>The tutorial is long and detailed, however in essence it is just a few steps. In <a href="#fig-tutorial-overiew" class="quarto-xref">Figure&nbsp;2</a> you can find a summary of the steps and can click on them to get directly to the corresponding section of the exercise.</p>
 <div class="cell" data-eval="true" data-layout-align="default">
 <div class="cell-output-display">
@@ -365,18 +364,16 @@ Figure&nbsp;1: Files and folders created by <code>renv</code> when initialized
 <pre class="mermaid mermaid-js" data-label="fig-tutorial-overiew">flowchart TD
     A["Create project folder &amp; set package repository"] --&gt; B["Initialize renv: **renv::init()**"]
     B --&gt; C["Configure renv: set snapshot type to 'all' and enable Posit Package Manager"]
-    C --&gt; D["Install **pak** to speed up package installs and instruct **renv** to use it"]
-    D --&gt; E["Install packages (e.g., targets)"]
-    E --&gt; F["Snapshot package versions: **renv::snapshot()**"]
-    F --&gt; G["Test restoration: copy project, delete renv/library, run **renv::restore()**"]
+    C --&gt; D["Install packages (e.g., targets)"]
+    D --&gt; E["Snapshot package versions: **renv::snapshot()**"]
+    E --&gt; F["Test restoration: copy project, delete renv/library, run **renv::restore()**"]
 
     click A "#create-project"
     click B "#renv-init"
     click C "#renv-config"
-    click D "#install-pak"
-    click E "#install-packages"
-    click F "#snapshot"
-    click G "#test-restore"
+    click D "#install-packages"
+    click E "#snapshot"
+    click F "#test-restore"
 </pre>
 </div>
 </div>
@@ -426,11 +423,15 @@ Note
 <p>or:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a> CRAN</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="st">"@CRAN@"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>To have more control over which versions are installed, you may set the repository to <a href="https://packagemanager.posit.co/" target="_blank">Posit Package Manager</a> and constrain it to a certain date:</p>
+<p>To have more control over which versions are installed, you may set the repository to <a href="https://packagemanager.posit.co/" target="_blank">Posit Package Manager</a> and constrain it to a certain date. We also add the <a href="https://ropensci.r-universe.dev/" target="_blank">rOpenSci</a> repository to install a certain package that is only available from there.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">repos =</span> <span class="st">"https://packagemanager.posit.co/cran/2025-02-28"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">repos =</span> <span class="fu">c</span>(</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"CRAN"</span> <span class="ot">=</span> <span class="st">"https://packagemanager.posit.co/cran/2025-02-28"</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>If you run <code>getOption("repos")</code> again, you should see the URL you have entered above. If it is set, the package versions you install will always correspond to the date you used. This allows you to freeze the packages you use for your project in time and prevent installation of new versions which may break your code. You may change the date for this setting later and update the packages, test your code with newer versions and decide if you need to revert to older versions.</p>
+<p>If you run <code>getOption("repos")</code> again, you should see the URLs you have entered above. If it is set, the package versions you install will always correspond to the date you used. This allows you to freeze the packages you use for your project in time and prevent installation of new versions which may break your code. You may change the date for this setting later and update the packages, test your code with newer versions and decide if you need to revert to older versions.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -517,114 +518,26 @@ Important
 </div>
 </section>
 </section>
-<section id="install-pak" class="level3" data-number="2.2.6">
-<h3 data-number="2.2.6" class="anchored" data-anchor-id="install-pak"><span class="header-section-number">2.2.6</span> Install <code>{pak}</code></h3>
-<p>Now install <code>{pak}</code> as you normally would. We also suggest that you install <code>usethis</code> package, as it provides some useful functions to easily edit configuration some files and setup certain files in the project from templates:</p>
+<section id="install-packages" class="level3" data-number="2.2.6">
+<h3 data-number="2.2.6" class="anchored" data-anchor-id="install-packages"><span class="header-section-number">2.2.6</span> Try installing packages</h3>
+<p>Now you can try to install a new package to see if <code>{renv}</code> works as expected. In the next exercise, we will need the <code>{targets}</code> package, so we can try installing it:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">"pak"</span>, <span class="st">"usethis"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"targets"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Note that even though you are using <code>install.packages()</code>, the installation process will look slightly different because <code>{renv}</code> is active in the current project.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Downloading packages -------------------------------------------------------</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> Downloading jsonlite from CRAN ...            OK [<span class="fl">1.1</span> Mb <span class="cf">in</span> <span class="fl">0.66</span>s]</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> Downloading httr2 from CRAN ...               OK [<span class="fl">718.6</span> Kb <span class="cf">in</span> <span class="fl">0.61</span>s]</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>Successfully downloaded <span class="dv">2</span> packages <span class="cf">in</span> <span class="fl">4.9</span> seconds.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>You will also be asked if you would like to install extra packages, to which you should agree. This is because <code>{renv}</code> is taking over the package installation process.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>The following <span class="fu">package</span>(s) will be installed<span class="sc">:</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> askpass     [<span class="dv">1</span>.<span class="fl">2.1</span>]</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> cli         [<span class="dv">3</span>.<span class="fl">6.4</span>]</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>...</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> yaml        [<span class="dv">2</span>.<span class="fl">3.10</span>]</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> zip         [<span class="dv">2</span>.<span class="fl">3.2</span>]</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>These packages will be installed into <span class="st">"path-to-your-project/renv/library/macos/R-4.4/aarch64-apple-darwin20"</span>.</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>Do you want to proceed? [Y<span class="sc">/</span>n]<span class="sc">:</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-</section>
-<section id="enable-pak-as-a-backend-for-renv" class="level3" data-number="2.2.7">
-<h3 data-number="2.2.7" class="anchored" data-anchor-id="enable-pak-as-a-backend-for-renv"><span class="header-section-number">2.2.7</span> Enable <code>{pak}</code> as a backend for <code>{renv}</code></h3>
-<p>To make <code>{renv}</code> use <code>{pak}</code> as a “backend” and therefore install packages and their dependencies faster, you need to add another line to your <code>.Rprofile</code> file in the current project/working directory. Either locate and edit the file manually (you may need to enable the display of hidden files in your editor or system), or you can run this command to open it in the editor automatically:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">proj_set</span>(<span class="st">"."</span>, <span class="at">force =</span> <span class="cn">TRUE</span>) <span class="co"># force sets the current direcotry as a project</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">edit_r_profile</span>(<span class="st">"project"</span>) <span class="co"># opens the project level .Rprofile file in the editor</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>In line with the <a href="https://rstudio.github.io/renv/reference/config.html#renv-config-pak-enabled"><code>{renv}</code> documentation</a>, add this line to the end of the file:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="st">"renv.config.pak.enabled"</span> <span class="ot">=</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Warning
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><code>{renv}</code>’s support for <code>{pak}</code> is still officially experimental, even though in practice it is quite stable. However, it may not work correctly in all cases. If something does not work, simply remove the line from the <code>.Rprofile</code> file. Everything will work fine without it, it’s just that the package installation process will be slower.</p>
-</div>
-</div>
-<p>So your new <code>.Rprofile</code> file should look like this:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"renv/activate.R"</span>)</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="st">"renv.config.pak.enabled"</span> <span class="ot">=</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>As these lines are only executed when <code>R</code> starts in the project directory, to apply it in the current <code>R</code> session, you will need to run the same command in the <code>R</code> console:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="st">"renv.config.pak.enabled"</span> <span class="ot">=</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Alternatively, you can also restart the R session to make the changes take effect.</p>
-</div>
-</div>
-</section>
-<section id="install-packages" class="level3" data-number="2.2.8">
-<h3 data-number="2.2.8" class="anchored" data-anchor-id="install-packages"><span class="header-section-number">2.2.8</span> Try installing packages</h3>
-<p>Now you can try to install a new package to see if <code>{renv}</code> works with <code>{pak}</code>. In the next exercise, we will need the <code>{targets}</code> package, so we can try installing it:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"targets"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>If you have setup both <code>{renv}</code> and <code>{pak}</code> correctly, you should see a new interface of the package installation process. You will be presented with the installation plan (<a href="#fig-package-installation-process1" class="quarto-xref">Figure&nbsp;3</a>) and asked to confirm.</p>
-<div id="fig-package-installation-process1" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-package-installation-process1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="media/images/install-targets-with-renv-pak-1.png" class="img-fluid figure-img" style="width:70.0%">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-package-installation-process1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: Package installation process with <code>{renv}</code> and <code>{pak}</code> - installation plan preview
-</figcaption>
-</figure>
-</div>
-<p>Once you confirm with “Y” and “Enter/Return”, packages will be installed:</p>
-<div id="fig-package-installation-process2" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-package-installation-process2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="media/images/install-targets-with-renv-pak-2.png" class="img-fluid figure-img" style="width:70.0%">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-package-installation-process2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4: Package installation process with <code>{renv}</code> and <code>{pak}</code> - executing installation plan
-</figcaption>
-</figure>
-</div>
+<p>You should see in the <code>R</code> console:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>The following <span class="fu">package</span>(s) will be installed<span class="sc">:</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> backports  [<span class="dv">1</span>.<span class="fl">5.0</span>]</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>...</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> targets    [<span class="dv">1</span>.<span class="fl">10.1</span>]</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>...</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> yaml       [<span class="dv">2</span>.<span class="fl">3.10</span>]</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>These packages will be installed into <span class="st">"path-to-your-project/renv/library/macos/R-4.4/aarch64-apple-darwin20"</span>.</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>Do you want to proceed? [Y<span class="sc">/</span>n]<span class="sc">:</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Agree and wait for the <code>{targets}</code> package and it’s dependencies to be installed.</p>
 <p>You can check that the <code>{targets}</code> package is installed by trying to load it:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(targets)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(targets)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -639,44 +552,76 @@ Note
 <p>If you have not had <code>targets</code> installed prior to starting this exercise, it does not exist in your default user R library, but only exists in the <code>{renv}</code> R package cache and in the current project directory. If you would like to check this, you can start another <code>R</code>/<code>RStudio</code> session in a differnt project directory and try to load <code>targets</code> there. It should fail, as there is no <code>targets</code> package in the default user R library.</p>
 </div>
 </div>
+<p>Now go to <a href="https://github.com/jschoeley/openscience25/tree/main/layer2-communal/example_2-1/code" target="_blank">https://github.com/jschoeley/openscience25/tree/main/layer2-communal/example_2-1/code</a>, find the relevant <code>R</code> script, and check all the packages that are needed to run Jonas’s code and install them into the project just like you have just done with <code>targets</code>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Notice that some packages are installed from CRAN, but there is one package that is installed from <em>https://ropensci.r-universe.dev</em>. This is not a problem at all for <code>{renv}</code>, as it is able to memorise where each package is coming from, even if it is from multiple repositories.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hint
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>You basically need all lines from <a href="https://github.com/jschoeley/openscience25/blob/main/layer2-communal/example_2-1/code/00-install_dependencies.R" target="_blank">https://github.com/jschoeley/openscience25/blob/main/layer2-communal/example_2-1/code/00-install_dependencies.R</a> except for the last three where Jonas saves the package list to a csv file. You do not need it, as we are using <code>{renv}</code> to manage packages.</p>
+</div>
+</div>
+</div>
 </section>
-<section id="snapshot" class="level3" data-number="2.2.9">
-<h3 data-number="2.2.9" class="anchored" data-anchor-id="snapshot"><span class="header-section-number">2.2.9</span> Save the package versions into lockfile</h3>
+<section id="snapshot" class="level3" data-number="2.2.7">
+<h3 data-number="2.2.7" class="anchored" data-anchor-id="snapshot"><span class="header-section-number">2.2.7</span> Save the package versions into lockfile</h3>
 <p>You can install and remove packages as usual while working with your project. Whenever you are done with testing your code and are certain that the installed packages are suffient to reproduce your code, you can “lock” the package list and their versions with <code>{renv}</code>.</p>
 <p>To check the current status of the R package versions snapshot, you can run the following command:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">status</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">status</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>You should get something like this:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>The following <span class="fu">package</span>(s) are <span class="cf">in</span> an inconsistent state<span class="sc">:</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>package     installed recorded used</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>askpass     y         n        y   </span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>backports   y         n        y   </span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>....</span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>yaml        y         n        y   </span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>zip         y         n        y   </span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>See <span class="st">`</span><span class="at">?renv::status</span><span class="st">`</span> <span class="cf">for</span> advice on resolving these issues.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>The following <span class="fu">package</span>(s) are <span class="cf">in</span> an inconsistent state<span class="sc">:</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>package     installed recorded used</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>askpass     y         n        y   </span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>backports   y         n        y   </span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>....</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>yaml        y         n        y   </span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>zip         y         n        y   </span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>See <span class="st">`</span><span class="at">?renv::status</span><span class="st">`</span> <span class="cf">for</span> advice on resolving these issues.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>As you can see from the <code>recorded</code> column, none of the package versions are currently recorded (snapshotted) in the <code>renv.lock</code> lockfile. To save the package list and their versions into the lockfile, you can run the following command:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">snapshot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">snapshot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>You may get a warning message for some missing dependencies, which you may have to install manually. For example:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>The following required packages are not installed<span class="sc">:</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> cpp11  [required by igraph]</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>Consider reinstalling these packages before snapshotting the lockfile.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>The following required packages are not installed<span class="sc">:</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> cpp11  [required by igraph]</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> progress       [required by readxl, vroom]</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> RcppArmadillo  [required by bayesm]</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>Consider reinstalling these packages before snapshotting the lockfile.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>If you get something like this, you should install the missing package(s) and then run <code>renv::snapshot()</code> again.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"cpp11"</span>)</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">snapshot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">"cpp11"</span>, <span class="st">"progress"</span>, <span class="st">"RcppArmadillo"</span>))</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">snapshot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then check the status again:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">status</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">status</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>You should repeat this until after running <code>renv::status()</code> you get:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>No issues found <span class="sc">--</span> the project is <span class="cf">in</span> a consistent state.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>No issues found <span class="sc">--</span> the project is <span class="cf">in</span> a consistent state.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -691,8 +636,8 @@ Note
 </div>
 </div>
 </section>
-<section id="test-restore" class="level3" data-number="2.2.10">
-<h3 data-number="2.2.10" class="anchored" data-anchor-id="test-restore"><span class="header-section-number">2.2.10</span> Test R packages restoration</h3>
+<section id="test-restore" class="level3" data-number="2.2.8">
+<h3 data-number="2.2.8" class="anchored" data-anchor-id="test-restore"><span class="header-section-number">2.2.8</span> Test R packages restoration</h3>
 <p>In the steps above you have created a project directory with fully isolated independent R package library. Now is the time to do a simple test, whether you can restore the R package environment of a project on a new computer, or at least in a new folder.</p>
 <p>To quickly test with the new folder, close your <code>R</code>/<code>RStudio</code> (or whichever other editor you are using) and create a of the the project folder in a new location on your computer. Once copied, manually delete the <code>renv/library</code> folder at this new location. Now open the new project folder with the deleted <code>renv/library</code> folder in your editor.</p>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -709,19 +654,18 @@ Note
 </div>
 </div>
 <p>Once <code>R</code> starts in this new project directory you should see the following message:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>OK</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> Installing renv  ... OK</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> Project <span class="st">'path/to/your/project-copy'</span> loaded. [renv <span class="dv">1</span>.<span class="fl">1.1</span>]</span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> One or more packages recorded <span class="cf">in</span> the lockfile are not installed.</span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> Use <span class="st">`</span><span class="at">renv::status()</span><span class="st">`</span> <span class="cf">for</span> more details.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>OK</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> Installing renv  ... OK</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> Project <span class="st">'path/to/your/project-copy'</span> loaded. [renv <span class="dv">1</span>.<span class="fl">1.1</span>]</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> One or more packages recorded <span class="cf">in</span> the lockfile are not installed.</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> Use <span class="st">`</span><span class="at">renv::status()</span><span class="st">`</span> <span class="cf">for</span> more details.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This means that <code>R</code> found the <code>.Rrofile</code> file in the project root and exectuted all of the commands there. The first command was to run all the code in <code>renv/activate.R</code> which would automatically install <code>{renv}</code> on a new computer if it was not installed yet. It has also checked briefly the installation status of the packages recorded in the <code>renv.lock</code> file against the project package library, ignoring any packages installed by the user into the system wide user R packages library.</p>
 <p>Feel free to run <code>renv::status()</code> to check the status of the packages, but this is optional.</p>
-<p>To restore all pacakge versions, run <code>renv::restore(prompt = FALSE)</code>. Agree to installing <code>{pak}</code>, and the installation of the rest of the packages will be handled without further prompts. Once the process finishes, you should be able to check the status again:</p>
+<p>To restore all pacakge versions, run <code>renv::restore(prompt = FALSE)</code>. Once the process finishes, you should be able to check the status again:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">status</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">status</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>You may get a warning message for the <code>{pak}</code> package version, which is normall. You can either reinstall the package and make a snapshot again, or just make a snapshot with <code>renv::snapshot()</code>.</p>
 <p>In the end you should be able to get <code>No issues found -- the project is in a consistent state.</code> when running <code>renv::status()</code>.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">

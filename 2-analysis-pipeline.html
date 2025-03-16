@@ -173,7 +173,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./1-r-packages.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1. R packages version management with <code>renv</code> and <code>pak</code></span></a>
+ <span class="menu-text">1. R packages version management with <code>renv</code></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -230,6 +230,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#goal" id="toc-goal" class="nav-link" data-scroll-target="#goal"><span class="header-section-number">2.1</span> Goal</a></li>
   <li><a href="#instructions" id="toc-instructions" class="nav-link" data-scroll-target="#instructions"><span class="header-section-number">2.2</span> Instructions</a></li>
   <li><a href="#open-the-project-folder-in-your-editor" id="toc-open-the-project-folder-in-your-editor" class="nav-link" data-scroll-target="#open-the-project-folder-in-your-editor"><span class="header-section-number">2.3</span> Open the project folder in your editor</a></li>
+  <li><a href="#restore-install-the-r-packages-in-the-project" id="toc-restore-install-the-r-packages-in-the-project" class="nav-link" data-scroll-target="#restore-install-the-r-packages-in-the-project"><span class="header-section-number">2.4</span> Restore (install) the R packages in the project</a>
+  <ul class="collapse">
+  <li><a href="#in-your-own-project" id="toc-in-your-own-project" class="nav-link" data-scroll-target="#in-your-own-project"><span class="header-section-number">2.4.1</span> In your own project</a></li>
+  <li><a href="#in-our-reference-project" id="toc-in-our-reference-project" class="nav-link" data-scroll-target="#in-our-reference-project"><span class="header-section-number">2.4.2</span> In our reference project</a></li>
+  </ul></li>
+  <li><a href="#setup-the-targets-pipeline" id="toc-setup-the-targets-pipeline" class="nav-link" data-scroll-target="#setup-the-targets-pipeline"><span class="header-section-number">2.5</span> Setup the <code>{targets}</code> pipeline</a></li>
+  <li><a href="#explore-the-sample-pipeline" id="toc-explore-the-sample-pipeline" class="nav-link" data-scroll-target="#explore-the-sample-pipeline"><span class="header-section-number">2.6</span> Explore the sample pipeline</a></li>
+  <li><a href="#replace-the-example-pipeline-with-data-analysis-pipeline" id="toc-replace-the-example-pipeline-with-data-analysis-pipeline" class="nav-link" data-scroll-target="#replace-the-example-pipeline-with-data-analysis-pipeline"><span class="header-section-number">2.7</span> Replace the example pipeline with data analysis pipeline</a>
+  <ul class="collapse">
+  <li><a href="#write-code-for-data-download-step" id="toc-write-code-for-data-download-step" class="nav-link" data-scroll-target="#write-code-for-data-download-step"><span class="header-section-number">2.7.1</span> Write code for data download step</a></li>
+  <li><a href="#download-files-by-executing-the-pipeline" id="toc-download-files-by-executing-the-pipeline" class="nav-link" data-scroll-target="#download-files-by-executing-the-pipeline"><span class="header-section-number">2.7.2</span> Download files by executing the pipeline</a></li>
+  <li><a href="#add-data-folder-to-.gitignore" id="toc-add-data-folder-to-.gitignore" class="nav-link" data-scroll-target="#add-data-folder-to-.gitignore"><span class="header-section-number">2.7.3</span> Add data folder to <code>.gitignore</code></a></li>
+  <li><a href="#targets-settings" id="toc-targets-settings" class="nav-link" data-scroll-target="#targets-settings"><span class="header-section-number">2.7.4</span> <code>targets</code> settings</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 </nav>
@@ -295,47 +309,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 Code to try <code>targets</code> in R console interactively
 </summary>
 <p>To quickly run the pipeline above in R console without setting up <code>targets</code> properly and creating an R script file, you can use the code below, that can be pasted in to the R console (and it will make the pipeline run in a temporary directory):</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tar_dir</span>({</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># runs the code in a temporary directory</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tar_script</span>(</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    {</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">library</span>(targets)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">list</span>(</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 1. Load the mtcars dataset.</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tar_target</span>(</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">name =</span> mtcars_data,</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">command =</span> <span class="fu">data</span>(mtcars)</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>        ),</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 2. Compute the mean of the mpg column.</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tar_target</span>(</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>          <span class="at">name =</span> mpg_mean,</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>          <span class="at">command =</span> <span class="fu">mean</span>(mtcars_data<span class="sc">$</span>mpg)</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>        ),</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 3. Create a histogram plot of mpg using base R.</span></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tar_target</span>(</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>          <span class="at">name =</span> hist_mpg,</span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>          <span class="at">packages =</span> <span class="fu">c</span>(<span class="st">"ggplot2"</span>),</span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>          <span class="at">command =</span> {</span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>            <span class="fu">ggplot</span>(mtcars_data, <span class="fu">aes</span>(<span class="at">x =</span> mpg)) <span class="sc">+</span></span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>              <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>              <span class="fu">labs</span>(</span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>                <span class="at">title =</span> <span class="st">"Histogram of MPG"</span>,</span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>                <span class="at">x =</span> <span class="st">"Miles Per Gallon"</span>,</span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>                <span class="at">y =</span> <span class="st">"Count"</span></span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>              )</span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>          }</span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>      )</span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>    },</span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">ask =</span> <span class="cn">FALSE</span></span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Run all targets defined in the pipeline.</span></span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tar_make</span>()</span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(targets)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tar_dir</span>({</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tar_script</span>({</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">library</span>(targets)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Load the mtcars dataset.</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">tar_target</span>(mtcars_data, mtcars),</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Compute the mean of the mpg column.</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">tar_target</span>(mpg_mean, <span class="fu">mean</span>(mtcars_data<span class="sc">$</span>mpg)),</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Create a histogram plot of mpg using base R.</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>      <span class="co"># The plot is saved as a PNG file and the filename is returned.</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>      <span class="fu">tar_target</span>(plot_mpg, {</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>        <span class="fu">png</span>(<span class="st">"hist_mpg.png"</span>)  <span class="co"># Open a PNG device.</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>        <span class="fu">hist</span>(mtcars_data<span class="sc">$</span>mpg,</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>             <span class="at">breaks =</span> <span class="st">"Sturges"</span>,</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>             <span class="at">main =</span> <span class="st">"Histogram of MPG"</span>,</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>             <span class="at">xlab =</span> <span class="st">"Miles Per Gallon"</span>,</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>             <span class="at">ylab =</span> <span class="st">"Frequency"</span>,</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>             <span class="at">col =</span> <span class="st">"lightblue"</span>)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>        <span class="fu">dev.off</span>()  <span class="co"># Close the device.</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>        <span class="st">"hist_mpg.png"</span>  <span class="co"># Return the filename as the target value.</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>      })</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>  }, <span class="at">ask =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Run all targets defined in the pipeline.</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tar_make</span>()</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>You will get output similar to this:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>▶ dispatched target mtcars_data</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>● completed target mtcars_data [<span class="dv">0</span> seconds, <span class="fl">1.225</span> kilobytes]</span>
@@ -345,48 +349,38 @@ Code to try <code>targets</code> in R console interactively
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>● completed target mpg_mean [<span class="dv">0</span> seconds, <span class="dv">52</span> bytes]</span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>▶ ended pipeline [<span class="fl">0.059</span> seconds]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>It would mean that all steps have been executed successfully.</p>
-<p>Similarly, if you replace <code>tar_make()</code> with <code>tar_visnetwork()</code>, you will get a visualization of the pipeline:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tar_dir</span>({</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># runs the code in a temporary directory</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tar_script</span>(</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    {</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">library</span>(targets)</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">list</span>(</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 1. Load the mtcars dataset.</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tar_target</span>(</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">name =</span> mtcars_data,</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">command =</span> <span class="fu">data</span>(mtcars)</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        ),</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 2. Compute the mean of the mpg column.</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tar_target</span>(</span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>          <span class="at">name =</span> mpg_mean,</span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>          <span class="at">command =</span> <span class="fu">mean</span>(mtcars_data<span class="sc">$</span>mpg)</span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        ),</span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 3. Create a histogram plot of mpg using base R.</span></span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tar_target</span>(</span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>          <span class="at">name =</span> hist_mpg,</span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>          <span class="at">packages =</span> <span class="fu">c</span>(<span class="st">"ggplot2"</span>),</span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>          <span class="at">command =</span> {</span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>            <span class="fu">ggplot</span>(mtcars_data, <span class="fu">aes</span>(<span class="at">x =</span> mpg)) <span class="sc">+</span></span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>              <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>              <span class="fu">labs</span>(</span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>                <span class="at">title =</span> <span class="st">"Histogram of MPG"</span>,</span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>                <span class="at">x =</span> <span class="st">"Miles Per Gallon"</span>,</span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>                <span class="at">y =</span> <span class="st">"Count"</span></span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>              )</span>
-<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>          }</span>
-<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>      )</span>
-<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>    },</span>
-<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">ask =</span> <span class="cn">FALSE</span></span>
-<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Run all targets defined in the pipeline.</span></span>
-<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tar_visnetwork</span>()</span>
-<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Similarly, if you add <code>tar_visnetwork()</code> after <code>tar_make()</code>, you will get a visualization of the pipeline:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(targets)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tar_dir</span>({</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tar_script</span>({</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">library</span>(targets)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Load the mtcars dataset.</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">tar_target</span>(mtcars_data, mtcars),</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Compute the mean of the mpg column.</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">tar_target</span>(mpg_mean, <span class="fu">mean</span>(mtcars_data<span class="sc">$</span>mpg)),</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Create a histogram plot of mpg using base R.</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>      <span class="co"># The plot is saved as a PNG file and the filename is returned.</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>      <span class="fu">tar_target</span>(plot_mpg, {</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        <span class="fu">png</span>(<span class="st">"hist_mpg.png"</span>)  <span class="co"># Open a PNG device.</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>        <span class="fu">hist</span>(mtcars_data<span class="sc">$</span>mpg,</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>             <span class="at">breaks =</span> <span class="st">"Sturges"</span>,</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>             <span class="at">main =</span> <span class="st">"Histogram of MPG"</span>,</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>             <span class="at">xlab =</span> <span class="st">"Miles Per Gallon"</span>,</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>             <span class="at">ylab =</span> <span class="st">"Frequency"</span>,</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>             <span class="at">col =</span> <span class="st">"lightblue"</span>)</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>        <span class="fu">dev.off</span>()  <span class="co"># Close the device.</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>        <span class="st">"hist_mpg.png"</span>  <span class="co"># Return the filename as the target value.</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>      })</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>  }, <span class="at">ask =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Run all targets defined in the pipeline.</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tar_make</span>()</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tar_visnetwork</span>()</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 You would get output similar to the one in the <a href="#fig-mtcars-visnet" class="quarto-xref">Figure&nbsp;1</a> below.
 </details>
 <div id="fig-mtcars-visnet" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -406,7 +400,7 @@ Figure&nbsp;1: “Pipeline visualization example”
 <h1 data-number="2"><span class="header-section-number">2</span> Exercise</h1>
 <section id="goal" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="goal"><span class="header-section-number">2.1</span> Goal</h2>
-<p>The goal of this exercise is to use the project folder that you have set up in the previous exercise with <code>{renv}</code> and <code>{pak}</code> to create a simple analysis pipeline using <code>{targets}</code>.</p>
+<p>The goal of this exercise is to use the project folder that you have set up in the previous exercise with <code>{renv}</code> to create a simple analysis pipeline using <code>{targets}</code>.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -426,9 +420,218 @@ Note
 </section>
 <section id="open-the-project-folder-in-your-editor" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="open-the-project-folder-in-your-editor"><span class="header-section-number">2.3</span> Open the project folder in your editor</h2>
-<p>If no</p>
+<p>Open either your own project, or our reference project snapshot form the Note above.</p>
+<p>If you open your own project, you should see in the R console:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> Project <span class="st">'path/on/your/computer/to/your/project'</span> loaded. [renv <span class="dv">1</span>.<span class="fl">1.1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If you open our reference project, you should see in the R console:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>OK</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> Installing renv  ... OK</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> Project <span class="st">'path/on/your/computer/2025-mpidr-workflows-reference-01'</span> loaded. [renv <span class="dv">1</span>.<span class="fl">1.1</span>]</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> One or more packages recorded <span class="cf">in</span> the lockfile are not installed.</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> Use <span class="st">`</span><span class="at">renv::status()</span><span class="st">`</span> <span class="cf">for</span> more details.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The reason you will see that the packages are not installed, is because the library of R packages is specific to an operating system and is considered as a disposable storage. By default, it is not pushed to GitHub. Therefore, when you copy such project from GitHub, you don’t have the packages, but you have all the files to restore the packages as required by the <code>renv.lock</code> file.</p>
+</div>
+</div>
+</section>
+<section id="restore-install-the-r-packages-in-the-project" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="restore-install-the-r-packages-in-the-project"><span class="header-section-number">2.4</span> Restore (install) the R packages in the project</h2>
+<section id="in-your-own-project" class="level3" data-number="2.4.1">
+<h3 data-number="2.4.1" class="anchored" data-anchor-id="in-your-own-project"><span class="header-section-number">2.4.1</span> In your own project</h3>
+<p>In your own project, you need to run:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">status</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This is to make sure that all the packages are installed in the project. If any packages are still missing, see the step below.</p>
+</section>
+<section id="in-our-reference-project" class="level3" data-number="2.4.2">
+<h3 data-number="2.4.2" class="anchored" data-anchor-id="in-our-reference-project"><span class="header-section-number">2.4.2</span> In our reference project</h3>
+<p>If you are working in our reference project from <a href="https://github.com/e-kotov/2025-mpidr-workflows-reference-01" target="_blank">https://github.com/e-kotov/2025-mpidr-workflows-reference-01</a>, you need to run:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">restore</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>After you confirm, you should see the package installation process.</p>
+<p>Once the installation finishes, to make sure you have successfully installed all packages, run:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">status</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You should get something like this:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>No issues found <span class="sc">--</span> the project is <span class="cf">in</span> a consistent state.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="setup-the-targets-pipeline" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="setup-the-targets-pipeline"><span class="header-section-number">2.5</span> Setup the <code>{targets}</code> pipeline</h2>
+<p>You could of course create a <code>targets</code> pipeline manually, but there is a handy R function to initialize a template for you:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">use_targets</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You may get:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>ℹ The package <span class="st">"usethis"</span> is required.</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>✖ Would you like to install it?</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">:</span> Yes</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="sc">:</span> No</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Agree to that and <code>{renv}</code> will take over again to install a new package. Don’t forget to add it to the <code>renv.lock</code> file with <code>renv::snapshot()</code> later.</p>
+<p>Once this is done, you should get a new file <code>_targets.R</code> in the root of your project folder.</p>
+</section>
+<section id="explore-the-sample-pipeline" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="explore-the-sample-pipeline"><span class="header-section-number">2.6</span> Explore the sample pipeline</h2>
+<p>Before editing the <code>_targets.R</code> file, explore the pipeline that is already defined in the file.</p>
+<p>First, run this to see the interactive graph of the pipeline (you will need to agree to install <code>visNetwork</code> package when you run this for the first time, run the command again if you still don’t see the visualisation in the viewer):</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">tar_visnetwork</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You will see that all steps are currently outdated.</p>
+<p>Now you can runn all the steps in the pipeline:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">tar_make</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Notice that you a new folder called <code>_targets</code> is created in the project folder. This is where the output of the pipeline will be stored as well as some metadata.</p>
+<p>If you run <code>targets::tar_visnetwork()</code> again, you will find all steps are now up-to-date.</p>
+<p>Now you can inspect in the <code>R</code> console the results of each step. You do not need to think where each output is saved, as all outputs are always stored in the <code>_targets</code> folder and are accessible by their name. For example:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>tmp_object <span class="ot">&lt;-</span> targets<span class="sc">::</span><span class="fu">tar_read</span>(data)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(tmp_object)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(tmp_object)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This will read the <code>data</code> object that is the output of the first step of the example pipeline and print it to the console. Finally, we also remove this object from the workspace to keep it clean.</p>
+<p>You may also load the object <code>data</code> with its name directly into the workspace with:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">tar_load</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"data"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Now clean the workspace/environment:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To delete saved outputs of all or certain (see the <a href="https://docs.ropensci.org/targets/reference/tar_destroy.html" target="_blank">documentation</a>) steps, run:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">tar_destroy</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To delete the saved results of steps that you might have deleted and will not use anymore, you could run:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">tar_prune</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="replace-the-example-pipeline-with-data-analysis-pipeline" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="replace-the-example-pipeline-with-data-analysis-pipeline"><span class="header-section-number">2.7</span> Replace the example pipeline with data analysis pipeline</h2>
+<p>See the code in Jonas’s repository at <a href="https://github.com/jschoeley/openscience25/tree/main/layer2-communal/example_2-1" target="_blank">https://github.com/jschoeley/openscience25/tree/main/layer2-communal/example_2-1</a>.</p>
+<p>Let us try to implement the steps from his code in a <code>targets</code> pipeline. We will guide you through the first pipeline step together.</p>
+<section id="write-code-for-data-download-step" class="level3" data-number="2.7.1">
+<h3 data-number="2.7.1" class="anchored" data-anchor-id="write-code-for-data-download-step"><span class="header-section-number">2.7.1</span> Write code for data download step</h3>
+<p>We first need to implement the data download step found in <a href="https://github.com/jschoeley/openscience25/blob/main/layer2-communal/example_2-1/code/10-download_input_data_from_zenodo.R" target="_blank">https://github.com/jschoeley/openscience25/blob/main/layer2-communal/example_2-1/code/10-download_input_data_from_zenodo.R</a>.</p>
+<p>We will keep all functions that implement the steps in a separate folder called <code>R</code>. Create this folder manually and create a file called <code>10-download_input_data_from_zenodo.R</code> in it. Copy the code from Jonas’s repository and save it in this new file, but convert it to a function that we could call from the <code>targets</code> pipeline. Compared to Jonas’s original code, this function needs to make sure that the folder for the file downloads exists and also return the paths to the downloaded data files. See the suggested function below:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Download analysis input data from Zenodo</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>download_files_from_zenodo <span class="ot">&lt;-</span> <span class="cf">function</span>(</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data_folder =</span> <span class="st">"data"</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>) {</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># make sure the data folder exists</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">dir.exists</span>(data_folder)) {</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">dir.create</span>(data_folder, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># download the files</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">download.file</span>(</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">url =</span> <span class="st">'https://zenodo.org/records/15033155/files/10-euro_education.csv?download=1'</span>,</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">destfile =</span> <span class="fu">paste0</span>(data_folder, <span class="st">"/10-euro_education.csv"</span>)</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">download.file</span>(</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">url =</span> <span class="st">'https://zenodo.org/records/15033155/files/10-euro_sectors.csv?download=1'</span>,</span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">destfile =</span> <span class="fu">paste0</span>(data_folder, <span class="st">"/10-euro_sectors.csv"</span>)</span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">download.file</span>(</span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">url =</span> <span class="st">'https://zenodo.org/records/15033155/files/10-euro_geo_nuts2.rds?download=1'</span>,</span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">destfile =</span> <span class="fu">paste0</span>(data_folder, <span class="st">"/10-euro_geo_nuts2.rds"</span>)</span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>  <span class="co"># find the downloaded files</span></span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>  data_from_zenodo <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="st">"data"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(data_from_zenodo) <span class="ot">&lt;-</span> <span class="fu">basename</span>(data_from_zenodo)</span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>  <span class="co"># return the list of files</span></span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(data_from_zenodo)</span>
+<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Compare this to the original code from Jonas’s repository at <a href="https://github.com/jschoeley/openscience25/blob/main/layer2-communal/example_2-1/code/10-download_input_data_from_zenodo.R" target="_blank">https://github.com/jschoeley/openscience25/blob/main/layer2-communal/example_2-1/code/10-download_input_data_from_zenodo.R</a>.</p>
+<p>Now, to implement this first step into the pipeline, let us find the list of steps in the end of the <code>_targets.R</code> file, it’s the one where all the steps are listed, each starting with <code>tar_target()</code>.</p>
+<p>Remove all the example steps and insert your own:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># download files from zenodo</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tar_target</span>(</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">name =</span> data_from_zenodo,</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">command =</span> <span class="fu">download_files_from_zenodo</span>(</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">data_folder =</span> <span class="st">"data"</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">format =</span> <span class="st">"file"</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Notice that we have added <code>format = "file"</code> to our first step. This means that <code>targets</code> should expect not a generic <code>R</code> object like a <code>data.frame</code>, <code>list</code>, or <code>vector</code> as on output of the <code>download_files_from_zenodo()</code> function, but a vector of files. This is useful for actions such as file downloads, as <code>targets</code> will be checking on it’s own if all expected files are actually downloaded.</p>
+<p>The final step is to inform <code>targets</code> that we want to run the pipeline by executing the <code>targets::tar_make()</code>.</p>
+</section>
+<section id="download-files-by-executing-the-pipeline" class="level3" data-number="2.7.2">
+<h3 data-number="2.7.2" class="anchored" data-anchor-id="download-files-by-executing-the-pipeline"><span class="header-section-number">2.7.2</span> Download files by executing the pipeline</h3>
+<p>Now you can run the pipeline by executing:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">tar_make</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You should get something like this:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>▶ dispatched target data_from_zenodo</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>trying URL <span class="st">'https://zenodo.org/records/15033155/files/10-euro_education.csv?download=1'</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>Content type <span class="st">'text/plain; charset=utf-8'</span> length <span class="dv">11150</span> <span class="fu">bytes</span> (<span class="dv">10</span> KB)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="sc">==</span><span class="er">================================================</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>downloaded <span class="dv">10</span> KB</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>trying URL <span class="st">'https://zenodo.org/records/15033155/files/10-euro_sectors.csv?download=1'</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>Content type <span class="st">'text/plain; charset=utf-8'</span> length <span class="dv">20626</span> <span class="fu">bytes</span> (<span class="dv">20</span> KB)</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="sc">==</span><span class="er">==============================</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>downloaded <span class="dv">20</span> KB</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>trying URL <span class="st">'https://zenodo.org/records/15033155/files/10-euro_geo_nuts2.rds?download=1'</span></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>Content type <span class="st">'application/octet-stream'</span> length <span class="dv">261344</span> <span class="fu">bytes</span> (<span class="dv">255</span> KB)</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a><span class="sc">==</span><span class="er">=====</span></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>downloaded <span class="dv">255</span> KB</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>● completed target data_from_zenodo [<span class="fl">0.894</span> seconds, <span class="fl">293.12</span> kilobytes]</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>▶ ended pipeline [<span class="fl">0.94</span> seconds]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The pipeline will download the files from Zenodo and will save them into the <code>data</code> folder. You can now use the downloaded files in the next steps of the pipeline.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>One thing to try, is to manually delete any one of the downloaded files and run the <code>targets::tar_visnetwork()</code> function. You will then see that one of the steps is outdated, as <code>targets</code> knows from the first run that it needs to keep track of files and it has noted the file signatures.</p>
+</div>
+</div>
+</section>
+<section id="add-data-folder-to-.gitignore" class="level3" data-number="2.7.3">
+<h3 data-number="2.7.3" class="anchored" data-anchor-id="add-data-folder-to-.gitignore"><span class="header-section-number">2.7.3</span> Add data folder to <code>.gitignore</code></h3>
+<p>As the data is preserved at Zenodo, and as it is bad practice to store data in the git repository, we should add the <code>data</code> folder to the <code>.gitignore</code> file. You can do this by executing the following command in the <code>R</code> console:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">use_git_ignore</span>(<span class="st">"data"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This will create a new <code>.gitignore</code> file in the root of the project (in case it did not exist) and add the <code>data</code> folder there. Now <code>git</code> tools will not prompt you to commit the <code>data</code> folder and it will never be pushed to GitHub or other remote repository you are using.</p>
+</section>
+<section id="targets-settings" class="level3" data-number="2.7.4">
+<h3 data-number="2.7.4" class="anchored" data-anchor-id="targets-settings"><span class="header-section-number">2.7.4</span> <code>targets</code> settings</h3>
+<p>Feel free to remove most of the comments in the example <code>_targets.R</code> file, espetially the ones regarding the targets options. We recommend you do set the options as follows:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tar_option_set</span>(</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">format =</span> <span class="st">"qs"</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>qs</code> format is a faster and more space efficient alternative to <code>rds</code> format. You can read more about it in the <a href="https://github.com/qsbase/qs2?tab=readme-ov-file#single-threaded"><code>qs2</code> documentation</a>. This will be the format that <code>targets</code> uses to save the output of each step of the pipeline, unless you specify <code>format = 'file'</code>, like we did for the file list above, or set it to something else in the specicfic <code>tar_target()</code> step.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You might also notice that we suggest to remove the <code>packages</code> option from <code>tar_option_set()</code> that was originally there. This is because it is much safer to specify the packages you need in each <code>tar_target()</code> step individually. This might seem like a lot of work, but it it has many advatanges:</p>
+<ul>
+<li>Each step runs much faster, as unnecessary packages are not loaded.</li>
+<li>You can prevent potential package conflicts. In big projects with hundreds of packages, some packages may not work well when loaded simultaneously (which would happen if you specify the <code>packages</code> option globally for all steps).</li>
+<li>It is much easier to debug, as you can see which packages are loaded at each step.</li>
+</ul>
+</div>
+</div>
 
 
+</section>
 </section>
 </section>
 
@@ -1037,8 +1240,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./1-r-packages.html" class="pagination-link" aria-label="1. R packages version management with `renv` and `pak`">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">1. R packages version management with <code>renv</code> and <code>pak</code></span>
+      <a href="./1-r-packages.html" class="pagination-link" aria-label="1. R packages version management with `renv`">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">1. R packages version management with <code>renv</code></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
