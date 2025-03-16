@@ -1,5 +1,5 @@
 ---
-title: "1. R packages version management with `renv` and `pak`"
+title: "1. R packages version management with `renv`"
 from: markdown+emoji
 code-annotations: hover
 eval: false
@@ -14,7 +14,7 @@ number-sections: true
 |  |  |
 |--------------------------------|----------------------------------------------------|
 | [`{renv}`](#renv) | Sets up an R package library on a per-project level. Each project where you activate `renv` with [`renv::init()`](https://rstudio.github.io/renv/reference/init.html){target="_blank"} will have it's own independent library with specific R package versions that will not interfere with either your default system/user libraries or with any other project. |
-| [`{pak}`](#pak) | Significantly speeds up R package installation by using multiple threads to download and install both requested packages and their dependencies. Can be used to install [CRAN](https://cran.r-project.org/){target="_blank"} and [Bioconductor](https://www.bioconductor.org/){target="_blank"} packages, as well as packages from GitHub or any other repository. Can be used independently from `{renv}`, or as a companion of `{renv}` . |
+| [`{pak}`](#pak) | Significantly speeds up R package installation by using multiple threads to download and install both requested packages and their dependencies. Can be used to install [CRAN](https://cran.r-project.org/){target="_blank"} and [Bioconductor](https://www.bioconductor.org/){target="_blank"} packages, as well as packages from GitHub or any other repository. Can be used independently from `{renv}`, or as a companion of `{renv}` . Using `{pak}` as "backend" for [`{renv}`] is still experimental and only recommended for advanced users. We do not recommend it for beginners and for this particular exercise. |
 : {tbl-colwidths="[15,85]"}
 
 ## `{renv}` {#renv}
@@ -48,13 +48,16 @@ When you install `{renv}` and run [`renv::init()`](https://rstudio.github.io/ren
 
 [`{pak}`](https://pak.r-lib.org/){target="_blank"} can be used instead of R's default `install.packages()` to install R packages and their dependencies faster.
 
-It can also serve as a so-called "backend" for [`{renv}`](#renv), that is it will help `{renv}` to install packages and their dependencies much faster when you, or someone who reproduces your code, such as your collaborator, use [`{renv}`](#renv) to fully restore the R package environment of a project on a new computer.
+It can also serve as a so-called "backend" for [`{renv}`], that is it will help `{renv}` to install packages and their dependencies much faster when you, or someone who reproduces your code, such as your collaborator, use `{renv}` to fully restore the R package environment of a project on a new computer.
+
+If you would like to enable `{pak}` as a backend for `{renv}`, you can find which `{renv}` options to set in the [`{renv}` documentation](https://rstudio.github.io/renv/reference/config.html?q=pak#renv-config-pak-enabled){target="_blank"}, however, as this is still experimental, please do not use it in this tutorial, as we will not have time to debug it if something does not work.
+
 
 # Exercise {#exercise}
 
 ## Goal
 
-The goal of this exercise is setup a new blank project with isolated R packages library using [`{renv}`](#renv) and [`{pak}`](#pak) in such a way, so that all the specific package versions can be restored on a new computer or in a new folder.
+The goal of this exercise is setup a new blank project with isolated R packages library using [`{renv}`](#renv) in such a way, so that all the specific package versions can be restored on a new computer or in a new folder.
 
 The tutorial is long and detailed, however in essence it is just a few steps. In @fig-tutorial-overiew you can find a summary of the steps and can click on them to get directly to the corresponding section of the exercise.
 
@@ -65,18 +68,16 @@ The tutorial is long and detailed, however in essence it is just a few steps. In
 flowchart TD
     A["Create project folder & set package repository"] --> B["Initialize renv: **renv::init()**"]
     B --> C["Configure renv: set snapshot type to 'all' and enable Posit Package Manager"]
-    C --> D["Install **pak** to speed up package installs and instruct **renv** to use it"]
-    D --> E["Install packages (e.g., targets)"]
-    E --> F["Snapshot package versions: **renv::snapshot()**"]
-    F --> G["Test restoration: copy project, delete renv/library, run **renv::restore()**"]
+    C --> D["Install packages (e.g., targets)"]
+    D --> E["Snapshot package versions: **renv::snapshot()**"]
+    E --> F["Test restoration: copy project, delete renv/library, run **renv::restore()**"]
 
     click A "#create-project"
     click B "#renv-init"
     click C "#renv-config"
-    click D "#install-pak"
-    click E "#install-packages"
-    click F "#snapshot"
-    click G "#test-restore"
+    click D "#install-packages"
+    click E "#snapshot"
+    click F "#test-restore"
 ```
 
 
@@ -129,8 +130,7 @@ To have more control over which versions are installed, you may set the reposito
 ```{r}
 options(
   repos = c(
-    "CRAN" = "https://packagemanager.posit.co/cran/2025-02-28",
-    "rOpenSci" = "https://ropensci.r-universe.dev"
+    "CRAN" = "https://packagemanager.posit.co/cran/2025-02-28"
   )
 )
 ```
@@ -210,93 +210,29 @@ renv::settings$ppm.enabled(value = TRUE)
 ```
 
 
-### Install `{pak}` {#install-pak}
-
-Now install `{pak}` as you normally would. We also suggest that you install `usethis` package, as it provides some useful functions to easily edit configuration some files and setup certain files in the project from templates:
-
-```{r}
-install.packages(c("pak", "usethis"))
-```
-
-::: {.callout-note}
-Note that even though you are using `install.packages()`, the installation process will look slightly different because `{renv}` is active in the current project.
-
-```r
-# Downloading packages -------------------------------------------------------
-- Downloading jsonlite from CRAN ...            OK [1.1 Mb in 0.66s]
-- Downloading httr2 from CRAN ...               OK [718.6 Kb in 0.61s]
-Successfully downloaded 2 packages in 4.9 seconds.
-```
-
-You will also be asked if you would like to install extra packages, to which you should agree. This is because `{renv}` is taking over the package installation process.
-
-```r
-The following package(s) will be installed:
-- askpass     [1.2.1]
-- cli         [3.6.4]
-...
-- yaml        [2.3.10]
-- zip         [2.3.2]
-These packages will be installed into "path-to-your-project/renv/library/macos/R-4.4/aarch64-apple-darwin20".
-
-Do you want to proceed? [Y/n]:
-```
-
-:::
-
-### Enable `{pak}` as a backend for `{renv}`
-
-To make `{renv}` use `{pak}` as a "backend" and therefore install packages and their dependencies faster, you need to add another line to your `.Rprofile` file in the current project/working directory. Either locate and edit the file manually (you may need to enable the display of hidden files in your editor or system), or you can run this command to open it in the editor automatically:
-
-```{r}
-usethis::proj_set(".", force = TRUE) # force sets the current direcotry as a project
-usethis::edit_r_profile("project") # opens the project level .Rprofile file in the editor
-```
-
-In line with the [`{renv}` documentation](https://rstudio.github.io/renv/reference/config.html#renv-config-pak-enabled), add this line to the end of the file:
-
-```r
-options("renv.config.pak.enabled" = TRUE)
-```
-
-::: {.callout-warning}
-`{renv}`'s support for `{pak}` is still officially experimental, even though in practice it is quite stable. However, it may not work correctly in all cases. If something does not work, simply remove the line from the `.Rprofile` file. Everything will work fine without it, it's just that the package installation process will be slower.
-:::
-
-
-So your new `.Rprofile` file should look like this:
-
-```r
-source("renv/activate.R")
-options("renv.config.pak.enabled" = TRUE)
-```
-
-As these lines are only executed when `R` starts in the project directory, to apply it in the current `R` session, you will need to run the same command in the `R` console:
-
-```{r}
-options("renv.config.pak.enabled" = TRUE)
-```
-
-::: {.callout-note}
-Alternatively, you can also restart the R session to make the changes take effect.
-:::
-
-
 ### Try installing packages {#install-packages}
 
-Now you can try to install a new package to see if `{renv}` works with `{pak}`. In the next exercise, we will need the `{targets}` package, so we can try installing it:
+Now you can try to install a new package to see if `{renv}` works as expected. In the next exercise, we will need the `{targets}` package, so we can try installing it:
 
 ```{r}
 install.packages("targets")
 ```
 
-If you have setup both `{renv}` and `{pak}` correctly, you should see a new interface of the package installation process. You will be presented with the installation plan (@fig-package-installation-process1) and asked to confirm.
+You should see in the `R` console:
 
-![Package installation process with `{renv}` and `{pak}` - installation plan preview](media/images/install-targets-with-renv-pak-1.png){#fig-package-installation-process1 width=70%}
+```r
+The following package(s) will be installed:
+- backports  [1.5.0]
+...
+- targets    [1.10.1]
+...
+- yaml       [2.3.10]
+These packages will be installed into "path-to-your-project/renv/library/macos/R-4.4/aarch64-apple-darwin20".
 
-Once you confirm with "Y" and "Enter/Return", packages will be installed:
+Do you want to proceed? [Y/n]: 
+```
 
-![Package installation process with `{renv}` and `{pak}` - executing installation plan](media/images/install-targets-with-renv-pak-2.png){#fig-package-installation-process2 width=70%}
+Agree and wait for the `{targets}` package and it's dependencies to be installed.
 
 You can check that the `{targets}` package is installed by trying to load it:
 
@@ -409,13 +345,11 @@ This means that `R` found the `.Rrofile` file in the project root and exectuted 
 
 Feel free to run `renv::status()` to check the status of the packages, but this is optional.
 
-To restore all pacakge versions, run `renv::restore(prompt = FALSE)`. Agree to installing `{pak}`, and the installation of the rest of the packages will be handled without further prompts. Once the process finishes, you should be able to check the status again:
+To restore all pacakge versions, run `renv::restore(prompt = FALSE)`. Once the process finishes, you should be able to check the status again:
 
 ```{r}
 renv::status()
 ```
-
-You may get a warning message for the `{pak}` package version, which is normall. You can either reinstall the package and make a snapshot again, or just make a snapshot with `renv::snapshot()`.
 
 In the end you should be able to get `No issues found -- the project is in a consistent state.` when running `renv::status()`.
 
