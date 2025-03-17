@@ -6,6 +6,10 @@ eval: false
 number-sections: true
 ---
 
+-----
+
+![](media/images/blocks-containers.png)
+
 This section consists of three parts. Part *a* is a reference material, parts *b* and *c* are tutorials, but you probably will not have time to go through both in class, so choose one of them to do in class and the other one to do at home.
 
 a. The overview of how containers work: [3a-how-docker-and-binder-work.qmd](3a-how-docker-and-binder-work.qmd). This is more of a reference material that explains some technicalities of `Docker` (one of the popular containerization software) and `Binder` (an online service that allows you to run a container with `R` and `RStudio` in the cloud with just a web browser).

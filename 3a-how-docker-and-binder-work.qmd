@@ -4,7 +4,9 @@ from: markdown+emoji
 code-annotations: hover
 ---
 
+-----
 
+![](media/images/blocks-containers.png)
 
 The goal of this tutorial is to show you how to create a reproducible GitHub repository that can be run in Binder. This is a great way to share your code with others, as they can run your code in the cloud using just their web browser without having to install anything on their local machine. There are some limitations, such [operating memory limit of 1-2 GB](https://mybinder.readthedocs.io/en/latest/about/user-guidelines.html#resources-available){target="_blank"} and [temporary nature of such environment](https://mybinder.readthedocs.io/en/latest/about/user-guidelines.html#how-long-will-my-binder-session-last){target="_blank"}, but for most small to medium-sized projects and for someone to just quickly inspect your code, this should be sufficient.
 

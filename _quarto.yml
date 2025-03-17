@@ -36,6 +36,31 @@ website:
           - 3c-reproducible-github-repo-in-binder.qmd
 
 
+authors:
+  - name: Egor Kotov
+    url: https://www.ekotov.pro/
+    orcid: 0000-0001-6690-5345
+    affiliations:
+      - ref: mpidr
+      - ref: upf
+  - name: Jonas Schöley
+    url: https://www.demogr.mpg.de/de/ueber_uns_6113/mitarbeiter_innen_1899/jonas_schoeley_2341/
+    orcid: 0000-0002-3340-8518
+    affiliations:
+      - ref: mpidr
+
+affiliations:
+  - id: mpidr
+    name: Max Planck Institute for Demographic Research
+    city: Rostock
+    country: Germany
+    url: https://demogr.mpg.de/
+  - id: upf
+    name: Universitat Pompeu Fabra
+    city: Barcelona
+    country: Spain
+    url: https://www.upf.edu/
+
 
 format:
   html:

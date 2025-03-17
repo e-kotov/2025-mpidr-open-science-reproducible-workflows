@@ -4,6 +4,10 @@ from: markdown+emoji
 code-annotations: hover
 ---
 
+-----
+
+![](media/images/blocks-containers.png)
+
 First, make sure you got [familiar with how Docker containers work](3a-how-docker-and-binder-work.qmd).
 
 ### The Goal

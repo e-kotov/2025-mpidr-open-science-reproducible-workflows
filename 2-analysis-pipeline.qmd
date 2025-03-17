@@ -6,6 +6,10 @@ eval: false
 number-sections: true
 ---
 
+-----
+
+![](media/images/blocks-targets.png)
+
 [Skip to exercise \>\>](#exercise)
 
 # The `targets` package {#targets}

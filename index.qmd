@@ -1,31 +1,5 @@
 ---
 title: "Workshop Introduction"
-
-authors:
-  - name: Egor Kotov
-    url: https://www.ekotov.pro/
-    orcid: 0000-0001-6690-5345
-    affiliations:
-      - ref: mpidr
-      - ref: upf
-  - name: Jonas Schöley
-    url: https://www.demogr.mpg.de/de/ueber_uns_6113/mitarbeiter_innen_1899/jonas_schoeley_2341/
-    orcid: 0000-0002-3340-8518
-    affiliations:
-      - ref: mpidr
-
-affiliations:
-  - id: mpidr
-    name: Max Planck Institute for Demographic Research
-    city: Rostock
-    country: Germany
-    url: https://demogr.mpg.de/
-  - id: upf
-    name: Universitat Pompeu Fabra
-    city: Barcelona
-    country: Spain
-    url: https://www.upf.edu/
-
 ---
 
 This website provides supporting materials for the part 2 of the workshop **Projects’ workflow for reproducibility and replicability using R** held at the [Second Rostock Open Science Workshop](https://www.demogr.mpg.de/en/news_events_6123/calendar_1921/second_rostock_open_science_workshop_13282){target="_blank"} organized by the [Max Planck Institute for Demographic Research](https://demogr.mpg.de/){target="_blank"} in Rostock, Germany. This tutorial is [licensed under CC0](license.qmd).
