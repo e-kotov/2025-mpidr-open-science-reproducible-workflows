@@ -23,7 +23,7 @@ number-sections: true
 
 [`{renv}`](https://rstudio.github.io/renv/){target="_blank"} takes over the location of the R package installation and the command `install.packages()`. After initialising `{renv}` for a particular project/working directory, all your packages installations and removals will be taken care of by `{renv}`. From now on, whenever you use `install.packages()` in that project, `{renv}` will install the package into the project directory.
 
-::: callout-note
+::: {.callout-note}
 Actually, `{renv}` will install the packages into user cache folder defined by the operating system (this is different from the default user folder for R package installation), and will "link" the packages into your project (or projects) directory(-ies). For example, you have two projects with different versions of `{ggplot2}`, but the same versions of `{dplyr}`. The `{renv}` packages cache will have two versions of `{ggplot2}` and one version of `{dplyr}`. Your projects however, will only contain "links" to the cache, therefore, you will not have two identical copies of `{dplyr}` on disk in two project directories, as they will both just point to the cached version of `{dplyr}` in `{renv}`'s cache folder. You can read more about it [here](https://rstudio.github.io/renv/articles/package-install.html#cache){target="_blank"}
 :::
 
@@ -50,8 +50,9 @@ When you install `{renv}` and run [`renv::init()`](https://rstudio.github.io/ren
 
 It can also serve as a so-called "backend" for [`{renv}`], that is it will help `{renv}` to install packages and their dependencies much faster when you, or someone who reproduces your code, such as your collaborator, use `{renv}` to fully restore the R package environment of a project on a new computer.
 
+::: {.callout-warning}
 If you would like to enable `{pak}` as a backend for `{renv}`, you can find which `{renv}` options to set in the [`{renv}` documentation](https://rstudio.github.io/renv/reference/config.html?q=pak#renv-config-pak-enabled){target="_blank"}, however, as this is still experimental, please do not use it in this tutorial, as we will not have time to debug it if something does not work.
-
+:::
 
 # Exercise {#exercise}
 
@@ -212,10 +213,10 @@ renv::settings$ppm.enabled(value = TRUE)
 
 ### Try installing packages {#install-packages}
 
-Now you can try to install a new package to see if `{renv}` works as expected. In the next exercise, we will need the `{targets}` package, so we can try installing it:
+Now you can try to install a new package to see if `{renv}` works as expected. In the next exercise, we will need the `{targets}` and `{usethis}` packages, so we can try installing them:
 
 ```{r}
-install.packages("targets")
+install.packages(c("targets", "usethis"))
 ```
 
 You should see in the `R` console:
@@ -232,7 +233,7 @@ These packages will be installed into "path-to-your-project/renv/library/macos/R
 Do you want to proceed? [Y/n]: 
 ```
 
-Agree and wait for the `{targets}` package and it's dependencies to be installed.
+Agree and wait for the packages and their dependencies to be installed.
 
 You can check that the `{targets}` package is installed by trying to load it:
 
@@ -299,7 +300,7 @@ Consider reinstalling these packages before snapshotting the lockfile.
 If you get something like this, you should install the missing package(s) and then run `renv::snapshot()` again.
 
 ```{r}
-install.packages(c("cpp11", "progress", "RcppArmadillo"))
+install.packages(c("cpp11", "progress", "RcppArmadillo", "qs2"))
 renv::snapshot()
 ```
 
