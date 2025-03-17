@@ -4,6 +4,8 @@ title: "Workshop Introduction"
 
 This website provides supporting materials for the part 2 of the workshop **Projects’ workflow for reproducibility and replicability using R** held at the [Second Rostock Open Science Workshop](https://www.demogr.mpg.de/en/news_events_6123/calendar_1921/second_rostock_open_science_workshop_13282){target="_blank"} organized by the [Max Planck Institute for Demographic Research](https://demogr.mpg.de/){target="_blank"} in Rostock, Germany. This tutorial is [licensed under CC0](license.qmd).
 
+You can get the slides in [PDF](assets/slides/2025-03-18_MPIDR_OSW_RWorkflows_part2.pdf) and [PPTX (with some animations)](assets/slides/2025-03-18_MPIDR_OSW_RWorkflows_part2.pptx).
+
 This tutorial includes the following sections:
 
 1. ["R packages version management with `renv`"](1-r-packages.qmd), which covers [`{renv}`](https://rstudio.github.io/renv/){target="_blank"} for `R` packages version management;
@@ -12,7 +14,7 @@ This tutorial includes the following sections:
 
 To participate in the workshop, we recommend that you have a [GitHub](https://github.com/){target="_blank"} account and a [Docker Hub](https://hub.docker.com/){target="_blank"} account (the latter is optional and only needed for the last section on `Docker`).
 
-For the section 3 on `Docker`, you may also want to install [Docker](https://docs.docker.com/get-docker/){target="_blank"} on your computer (for Windows, macOS or Linux). For macOS we also highly recommend the free version of [OrbStack](https://orbstack.dev/download){target="_blank"} as a complete and lightweight Docker Desktop replacement. In the workshop we will also show how to try `Docker` using just a web browser and the website [https://labs.play-with-docker.com/](https://labs.play-with-docker.com/){target="_blank"} without installing any additional software on your computer.
+For the section 3 on `Docker`, you may also want to install [Docker](https://docs.docker.com/get-docker/){target="_blank"} on your computer (for Windows, macOS or Linux). For `macOS` we also highly recommend the free version of [OrbStack](https://orbstack.dev/download){target="_blank"} as a complete and lightweight `Docker Desktop` replacement.
 
 ## Expected learning outcomes
 

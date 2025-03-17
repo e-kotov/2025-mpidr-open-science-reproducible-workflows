@@ -1,6 +1,8 @@
 project:
   type: website
   output-dir: docs
+  resources:
+    - "assets/*"
 
 
 lang: en
@@ -31,9 +33,10 @@ website:
       - 2-analysis-pipeline.qmd
       - section: "3. Containerizing R and R Packages for Ultimate Reproducibility"
         contents:
+          - 3-containers.qmd
           - 3a-how-docker-and-binder-work.qmd
-          - 3b-build-docker-container-image.qmd
-          - 3c-reproducible-github-repo-in-binder.qmd
+          - 3b-reproducible-github-repo-in-binder.qmd
+          - 3c-build-docker-container-image.qmd
 
 
 authors:

@@ -59,7 +59,7 @@ If you would like to enable `{pak}` as a backend for `{renv}`, you can find whic
 
 ## Goal
 
-The goal of this exercise is setup a new blank project with isolated R packages library using [`{renv}`](#renv) in such a way, so that all the specific package versions can be restored on a new computer or in a new folder.
+The goal of this exercise is to setup a new blank project from scratch with isolated R packages library using `{renv}` in such a way, so that all the specific package versions can be restored on a new computer or in a new folder.
 
 The tutorial is long and detailed, however in essence it is just a few steps. In @fig-tutorial-overiew you can find a summary of the steps and can click on them to get directly to the corresponding section of the exercise.
 
@@ -82,8 +82,8 @@ flowchart TD
     click F "#test-restore"
 ```
 
-::: callout-note
-You can find the repository with the expected end result of the exercise at [https://github.com/e-kotov/2025-mpidr-workflows-reference-01](https://github.com/e-kotov/2025-mpidr-workflows-reference-01){target="_blank"}. If you would like to skip the exercise and just see how the package restoration process with `{renv}` works, feel free to download/clone this repository and follow the instructions starting with the [Test R packages restoration](#test-restore) step.
+::: {.callout-tip}
+You can find the repository with the expected end result of the exercise at [https://github.com/e-kotov/2025-mpidr-workflows-reference-01](https://github.com/e-kotov/2025-mpidr-workflows-reference-01){target="_blank"}. If you would like to skip the exercise and just see how the package restoration process with `{renv}` works, feel free to download/clone this repository and follow the instructions starting with the [Test R packages restoration](#test-restore) step or proceed to the next exercise on `{targets}` - [2. Building analysis pipelines with `targets`](2-analysis-pipeline.qmd).
 :::
 
 ## Instructions
@@ -92,15 +92,15 @@ You can find the repository with the expected end result of the exercise at [htt
 
 Create a new folder wherever you would normally create a folder for a new research project.
 
-If you are using RStudio, use the menu `File -> New Project`, then select `New Directory -> New Project` and set the folder name and location. You may select `Use renv with this project` in the end of the project creation wizard, but we would advice to skip it for now, as we will set this up in the next step.
+If you are using RStudio, use the menu `File -> New Project`, then select `New Directory -> New Project` and set the folder name and location. You may select `Use renv with this project` in the end of the project creation wizard, but we would advice to skip it for now, as we will set this up in the next step. You may also want to select `Create a git repository` in the project creation wizard if you plan to push your results to GitHub.
 
-If you are using [`Visual Studio Code`](https://code.visualstudio.com/){target="_blank"} or the new [`Positron`](https://positron.posit.co/){target="_blank"} (the future replacement for `RStudio` based on `Visual Studio Code`), just create a folder manually and open it in the respective editor.
+If you are using [`Visual Studio Code`](https://code.visualstudio.com/){target="_blank"} or the new [`Positron`](https://positron.posit.co/){target="_blank"} (the future replacement for `RStudio` based on `Visual Studio Code`), just create a folder manually and open it in the respective editor, so that the folder is recognized as a project.
 
-If you are using some other editor, follow the usual procedure you know to create a new project.
+If you're using a different editor, follow the standard procedure to create a new project.
 
 In any case, once you are ready, run the following command in the R console to make sure that the current working directory is the project directory you intended to create and use:
 
-```{r}
+```r
 getwd()
 ```
 
@@ -108,7 +108,7 @@ getwd()
 
 By default, your `R` installation probably installs packages from CRAN ( https://cran.r-project.org/ ) or from CRAN mirror hosted by RStudio/Posit ( https://cran.rstudio.com/ ). These repositories are updated every day with latest R package versions, so you never know, which version of a package you will get when you install it. You can check which repository is used with:
 
-```{r}
+```r
 getOption("repos")
 ```
 
@@ -128,7 +128,7 @@ or:
 
 To have more control over which versions are installed, you may set the repository to [Posit Package Manager](https://packagemanager.posit.co/){target="_blank"} and constrain it to a certain date. We also add the [rOpenSci](https://ropensci.r-universe.dev/){target="_blank"} repository to install a certain package that is only available from there.
 
-```{r}
+```r
 options(
   repos = c(
     "CRAN" = "https://packagemanager.posit.co/cran/2025-02-28"
@@ -150,7 +150,7 @@ The `repos` option should be set before you move to the next step and initialise
 
 Install `{renv}` as you normally would. You should not install any other packages at this point, as after installing and initizalising `{renv}`, you would need to install then again, as R will start using your project directory as a package library and will not see any previously user-installed packages anymore.
 
-```{r}
+```r
 install.packages("renv")
 ```
 
@@ -158,7 +158,7 @@ install.packages("renv")
 
 Initialise `{renv}` in the current project/working directory:
 
-```{r}
+```r
 renv::init()
 ```
 
@@ -193,7 +193,7 @@ By default, `{renv}` tries to automatically identify which packages you actually
 
 Therefore, it is better to just force `{renv}` to keep track not just the packages it "thinks" you use, but all packages you install while working with the current project. To do that, run the folliwing code in the `R` console:
 
-```{r}
+```r
 renv::settings$snapshot.type(value = "all")
 ```
 
@@ -203,16 +203,16 @@ This will change the setting in the `renv/settings.json` file. You could of cour
 
 We have already set the `repos` option above to the Posit Package Manager, but it is also worth enabling the corresponding option in `{renv}` with:
 
-```{r}
+```r
 renv::settings$ppm.enabled(value = TRUE)
 ```
 
 ### Try installing packages {#install-packages}
 
-Now you can try to install a new package to see if `{renv}` works as expected. In the next exercise, we will need the `{targets}` and `{usethis}` packages, so we can try installing them:
+Now you can try to install a new package to see if `{renv}` works as expected. In the next exercise, we will need the `{targets}`, `{usethis}`, and `{visNetwork}` packages, so we can try installing them:
 
-```{r}
-install.packages(c("targets", "usethis"))
+```r
+install.packages(c("targets", "usethis", "visNetwork"))
 ```
 
 You should see in the `R` console:
@@ -233,7 +233,7 @@ Agree and wait for the packages and their dependencies to be installed.
 
 You can check that the `{targets}` package is installed by trying to load it:
 
-```{r}
+```r
 library(targets)
 ```
 
@@ -259,7 +259,7 @@ You can install and remove packages as usual while working with your project. Wh
 
 To check the current status of the R package versions snapshot, you can run the following command:
 
-```{r}
+```r
 renv::status()
 ```
 
@@ -280,7 +280,7 @@ See `?renv::status` for advice on resolving these issues.
 
 As you can see from the `recorded` column, none of the package versions are currently recorded (snapshotted) in the `renv.lock` lockfile. To save the package list and their versions into the lockfile, you can run the following command:
 
-```{r}
+```r
 renv::snapshot()
 ```
 
@@ -296,14 +296,14 @@ Consider reinstalling these packages before snapshotting the lockfile.
 
 If you get something like this, you should install the missing package(s) and then run `renv::snapshot()` again.
 
-```{r}
+```r
 install.packages(c("cpp11", "progress", "RcppArmadillo", "qs2"))
 renv::snapshot()
 ```
 
 Then check the status again:
 
-```{r}
+```r
 renv::status()
 ```
 
@@ -344,7 +344,7 @@ Feel free to run `renv::status()` to check the status of the packages, but this 
 
 To restore all pacakge versions, run `renv::restore(prompt = FALSE)`. Once the process finishes, you should be able to check the status again:
 
-```{r}
+```r
 renv::status()
 ```
 

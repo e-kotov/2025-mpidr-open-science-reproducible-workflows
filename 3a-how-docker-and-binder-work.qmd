@@ -25,7 +25,16 @@ There is also a minimal example [@kotov.deneke2024] that you can see in action b
 
 ![Performing gridsample technique in a cloud cointainer in Binder](media/videos/fig_02_running_the_container.gif){fig-align="left"}
 
+The repository can be found at [https://github.com/Population-Dynamics-Lab/grid-sample-containerized](https://github.com/Population-Dynamics-Lab/grid-sample-containerized){target="_blank"}.
 
+Another recent example is based on @Schoeley_S29_19:
+
+{{< video media/videos/demogr-reproduce-repo.mp4
+    title="Reproducing the code from Schöley (2021) in a cloud container in Binder"
+    start="0"
+>}}
+
+The repository can be found at [https://github.com/e-kotov/demographic-research.44-19-containerized](https://github.com/e-kotov/demographic-research.44-19-containerized){target="_blank"}.
 
 ## Try the example repository live-demo
 

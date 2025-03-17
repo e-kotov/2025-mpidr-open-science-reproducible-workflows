@@ -1,0 +1,170 @@
+---
+title: "3b. Make your own git repository reproducible in `Binder`"
+from: markdown+emoji
+code-annotations: hover
+---
+
+-----
+
+![](media/images/blocks-containers.png)
+
+First, make sure you got [familiar with how Docker containers work](3a-how-docker-and-binder-work.qmd).
+
+# The Goal
+
+Create a repository that can be executed in the cloud using [Binder](https://mybinder.org/){target="_blank"} environment, similar to how we set up the repository for Jona's original code at [https://github.com/e-kotov/demographic-research.44-19-containerized](https://github.com/e-kotov/demographic-research.44-19-containerized){target="_blank"}.
+
+You can continue with your own project, having completed sections 1 and 2 on `renv` and `targets` (and pushed to a public GitHub repository, otherwise there is no way for `Binder` to access your repository). Alternatively, you can reuse our snapshot of the expected results of the section 2 exercise on setting up a simple `targets` pipeline located at [https://github.com/e-kotov/2025-mpidr-workflows-reference-02](https://github.com/e-kotov/2025-mpidr-workflows-reference-02){target="_blank"}. You will need to either fork this repository or clone it locally, create your own repository in GitHub, and push the locally cloned repository to this new one.
+
+::: {.callout-tip}
+To finish this exercise faster, we recommend forking our [https://github.com/e-kotov/2025-mpidr-workflows-reference-02/fork](https://github.com/e-kotov/2025-mpidr-workflows-reference-02/fork){target="_blank"}. This will save you time on figuring out things with `git` if you are not comfortable with it yet.
+
+After forking, if you open your own repository in the web browser and push the `.` key on the keyboard, you will be able to edit the files in a `VS Code`-like interface right in the browser and push the changes back to GitHub.
+:::
+
+
+# Create a `Dockerfile` for `Binder`
+
+To run your repository, `Binder` needs a `Dockerfile` in the root of the reposotory.
+
+Let us construct the `Dockerfile` for `Binder` line by line.
+
+
+## Choose the Rocker Image version
+
+Go to [Rocker Project's Docker Hub](https://hub.docker.com/r/rocker/binder/tags){target="_blank"} and find an appropriate version of the `RStudio` image. Since we are using modern R version and no trying to recreate an environment for an older version of R back from 2020, you can just use the most recent container image. For the container image to work seamlessly with `Binder` service, you have to use the `rocker/binder` image, as it contains some extra software in addition to the `RStudio` image.
+
+::: {.callout-note}
+If you wanted to reconstruct the environment from several years ago, we would advice to also use the `R` version that was used then, like we did in the [repository](https://github.com/e-kotov/demographic-research.44-19-containerized){target="_blank"} where we recreated `R` 4.2.2 from 2022 to run Jonas's old code.
+:::
+
+## Create the `Dockerfile`
+
+Create an empty text file called `Dockerfile` in the root of your project and/or repository. And add a first line to it. It should be the instruction on which existing `Docker` container image to use. For the most recent `Rocker Binder` image, you can use the following code:
+
+```dockerfile
+FROM rocker/binder:4.4.2
+```
+
+## Create temporary project folder in the container image
+
+Next, we need to create a temporary project in the container image, so that we could use it to activate `{renv}` and install the packages.
+
+```dockerfile
+RUN mkdir -p /home/rstudio/project && \ 
+    chown -R rstudio:rstudio /home/rstudio/project
+WORKDIR /home/rstudio/project
+```
+
+## Copy the `{renv}`-specific files into the container image
+
+We also need to copy the `{renv}`-specific files into the container image.
+
+```dockerfile
+COPY --chown=rstudio:rstudio ../renv.lock renv.lock
+RUN mkdir -p renv
+COPY --chown=rstudio:rstudio ../.Rprofile .Rprofile
+COPY --chown=rstudio:rstudio ../renv/activate.R renv/activate.R
+COPY --chown=rstudio:rstudio ../renv/settings.json renv/settings.json
+```
+
+## Install the packages into the container
+
+We need to run an `R` command within the container image to install the packages.
+
+```dockerfile
+RUN R -e "renv::restore(library = '/usr/local/lib/R/site-library')"
+```
+
+
+::: {.callout-note}
+Let us break down the most recent line in the `Dockerfile`:
+
+  - `R` - starts `R`
+  
+  - `-e` - executes the command that follows next
+
+  - `renv::restore(library = '/usr/local/lib/R/site-library')` - installs the packages listed in the `renv.lock` file. The trick here is that we are installing the packages into the system library, which is `/usr/local/lib/R/site-library`, instead of a project library. This way, the packages will be integrated into the container image and will be seen by an R session.
+:::
+
+## Clean up
+
+Now we also remove the temporary project folder from the container image:
+
+```dockerfile
+RUN chmod -R u+w /home/rstudio/project && rm -rf /home/rstudio/project
+```
+
+## Copy the repository into the container image
+
+We need to copy all the files from the repository into the container image, so that when we run it in `Binder`, we would see all the code and other files.
+
+```dockerfile
+COPY --chown=rstudio . /home/rstudio
+```
+
+## Remove the `renv`-specific files from the container image
+
+However, because we will have all the packages already installed, we don't need renv to be activated anymore, so we can remove the `renv`-specific files from the container image.
+
+```dockerfile
+RUN rm -rf /home/rstudio/renv \
+           /home/rstudio/renv.lock \
+           /home/rstudio/.Rprofile
+```
+
+## Instruct how to run the container image
+
+And finally we reuse the lines that instruct `Docker` how to run the container image [from the original `Dockerfile`](https://github.com/rocker-org/rocker-versioned2/blob/abe4fc1f3fb1c50281f9de5b3636f8a117126f98/dockerfiles/binder_4.4.2.Dockerfile#L10-L12){target="_blank"}:
+
+```dockerfile
+EXPOSE 8888
+CMD ["jupyter", "lab", "--ip", "0.0.0.0", "--no-browser"]
+```
+
+## Final `Dockerfile`
+
+So your final `Dockerfile` should look like this:
+
+```dockerfile
+FROM rocker/binder:4.4.2
+
+RUN mkdir -p /home/rstudio/project && \ 
+    chown -R rstudio:rstudio /home/rstudio/project
+WORKDIR /home/rstudio/project
+
+COPY --chown=rstudio:rstudio ../renv.lock renv.lock
+RUN mkdir -p renv
+COPY --chown=rstudio:rstudio ../.Rprofile .Rprofile
+COPY --chown=rstudio:rstudio ../renv/activate.R renv/activate.R
+COPY --chown=rstudio:rstudio ../renv/settings.json renv/settings.json
+
+RUN R -e "renv::restore(library = '/usr/local/lib/R/site-library')"
+
+RUN chmod -R u+w /home/rstudio/project && rm -rf /home/rstudio/project
+
+COPY --chown=rstudio . /home/rstudio
+
+RUN rm -rf /home/rstudio/renv \
+           /home/rstudio/renv.lock \
+           /home/rstudio/.Rprofile
+
+EXPOSE 8888
+CMD ["jupyter", "lab", "--ip", "0.0.0.0", "--no-browser"]
+```
+
+# Create a README.md with the Launch-in-Binder button
+
+To create a nice looking `Launch-in-Binder` button, you will need to insert some simple code into the README.md file of your repository. You can see the example [here](https://raw.githubusercontent.com/e-kotov/2025-mpidr-workflows-reference-03/refs/heads/main/README.md){target="_blank"}. Remember to adapt the link to **your own** repository address.
+
+# Share your work
+
+Paste the link to your repository in a new [issue](https://github.com/e-kotov/2025-mpidr-open-science-reproducible-workflows/issues/new){target="_blank"} in the repository of this tutorial, so that others can see your work and try to run your container in `Binder`.
+
+# Final expected result
+
+You can find the final expected result of this exercise at [https://github.com/e-kotov/2025-mpidr-workflows-reference-03](https://github.com/e-kotov/2025-mpidr-workflows-reference-03){target="_blank"}. Note that it also includes a `Dockerfile` for the other tutorial [3c. Build your own `Docker` container image and run it locally](3c-build-docker-container-image.qmd).
+
+# Discussion
+
+Now that you have created your own reproducible repository, think for a moment, how future proof is it really? What does the reproducibility of your repository depend on? How can you further future-proof it?
