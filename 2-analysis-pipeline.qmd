@@ -297,7 +297,7 @@ targets::tar_prune()
 
 ## Adjust `targets` settings
 
-Feel free to remove most of the comments in the example `_targets.R` file, espetially the ones regarding the targets options. We recommend you do set the options as follows:
+Feel free to remove most of the comments in the example `_targets.R` file, especially the ones regarding the targets options. We recommend you do set the options as follows:
 
 ```r
 tar_option_set(
