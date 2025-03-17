@@ -64,7 +64,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./3a-how-docker-and-binder-work.html" rel="next">
+<link href="./3-containers.html" rel="next">
 <link href="./1-r-packages.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -193,20 +193,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./3-containers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. Containerizing R and R Packages for Ultimate Reproducibility</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./3a-how-docker-and-binder-work.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3a. Get Familiar with <code>Docker</code> and <code>Binder</code></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./3b-build-docker-container-image.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3b. Build your own <code>Docker</code> container image and run it (locally or in the academic cluster)</span></a>
+  <a href="./3b-reproducible-github-repo-in-binder.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3b. Make your own git repository reproducible in <code>Binder</code></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./3c-reproducible-github-repo-in-binder.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3c. Make your own git repository reproducible in <code>Binder</code></span></a>
+  <a href="./3c-build-docker-container-image.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3c. Build your own <code>Docker</code> container image and run it locally</span></a>
   </div>
 </li>
       </ul>
@@ -504,9 +510,7 @@ Note
 <section id="setup-the-targets-pipeline" class="level2" data-number="2.5">
 <h2 data-number="2.5" class="anchored" data-anchor-id="setup-the-targets-pipeline"><span class="header-section-number">2.5</span> Setup the <code>{targets}</code> pipeline</h2>
 <p>You could of course create a <code>targets</code> pipeline manually, but there is a handy R function to initialize a template for you:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">use_targets</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">use_targets</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Agree to that and <code>{renv}</code> will take over again to install a new package. Don’t forget to add it to the <code>renv.lock</code> file with <code>renv::snapshot()</code> later.</p>
 <p>Once this is done, you should get a new file <code>_targets.R</code> in the root of your project folder.</p>
 </section>
@@ -538,7 +542,7 @@ Note
 </section>
 <section id="adjust-targets-settings" class="level2" data-number="2.7">
 <h2 data-number="2.7" class="anchored" data-anchor-id="adjust-targets-settings"><span class="header-section-number">2.7</span> Adjust <code>targets</code> settings</h2>
-<p>Feel free to remove most of the comments in the example <code>_targets.R</code> file, espetially the ones regarding the targets options. We recommend you do set the options as follows:</p>
+<p>Feel free to remove most of the comments in the example <code>_targets.R</code> file, especially the ones regarding the targets options. We recommend you do set the options as follows:</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tar_option_set</span>(</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">format =</span> <span class="st">"qs"</span></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1469,8 +1473,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./3a-how-docker-and-binder-work.html" class="pagination-link" aria-label="3a. Get Familiar with `Docker` and `Binder`">
-        <span class="nav-page-text">3a. Get Familiar with <code>Docker</code> and <code>Binder</code></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./3-containers.html" class="pagination-link" aria-label="3. Containerizing R and R Packages for Ultimate Reproducibility">
+        <span class="nav-page-text">3. Containerizing R and R Packages for Ultimate Reproducibility</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

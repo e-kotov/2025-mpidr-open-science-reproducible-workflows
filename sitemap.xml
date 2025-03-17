@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://e-kotov.github.io/2025-mpidr-open-science-reproducible-workflows/3b-build-docker-container-image.html</loc>
-    <lastmod>2025-03-17T16:16:07.759Z</lastmod>
+    <loc>https://e-kotov.github.io/2025-mpidr-open-science-reproducible-workflows/3c-build-docker-container-image.html</loc>
+    <lastmod>2025-03-17T23:34:23.487Z</lastmod>
   </url>
   <url>
     <loc>https://e-kotov.github.io/2025-mpidr-open-science-reproducible-workflows/license.html</loc>
-    <lastmod>2025-03-17T16:16:07.760Z</lastmod>
+    <lastmod>2025-03-17T23:34:23.578Z</lastmod>
   </url>
   <url>
-    <loc>https://e-kotov.github.io/2025-mpidr-open-science-reproducible-workflows/index.html</loc>
-    <lastmod>2025-03-17T16:16:07.760Z</lastmod>
+    <loc>https://e-kotov.github.io/2025-mpidr-open-science-reproducible-workflows/3b-reproducible-github-repo-in-binder.html</loc>
+    <lastmod>2025-03-17T23:34:23.487Z</lastmod>
   </url>
   <url>
     <loc>https://e-kotov.github.io/2025-mpidr-open-science-reproducible-workflows/3-containers.html</loc>
-    <lastmod>2025-03-17T16:16:07.759Z</lastmod>
+    <lastmod>2025-03-17T23:34:23.487Z</lastmod>
   </url>
   <url>
     <loc>https://e-kotov.github.io/2025-mpidr-open-science-reproducible-workflows/2-analysis-pipeline.html</loc>
-    <lastmod>2025-03-17T16:16:07.759Z</lastmod>
+    <lastmod>2025-03-17T23:34:23.487Z</lastmod>
   </url>
   <url>
-    <loc>https://e-kotov.github.io/2025-mpidr-open-science-reproducible-workflows/3c-reproducible-github-repo-in-binder.html</loc>
-    <lastmod>2025-03-17T16:16:07.759Z</lastmod>
+    <loc>https://e-kotov.github.io/2025-mpidr-open-science-reproducible-workflows/index.html</loc>
+    <lastmod>2025-03-17T23:34:23.578Z</lastmod>
   </url>
   <url>
     <loc>https://e-kotov.github.io/2025-mpidr-open-science-reproducible-workflows/1-r-packages.html</loc>
-    <lastmod>2025-03-17T16:16:07.759Z</lastmod>
+    <lastmod>2025-03-17T23:34:23.487Z</lastmod>
   </url>
   <url>
     <loc>https://e-kotov.github.io/2025-mpidr-open-science-reproducible-workflows/3a-how-docker-and-binder-work.html</loc>
-    <lastmod>2025-03-17T16:16:07.759Z</lastmod>
+    <lastmod>2025-03-17T23:34:23.487Z</lastmod>
   </url>
 </urlset>

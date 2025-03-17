@@ -84,8 +84,8 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./3b-build-docker-container-image.html" rel="next">
-<link href="./2-analysis-pipeline.html" rel="prev">
+<link href="./3b-reproducible-github-repo-in-binder.html" rel="next">
+<link href="./3-containers.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -97,6 +97,8 @@ div.csl-indent {
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-a1acfbbee927fc374e63b7e1701d59bf.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="site_libs/bootstrap/bootstrap-dark-8e67f728467f3a6880e08e0f30c0633d.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="site_libs/quarto-contrib/videojs/video.min.js"></script>
+<link href="site_libs/quarto-contrib/videojs/video-js.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -159,7 +161,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./3a-how-docker-and-binder-work.html">3. Containerizing R and R Packages for Ultimate Reproducibility</a></li><li class="breadcrumb-item"><a href="./3a-how-docker-and-binder-work.html">3a. Get Familiar with <code>Docker</code> and <code>Binder</code></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./3-containers.html">3. Containerizing R and R Packages for Ultimate Reproducibility</a></li><li class="breadcrumb-item"><a href="./3a-how-docker-and-binder-work.html">3a. Get Familiar with <code>Docker</code> and <code>Binder</code></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -217,20 +219,26 @@ div.csl-indent {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./3-containers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. Containerizing R and R Packages for Ultimate Reproducibility</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./3a-how-docker-and-binder-work.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">3a. Get Familiar with <code>Docker</code> and <code>Binder</code></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./3b-build-docker-container-image.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3b. Build your own <code>Docker</code> container image and run it (locally or in the academic cluster)</span></a>
+  <a href="./3b-reproducible-github-repo-in-binder.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3b. Make your own git repository reproducible in <code>Binder</code></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./3c-reproducible-github-repo-in-binder.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3c. Make your own git repository reproducible in <code>Binder</code></span></a>
+  <a href="./3c-build-docker-container-image.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3c. Build your own <code>Docker</code> container image and run it locally</span></a>
   </div>
 </li>
       </ul>
@@ -258,7 +266,7 @@ div.csl-indent {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./3a-how-docker-and-binder-work.html">3. Containerizing R and R Packages for Ultimate Reproducibility</a></li><li class="breadcrumb-item"><a href="./3a-how-docker-and-binder-work.html">3a. Get Familiar with <code>Docker</code> and <code>Binder</code></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./3-containers.html">3. Containerizing R and R Packages for Ultimate Reproducibility</a></li><li class="breadcrumb-item"><a href="./3a-how-docker-and-binder-work.html">3a. Get Familiar with <code>Docker</code> and <code>Binder</code></a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">3a. Get Familiar with <code>Docker</code> and <code>Binder</code></h1>
 </div>
@@ -325,6 +333,10 @@ div.csl-indent {
 <figcaption>Performing gridsample technique in a cloud cointainer in Binder</figcaption>
 </figure>
 </div>
+<p>The repository can be found at <a href="https://github.com/Population-Dynamics-Lab/grid-sample-containerized" target="_blank">https://github.com/Population-Dynamics-Lab/grid-sample-containerized</a>.</p>
+<p>Another recent example is based on <span class="citation" data-cites="Schoeley_S29_19">Schöley (<a href="#ref-Schoeley_S29_19" role="doc-biblioref">2021</a>)</span>:</p>
+<div class="quarto-video"><video id="video_shortcode_videojs_video1" class="video-js vjs-default-skin vjs-fluid" controls="" preload="auto" data-setup="{}" title="Reproducing the code from Schöley (2021) in a cloud container in Binder"><source src="media/videos/demogr-reproduce-repo.mp4"></video></div>
+<p>The repository can be found at <a href="https://github.com/e-kotov/demographic-research.44-19-containerized" target="_blank">https://github.com/e-kotov/demographic-research.44-19-containerized</a>.</p>
 </section>
 <section id="try-the-example-repository-live-demo" class="level2">
 <h2 class="anchored" data-anchor-id="try-the-example-repository-live-demo">Try the example repository live-demo</h2>
@@ -395,6 +407,9 @@ div.csl-indent {
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-kotov.deneke2024" class="csl-entry" role="listitem">
 Kotov, Egor, and Esther Deneke. 2024. <span>“Expanding the <span>Lifespan</span> of <span>Software</span> for <span>Demographic Analysis</span> with <span>Containers</span>: <span>An Application</span> of <span>Spatial Sampling</span>.”</span> <em>The Denominator. Population Dynamics Lab</em>. <a href="https://doi.org/10.6069/WY8K-D973">https://doi.org/10.6069/WY8K-D973</a>.
+</div>
+<div id="ref-Schoeley_S29_19" class="csl-entry" role="listitem">
+Schöley, Jonas. 2021. <span>“<span class="nocase">The centered ternary balance scheme: A technique to visualize surfaces of unbalanced three-part compositions</span>.”</span> <em>Demographic Research</em> S29 (19): 443–58. <a href="https://doi.org/10.4054/DemRes.2021.44.19">https://doi.org/10.4054/DemRes.2021.44.19</a>.
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -1001,13 +1016,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./2-analysis-pipeline.html" class="pagination-link" aria-label="2. Building analysis pipelines with `targets`">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">2. Building analysis pipelines with <code>targets</code></span>
+      <a href="./3-containers.html" class="pagination-link" aria-label="3. Containerizing R and R Packages for Ultimate Reproducibility">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">3. Containerizing R and R Packages for Ultimate Reproducibility</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./3b-build-docker-container-image.html" class="pagination-link" aria-label="3b. Build your own `Docker` container image and run it (locally or in the academic cluster)">
-        <span class="nav-page-text">3b. Build your own <code>Docker</code> container image and run it (locally or in the academic cluster)</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./3b-reproducible-github-repo-in-binder.html" class="pagination-link" aria-label="3b. Make your own git repository reproducible in `Binder`">
+        <span class="nav-page-text">3b. Make your own git repository reproducible in <code>Binder</code></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -1038,6 +1053,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
+<script>videojs(video_shortcode_videojs_video1);</script>
 
 
 
