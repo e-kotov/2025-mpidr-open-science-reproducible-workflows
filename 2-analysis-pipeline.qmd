@@ -223,7 +223,7 @@ No issues found -- the project is in a consistent state.
 
 You could of course create a `targets` pipeline manually, but there is a handy R function to initialize a template for you:
 
-```{r}
+```r
 targets::use_targets()
 ```
 
