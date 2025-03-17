@@ -2,7 +2,7 @@
 title: "Workshop Introduction"
 ---
 
-This website provides supporting materials for the part 2 of the workshop **Projects’ workflow for reproducibility and replicability using R** held at the [Second Rostock Open Science Workshop](https://www.demogr.mpg.de/en/news_events_6123/calendar_1921/second_rostock_open_science_workshop_13282){target="_blank"} organized by the [Max Planck Institute for Demographic Research](https://demogr.mpg.de/){target="_blank"} in Rostock, Germany. This tutorial is [licensed under CC0](license.qmd).
+This website provides supporting materials for the part 2 of the workshop **Projects’ workflow for reproducibility and replicability using R** held at the [Second Rostock Open Science Workshop](https://www.demogr.mpg.de/en/news_events_6123/calendar_1921/second_rostock_open_science_workshop_13282){target="_blank"} organized by the [Max Planck Institute for Demographic Research](https://demogr.mpg.de/){target="_blank"} in Rostock, Germany. This tutorial is [licensed under CC0](license.qmd). Part 1 of the workshop is [available in this GitHub repository](https://github.com/jschoeley/openscience25){target="_blank"}.
 
 You can get the slides in [PDF](assets/slides/2025-03-18_MPIDR_OSW_RWorkflows_part2.pdf) and [PPTX (with some animations)](assets/slides/2025-03-18_MPIDR_OSW_RWorkflows_part2.pptx).
 
