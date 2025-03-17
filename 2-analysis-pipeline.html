@@ -237,13 +237,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#setup-the-targets-pipeline" id="toc-setup-the-targets-pipeline" class="nav-link" data-scroll-target="#setup-the-targets-pipeline"><span class="header-section-number">2.5</span> Setup the <code>{targets}</code> pipeline</a></li>
   <li><a href="#explore-the-sample-pipeline" id="toc-explore-the-sample-pipeline" class="nav-link" data-scroll-target="#explore-the-sample-pipeline"><span class="header-section-number">2.6</span> Explore the sample pipeline</a></li>
-  <li><a href="#replace-the-example-pipeline-with-data-analysis-pipeline" id="toc-replace-the-example-pipeline-with-data-analysis-pipeline" class="nav-link" data-scroll-target="#replace-the-example-pipeline-with-data-analysis-pipeline"><span class="header-section-number">2.7</span> Replace the example pipeline with data analysis pipeline</a>
+  <li><a href="#adjust-targets-settings" id="toc-adjust-targets-settings" class="nav-link" data-scroll-target="#adjust-targets-settings"><span class="header-section-number">2.7</span> Adjust <code>targets</code> settings</a></li>
+  <li><a href="#step1-get-data" id="toc-step1-get-data" class="nav-link" data-scroll-target="#step1-get-data"><span class="header-section-number">2.8</span> Analysis step 1 - Get the data</a>
   <ul class="collapse">
-  <li><a href="#write-code-for-data-download-step" id="toc-write-code-for-data-download-step" class="nav-link" data-scroll-target="#write-code-for-data-download-step"><span class="header-section-number">2.7.1</span> Write code for data download step</a></li>
-  <li><a href="#download-files-by-executing-the-pipeline" id="toc-download-files-by-executing-the-pipeline" class="nav-link" data-scroll-target="#download-files-by-executing-the-pipeline"><span class="header-section-number">2.7.2</span> Download files by executing the pipeline</a></li>
-  <li><a href="#add-data-folder-to-.gitignore" id="toc-add-data-folder-to-.gitignore" class="nav-link" data-scroll-target="#add-data-folder-to-.gitignore"><span class="header-section-number">2.7.3</span> Add data folder to <code>.gitignore</code></a></li>
-  <li><a href="#targets-settings" id="toc-targets-settings" class="nav-link" data-scroll-target="#targets-settings"><span class="header-section-number">2.7.4</span> <code>targets</code> settings</a></li>
+  <li><a href="#wrap-data-download-step-into-a-function" id="toc-wrap-data-download-step-into-a-function" class="nav-link" data-scroll-target="#wrap-data-download-step-into-a-function"><span class="header-section-number">2.8.1</span> Wrap data download step into a function</a></li>
+  <li><a href="#download-files-by-executing-the-pipeline" id="toc-download-files-by-executing-the-pipeline" class="nav-link" data-scroll-target="#download-files-by-executing-the-pipeline"><span class="header-section-number">2.8.2</span> Download files by executing the pipeline</a></li>
+  <li><a href="#add-data-folder-to-.gitignore" id="toc-add-data-folder-to-.gitignore" class="nav-link" data-scroll-target="#add-data-folder-to-.gitignore"><span class="header-section-number">2.8.3</span> Add data folder to <code>.gitignore</code></a></li>
   </ul></li>
+  <li><a href="#analysis-step-2---create-background-map" id="toc-analysis-step-2---create-background-map" class="nav-link" data-scroll-target="#analysis-step-2---create-background-map"><span class="header-section-number">2.9</span> Analysis step 2 - Create background map</a>
+  <ul class="collapse">
+  <li><a href="#step-2.1-download-natural-earth-data" id="toc-step-2.1-download-natural-earth-data" class="nav-link" data-scroll-target="#step-2.1-download-natural-earth-data"><span class="header-section-number">2.9.0.1</span> Step 2.1 Download Natural Earth data</a></li>
+  </ul></li>
+  <li><a href="#step-2.2-wrap-background-map-creation-step-into-a-function" id="toc-step-2.2-wrap-background-map-creation-step-into-a-function" class="nav-link" data-scroll-target="#step-2.2-wrap-background-map-creation-step-into-a-function"><span class="header-section-number">2.10</span> Step 2.2 Wrap background map creation step into a function</a></li>
+  <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps"><span class="header-section-number">2.11</span> Next steps</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -306,7 +312,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>This script has three steps. It loads the data, computes a simple statistic, and creates a plot. To run this pipeline with <code>targets</code> you would need to save this script to the <code>_targets.R</code> file in the root of the project directory and run <code>targets::tar_make()</code> in R console.</p>
 <details>
 <summary>
-Code to try <code>targets</code> in R console interactively
+Reveal code to try the toy <code>targets</code> example above in R console interactively
 </summary>
 <p>To quickly run the pipeline above in R console without setting up <code>targets</code> properly and creating an R script file, you can use the code below, that can be pasted in to the R console (and it will make the pipeline run in a temporary directory):</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(targets)</span>
@@ -393,7 +399,7 @@ Figure&nbsp;1: “Pipeline visualization example”
 </figcaption>
 </figure>
 </div>
-<p>As you can see in <a href="#fig-mtcars-visnet" class="quarto-xref">Figure&nbsp;1</a>, <code>{targets}</code> knows that the summary statistic and the plot depend on the data. If you were to change the first step of the pipeline, then the next time you ask <code>{targets}</code> to update the pipeline, it will only run steps two and three. If, however, instead of changing the data, you will change the code for the plot (e.g.&nbsp;change the title), then the pipeline will only re-run step three. This way, you do not have to manually keep track of what might have changed in the data or the code, or, in more complex pipelines, in the intermediate data (such as cross-validation folds for machine learning models) - <code>{targets}</code> will figure it out for you.</p>
+<p>As you can see in <a href="#fig-mtcars-visnet" class="quarto-xref">Figure&nbsp;1</a>, <code>{targets}</code> knows that the summary statistic and the plot depend on the data. If you were to change the first step of the pipeline, then the next time you ask <code>{targets}</code> to update the pipeline, it would only run steps two and three. If, however, instead of changing the data, you changed the code for the plot (e.g.&nbsp;change the title), then the pipeline would only re-run step three. This way, you do not have to manually keep track of what might have changed in the data or the code, or, in more complex pipelines, in the intermediate data (such as cross-validation folds for machine learning models) - <code>{targets}</code> will figure it out for you.</p>
 </section>
 </section>
 <section id="exercise" class="level1" data-number="2">
@@ -469,12 +475,6 @@ Note
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">use_targets</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>You may get:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>ℹ The package <span class="st">"usethis"</span> is required.</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>✖ Would you like to install it?</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">:</span> Yes</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="sc">:</span> No</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Agree to that and <code>{renv}</code> will take over again to install a new package. Don’t forget to add it to the <code>renv.lock</code> file with <code>renv::snapshot()</code> later.</p>
 <p>Once this is done, you should get a new file <code>_targets.R</code> in the root of your project folder.</p>
 </section>
@@ -482,34 +482,61 @@ Note
 <h2 data-number="2.6" class="anchored" data-anchor-id="explore-the-sample-pipeline"><span class="header-section-number">2.6</span> Explore the sample pipeline</h2>
 <p>Before editing the <code>_targets.R</code> file, explore the pipeline that is already defined in the file.</p>
 <p>First, run this to see the interactive graph of the pipeline (you will need to agree to install <code>visNetwork</code> package when you run this for the first time, run the command again if you still don’t see the visualisation in the viewer):</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">tar_visnetwork</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">tar_visnetwork</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>You will see that all steps are currently outdated.</p>
 <p>Now you can runn all the steps in the pipeline:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">tar_make</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">tar_make</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Notice that you a new folder called <code>_targets</code> is created in the project folder. This is where the output of the pipeline will be stored as well as some metadata.</p>
 <p>If you run <code>targets::tar_visnetwork()</code> again, you will find all steps are now up-to-date.</p>
 <p>Now you can inspect in the <code>R</code> console the results of each step. You do not need to think where each output is saved, as all outputs are always stored in the <code>_targets</code> folder and are accessible by their name. For example:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>tmp_object <span class="ot">&lt;-</span> targets<span class="sc">::</span><span class="fu">tar_read</span>(data)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(tmp_object)</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(tmp_object)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>tmp_object <span class="ot">&lt;-</span> targets<span class="sc">::</span><span class="fu">tar_read</span>(data)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(tmp_object)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(tmp_object)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This will read the <code>data</code> object that is the output of the first step of the example pipeline and print it to the console. Finally, we also remove this object from the workspace to keep it clean.</p>
 <p>You may also load the object <code>data</code> with its name directly into the workspace with:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">tar_load</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"data"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">tar_load</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"data"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Now clean the workspace/environment:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>To delete saved outputs of all or certain (see the <a href="https://docs.ropensci.org/targets/reference/tar_destroy.html" target="_blank">documentation</a>) steps, run:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">tar_destroy</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">tar_destroy</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>To delete the saved results of steps that you might have deleted and will not use anymore, you could run:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">tar_prune</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">tar_prune</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="replace-the-example-pipeline-with-data-analysis-pipeline" class="level2" data-number="2.7">
-<h2 data-number="2.7" class="anchored" data-anchor-id="replace-the-example-pipeline-with-data-analysis-pipeline"><span class="header-section-number">2.7</span> Replace the example pipeline with data analysis pipeline</h2>
+<section id="adjust-targets-settings" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="adjust-targets-settings"><span class="header-section-number">2.7</span> Adjust <code>targets</code> settings</h2>
+<p>Feel free to remove most of the comments in the example <code>_targets.R</code> file, espetially the ones regarding the targets options. We recommend you do set the options as follows:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tar_option_set</span>(</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">format =</span> <span class="st">"qs"</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>qs</code>/<code>qs2</code> format is a faster and more space efficient alternative to <code>rds</code> format. You can read more about it in the <a href="https://github.com/qsbase/qs2?tab=readme-ov-file#single-threaded"><code>qs2</code> documentation</a>. This will be the format that <code>targets</code> uses to save the output of each step of the pipeline, unless you specify <code>format = 'file'</code>, or set it to something else in the specicfic <code>tar_target()</code> step.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You might also notice that we suggest to remove the <code>packages</code> option from <code>tar_option_set()</code> that was originally there. This is because it is much safer to specify the packages you need in each <code>tar_target()</code> step individually. This might seem like a lot of work, but it it has many advatanges:</p>
+<ul>
+<li>Each step runs much faster, as unnecessary packages are not loaded.</li>
+<li>You can prevent potential package conflicts. In big projects with hundreds of packages, some packages may not work well when loaded simultaneously (which would happen if you specify the <code>packages</code> option globally for all steps).</li>
+<li>It is much easier to debug, as you can see which packages are loaded at each step.</li>
+</ul>
+</div>
+</div>
+<p>For more <code>targets</code> options, you can see the documentation for <a href="https://docs.ropensci.org/targets/reference/tar_option_set.html" target="_blank"><code>tar_option_set()</code></a>.</p>
+</section>
+<section id="step1-get-data" class="level2" data-number="2.8">
+<h2 data-number="2.8" class="anchored" data-anchor-id="step1-get-data"><span class="header-section-number">2.8</span> Analysis step 1 - Get the data</h2>
 <p>See the code in Jonas’s repository at <a href="https://github.com/jschoeley/openscience25/tree/main/layer2-communal/example_2-1" target="_blank">https://github.com/jschoeley/openscience25/tree/main/layer2-communal/example_2-1</a>.</p>
 <p>Let us try to implement the steps from his code in a <code>targets</code> pipeline. We will guide you through the first pipeline step together.</p>
-<section id="write-code-for-data-download-step" class="level3" data-number="2.7.1">
-<h3 data-number="2.7.1" class="anchored" data-anchor-id="write-code-for-data-download-step"><span class="header-section-number">2.7.1</span> Write code for data download step</h3>
+<section id="wrap-data-download-step-into-a-function" class="level3" data-number="2.8.1">
+<h3 data-number="2.8.1" class="anchored" data-anchor-id="wrap-data-download-step-into-a-function"><span class="header-section-number">2.8.1</span> Wrap data download step into a function</h3>
 <p>We first need to implement the data download step found in <a href="https://github.com/jschoeley/openscience25/blob/main/layer2-communal/example_2-1/code/10-download_input_data_from_zenodo.R" target="_blank">https://github.com/jschoeley/openscience25/blob/main/layer2-communal/example_2-1/code/10-download_input_data_from_zenodo.R</a>.</p>
 <p>We will keep all functions that implement the steps in a separate folder called <code>R</code>. Create this folder manually and create a file called <code>10-download_input_data_from_zenodo.R</code> in it. Copy the code from Jonas’s repository and save it in this new file, but convert it to a function that we could call from the <code>targets</code> pipeline. Compared to Jonas’s original code, this function needs to make sure that the folder for the file downloads exists and also return the paths to the downloaded data files. See the suggested function below:</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Download analysis input data from Zenodo</span></span>
@@ -539,11 +566,10 @@ Note
 <span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>  <span class="co"># find the downloaded files</span></span>
 <span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>  data_from_zenodo <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="st">"data"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(data_from_zenodo) <span class="ot">&lt;-</span> <span class="fu">basename</span>(data_from_zenodo)</span>
-<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>  <span class="co"># return the list of files</span></span>
-<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(data_from_zenodo)</span>
-<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># return the list of files</span></span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(data_from_zenodo)</span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Compare this to the original code from Jonas’s repository at <a href="https://github.com/jschoeley/openscience25/blob/main/layer2-communal/example_2-1/code/10-download_input_data_from_zenodo.R" target="_blank">https://github.com/jschoeley/openscience25/blob/main/layer2-communal/example_2-1/code/10-download_input_data_from_zenodo.R</a>.</p>
 <p>Now, to implement this first step into the pipeline, let us find the list of steps in the end of the <code>_targets.R</code> file, it’s the one where all the steps are listed, each starting with <code>tar_target()</code>.</p>
 <p>Remove all the example steps and insert your own:</p>
@@ -560,8 +586,8 @@ Note
 <p>Notice that we have added <code>format = "file"</code> to our first step. This means that <code>targets</code> should expect not a generic <code>R</code> object like a <code>data.frame</code>, <code>list</code>, or <code>vector</code> as on output of the <code>download_files_from_zenodo()</code> function, but a vector of files. This is useful for actions such as file downloads, as <code>targets</code> will be checking on it’s own if all expected files are actually downloaded.</p>
 <p>The final step is to inform <code>targets</code> that we want to run the pipeline by executing the <code>targets::tar_make()</code>.</p>
 </section>
-<section id="download-files-by-executing-the-pipeline" class="level3" data-number="2.7.2">
-<h3 data-number="2.7.2" class="anchored" data-anchor-id="download-files-by-executing-the-pipeline"><span class="header-section-number">2.7.2</span> Download files by executing the pipeline</h3>
+<section id="download-files-by-executing-the-pipeline" class="level3" data-number="2.8.2">
+<h3 data-number="2.8.2" class="anchored" data-anchor-id="download-files-by-executing-the-pipeline"><span class="header-section-number">2.8.2</span> Download files by executing the pipeline</h3>
 <p>Now you can run the pipeline by executing:</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">tar_make</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>You should get something like this:</p>
@@ -583,7 +609,20 @@ Note
 <span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>● completed target data_from_zenodo [<span class="fl">0.894</span> seconds, <span class="fl">293.12</span> kilobytes]</span>
 <span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>▶ ended pipeline [<span class="fl">0.94</span> seconds]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>The pipeline will download the files from Zenodo and will save them into the <code>data</code> folder. You can now use the downloaded files in the next steps of the pipeline.</p>
+<p>The pipeline downloaded the files from Zenodo and will save them into the <code>data</code> folder. You can now use the downloaded files in the next steps of the pipeline.</p>
+<p>Make an interactive graph of the pipeline:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">tar_visnetwork</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You should see a network similar to the one in <a href="#fig-ex-02-targets-zenodo-data.png" class="quarto-xref">Figure&nbsp;2</a>.</p>
+<div id="fig-ex-02-targets-zenodo-data.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ex-02-targets-zenodo-data.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="media/images/ex-02-targets-zenodo-data.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ex-02-targets-zenodo-data.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: “Up to date workflow including getting the data and producing the basemap”
+</figcaption>
+</figure>
+</div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -598,19 +637,75 @@ Note
 </div>
 </div>
 </section>
-<section id="add-data-folder-to-.gitignore" class="level3" data-number="2.7.3">
-<h3 data-number="2.7.3" class="anchored" data-anchor-id="add-data-folder-to-.gitignore"><span class="header-section-number">2.7.3</span> Add data folder to <code>.gitignore</code></h3>
+<section id="add-data-folder-to-.gitignore" class="level3" data-number="2.8.3">
+<h3 data-number="2.8.3" class="anchored" data-anchor-id="add-data-folder-to-.gitignore"><span class="header-section-number">2.8.3</span> Add data folder to <code>.gitignore</code></h3>
 <p>As the data is preserved at Zenodo, and as it is bad practice to store data in the git repository, we should add the <code>data</code> folder to the <code>.gitignore</code> file. You can do this by executing the following command in the <code>R</code> console:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">use_git_ignore</span>(<span class="st">"data"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">use_git_ignore</span>(<span class="st">"data"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This will create a new <code>.gitignore</code> file in the root of the project (in case it did not exist) and add the <code>data</code> folder there. Now <code>git</code> tools will not prompt you to commit the <code>data</code> folder and it will never be pushed to GitHub or other remote repository you are using.</p>
 </section>
-<section id="targets-settings" class="level3" data-number="2.7.4">
-<h3 data-number="2.7.4" class="anchored" data-anchor-id="targets-settings"><span class="header-section-number">2.7.4</span> <code>targets</code> settings</h3>
-<p>Feel free to remove most of the comments in the example <code>_targets.R</code> file, espetially the ones regarding the targets options. We recommend you do set the options as follows:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tar_option_set</span>(</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">format =</span> <span class="st">"qs"</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>The <code>qs</code> format is a faster and more space efficient alternative to <code>rds</code> format. You can read more about it in the <a href="https://github.com/qsbase/qs2?tab=readme-ov-file#single-threaded"><code>qs2</code> documentation</a>. This will be the format that <code>targets</code> uses to save the output of each step of the pipeline, unless you specify <code>format = 'file'</code>, like we did for the file list above, or set it to something else in the specicfic <code>tar_target()</code> step.</p>
+</section>
+<section id="analysis-step-2---create-background-map" class="level2" data-number="2.9">
+<h2 data-number="2.9" class="anchored" data-anchor-id="analysis-step-2---create-background-map"><span class="header-section-number">2.9</span> Analysis step 2 - Create background map</h2>
+<p>Now let us add a new step that creates background map that will be re-used in all of the plots me can create following the code in Jonas’s repository. We will look at the code in <a href="https://github.com/jschoeley/openscience25/blob/main/layer2-communal/example_2-1/code/20-create_european_backgroundmap.R" target="_blank">https://github.com/jschoeley/openscience25/blob/main/layer2-communal/example_2-1/code/20-create_european_backgroundmap.R</a> and adjust it to be a <code>targets</code> step executed by <code>tar_target()</code>.</p>
+<p>Because the code there uses <a href="https://github.com/jschoeley/openscience25/blob/main/layer2-communal/example_2-1/code/_config.yaml" target="_blank"><code>_config.yaml</code></a> to customize the plots, you will need to <a href="https://github.com/jschoeley/openscience25/raw/refs/heads/main/layer2-communal/example_2-1/code/_config.yaml" target="_blank">download</a> it and put into your project, e.g.&nbsp;into <code>config</code> folder.</p>
+<p>We will also break down the code into steps, as it makes sense to isolate the code for downloading the data from Natural Earth into a separate function.</p>
+<section id="step-2.1-download-natural-earth-data" class="level4" data-number="2.9.0.1">
+<h4 data-number="2.9.0.1" class="anchored" data-anchor-id="step-2.1-download-natural-earth-data"><span class="header-section-number">2.9.0.1</span> Step 2.1 Download Natural Earth data</h4>
+<p>Look at <a href="https://github.com/jschoeley/openscience25/blob/9efc85e2dad9b2d1cc05da2d257c5dad01a97276/layer2-communal/example_2-1/code/20-create_european_backgroundmap.R#L28C1-L42C39" target="_blank">the corresponding lines</a> in Jonas’s code:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Download Eurasian geodata ---------------------------------------</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>eura_sf <span class="ot">&lt;-</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># download geospatial data for European, Asian and African countries</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ne_countries</span>(<span class="at">continent =</span> <span class="fu">c</span>(<span class="st">'europe'</span>, <span class="st">'asia'</span>, <span class="st">'africa'</span>),</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">returnclass =</span> <span class="st">'sf'</span>, <span class="at">scale =</span> <span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># project to crs suitable for Europe</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="at">crs =</span> config<span class="sc">$</span>crs) <span class="sc">%&gt;%</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># merge into single polygon</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_union</span>(<span class="at">by_feature =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># crop to Europe</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_crop</span>(<span class="at">xmin =</span> config<span class="sc">$</span>eurocrop<span class="sc">$</span>xmin,</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>          <span class="at">xmax =</span> config<span class="sc">$</span>eurocrop<span class="sc">$</span>xmax,</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>          <span class="at">ymin =</span> config<span class="sc">$</span>eurocrop<span class="sc">$</span>ymin,</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>          <span class="at">ymax =</span> config<span class="sc">$</span>eurocrop<span class="sc">$</span>ymax)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>We will rewrite it as a following function:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Download Eurasian geodata ---------------------------------------</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>download_ne_data <span class="ot">&lt;-</span> <span class="cf">function</span>(</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  crs, xmin, xmax, ymin, ymax</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>) {</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  eura_sf <span class="ot">&lt;-</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># download geospatial data for European, Asian and African countries</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    rnaturalearth<span class="sc">::</span><span class="fu">ne_countries</span>(</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">continent =</span> <span class="fu">c</span>(<span class="st">'europe'</span>, <span class="st">'asia'</span>, <span class="st">'africa'</span>),</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">returnclass =</span> <span class="st">'sf'</span>,</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">scale =</span> <span class="dv">10</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># project to crs suitable for Europe</span></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>    sf<span class="sc">::</span><span class="fu">st_transform</span>(<span class="at">crs =</span> crs) <span class="sc">|&gt;</span></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># merge into single polygon</span></span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>    sf<span class="sc">::</span><span class="fu">st_union</span>(<span class="at">by_feature =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># crop to Europe</span></span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>    sf<span class="sc">::</span><span class="fu">st_crop</span>(<span class="at">xmin =</span> xmin, <span class="at">xmax =</span> xmax, <span class="at">ymin =</span> ymin, <span class="at">ymax =</span> ymax)</span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(eura_sf)</span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>As you can see, we got rid of the references to <code>yaml</code> file, which is one of the ways to approach it. Any preferences previously set in yaml file are now set in the function parameters.</p>
+<p>We also prefixed each function call with a package name. We do this to be more aware of which packages we use in each function to minimize the potential for conflicts.</p>
+<p>In the list of <code>targets</code> steps we will add the call as follows:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tar_target</span>(</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">name =</span> eura_sf,</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">packages =</span> <span class="fu">c</span>(<span class="st">"rnaturalearth"</span>, <span class="st">"sf"</span>),</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">command =</span> <span class="fu">download_ne_data</span>(</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">crs =</span> <span class="dv">3035</span>,</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">xmin =</span> <span class="fl">25.0e+5</span>,</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">xmax =</span> <span class="fl">75.0e+5</span>,</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">ymin =</span> <span class="fl">13.5e+5</span>,</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">ymax =</span> <span class="fl">54.5e+5</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Note that:</p>
+<ul>
+<li>We specified the <code>packages</code> argument for an individual target step.</li>
+<li>We did not specify the <code>format = "file"</code>, so by default it will be <code>qs2</code> format, as specified above in <code>tar_option_set()</code>.</li>
+</ul>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -621,17 +716,114 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>You might also notice that we suggest to remove the <code>packages</code> option from <code>tar_option_set()</code> that was originally there. This is because it is much safer to specify the packages you need in each <code>tar_target()</code> step individually. This might seem like a lot of work, but it it has many advatanges:</p>
-<ul>
-<li>Each step runs much faster, as unnecessary packages are not loaded.</li>
-<li>You can prevent potential package conflicts. In big projects with hundreds of packages, some packages may not work well when loaded simultaneously (which would happen if you specify the <code>packages</code> option globally for all steps).</li>
-<li>It is much easier to debug, as you can see which packages are loaded at each step.</li>
-</ul>
+<p>As you might have noticed, we set the name of the <code>targets</code> step as <code>eura_sf</code>, and we also return an object called <code>eura_sf</code> from the <code>download_ne_data()</code> function. These names do NOT have to match, as in larger projects functions may be reused multiple times and they may have more generic uses and therefore return different output to different targets based on their input parameters. In this case, we are just naming the objects in the same way for convenience.</p>
 </div>
 </div>
-
-
+<p>Test the <code>targets</code> pipeline by running it and making an interactive graph:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">tar_make</span>()</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">tar_visnetwork</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You should see a network similar to the one in <a href="#fig-ex-02-targets-ne-data" class="quarto-xref">Figure&nbsp;3</a>.</p>
+<div id="fig-ex-02-targets-ne-data" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ex-02-targets-ne-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="media/images/ex-02-targets-ne-data.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ex-02-targets-ne-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: “Up to date workflow including getting the data and producing the basemap”
+</figcaption>
+</figure>
+</div>
 </section>
+</section>
+<section id="step-2.2-wrap-background-map-creation-step-into-a-function" class="level2" data-number="2.10">
+<h2 data-number="2.10" class="anchored" data-anchor-id="step-2.2-wrap-background-map-creation-step-into-a-function"><span class="header-section-number">2.10</span> Step 2.2 Wrap background map creation step into a function</h2>
+<p>Create a file <code>20-create_european_backgroundmap.R</code> in <code>R</code> subfolder of your project.</p>
+<p>Look at <a href="https://github.com/jschoeley/openscience25/blob/9efc85e2dad9b2d1cc05da2d257c5dad01a97276/layer2-communal/example_2-1/code/20-create_european_backgroundmap.R#L15-L26" target="_blank">the first few lines</a> in Jonas’s code, just after the <code>library()</code> calls (which we will look at later).</p>
+<p>Original lines:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># input and output paths</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>paths <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>paths<span class="sc">$</span>input <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">config =</span> <span class="st">'./code/_config.yaml'</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>paths<span class="sc">$</span>output <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">euro_basemap.rds =</span> <span class="st">'./data/20-euro_basemap.rds'</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="co"># global configuration</span></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>config <span class="ot">&lt;-</span> <span class="fu">read_yaml</span>(paths<span class="sc">$</span>input<span class="sc">$</span>config)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>We do not nede to use any of these lines anymore. Previously we had to specify where to save the base map in <code>paths$output</code>. With <code>targets</code>, we do not need to manually keep track where we save intermediate results and wether or not they are up to date. Instead of saving the file at the path specified in <code>paths$output</code>, we will just return an <code>R</code> object from the function called by a particular <code>targets</code> step and it will be stored automatically for us in <code>_targets/objects</code> folder. We do not need the <code>_config.yaml</code> here anymore, as it did not contain any variables that would affect the basemap creation.</p>
+<p>We only need <a href="https://github.com/jschoeley/openscience25/blob/9efc85e2dad9b2d1cc05da2d257c5dad01a97276/layer2-communal/example_2-1/code/20-create_european_backgroundmap.R#L44C1-L53C15" target="_blank">the lines</a> that create a <code>ggplot2</code> plot object with the basemap:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Draw a basemap of Europe ----------------------------------------</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>euro_basemap <span class="ot">&lt;-</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(eura_sf) <span class="sc">+</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">geometry =</span> geometry),</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="cn">NA</span>, <span class="at">fill =</span> <span class="st">'grey90'</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">expand =</span> <span class="cn">FALSE</span>, <span class="at">datum =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>And we rewrite these as a function:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Draw a basemap of Europe ----------------------------------------</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>create_european_backgroundmap <span class="ot">&lt;-</span> <span class="cf">function</span>(</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  eura_sf</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>) {</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># eura_sf &lt;- targets::tar_read(eura_sf) # for debug</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>  euro_basemap <span class="ot">&lt;-</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>    ggplot2<span class="sc">::</span><span class="fu">ggplot</span>(eura_sf) <span class="sc">+</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>    ggplot2<span class="sc">::</span><span class="fu">geom_sf</span>(</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">aes</span>(<span class="at">geometry =</span> geometry),</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">color =</span> <span class="cn">NA</span>,</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">fill =</span> <span class="st">'grey90'</span></span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>    ggplot2<span class="sc">::</span><span class="fu">coord_sf</span>(<span class="at">expand =</span> <span class="cn">FALSE</span>, <span class="at">datum =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>    ggplot2<span class="sc">::</span><span class="fu">theme_void</span>()</span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(euro_basemap)</span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Notice that we pass <code>eura_sf</code> object that we created with <code>targets</code> step that executed <code>download_ne_data()</code> and we return the <code>ggplot2</code> object <code>euro_basemap</code> that should be reused in the next steps for creating the maps.</p>
+<p>We also added explicit <code>ggplot2::</code> prefixes to relevant functions. This is optional, as we will specify that we need <code>ggplot2</code> package for this function in the <code>targets</code> pipeline, but this also helps to debug the function quickly.</p>
+<p>To run the code in this function manually, you can use the commented out line <code>eura_sf &lt;- targets::tar_read(eura_sf)</code> to quickly load the <code>eura_sf</code> object (assuming you have previously ran the <code>targets</code> pipeline and it is saved in the <code>targets/ojects</code> storage).</p>
+<p>Now let us add a <code>targets</code> step to the pipeline:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tar_target</span>(</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">name =</span> euro_basemap,</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">packages =</span> <span class="fu">c</span>(<span class="st">"ggplot2"</span>),</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">command =</span> <span class="fu">create_european_backgroundmap</span>(</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">eura_sf =</span> eura_sf</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Test the targets pipeline by running it and making an interactive graph:</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">tar_make</span>()</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">tar_visnetwork</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You should see a network similar to the one in <a href="#fig-ex-02-targets-eubasemap-done" class="quarto-xref">Figure&nbsp;4</a>.</p>
+<div id="fig-ex-02-targets-eubasemap-done" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ex-02-targets-eubasemap-done-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="media/images/ex-02-targets-eubasemap-done.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ex-02-targets-eubasemap-done-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: “Up to date workflow including getting the data and producing the basemap”
+</figcaption>
+</figure>
+</div>
+<p>Now if you run <code>targets::tar_read(euro_basemap)</code>, you should get a plot of the basemap (see <a href="#fig-ex-02-targets-euro-basemap" class="quarto-xref">Figure&nbsp;5</a>):</p>
+<div id="fig-ex-02-targets-euro-basemap" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ex-02-targets-euro-basemap-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="media/images/ex-02-targets-euro-basemap.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ex-02-targets-euro-basemap-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: The figure to be expected as output of <code>targets::tar_read(euro_basemap)</code>
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="next-steps" class="level2" data-number="2.11">
+<h2 data-number="2.11" class="anchored" data-anchor-id="next-steps"><span class="header-section-number">2.11</span> Next steps</h2>
+<p>Now you it is up to you to adapt the code from one of the R scripts that create maps (<code>30-plot_figure_1.R</code>, <code>31-plot_figure_2.R</code>, <code>32-plot_figure_3.R</code>) in Jonas’s repository at <a href="https://github.com/jschoeley/openscience25/tree/main/layer2-communal/example_2-1/code" target="_blank">https://github.com/jschoeley/openscience25/tree/main/layer2-communal/example_2-1/code</a>. in the same way we did above. We would suggest that because these plots are final output images, instead of returning <code>ggplot2</code> objects from the plot making functions, you save the plots to files and return the path to the file, like we did with the <a href="#step1-get-data">step that downloaded the data from Zenodo</a>.</p>
+
+
 </section>
 </section>
 

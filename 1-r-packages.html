@@ -345,7 +345,19 @@ Figure&nbsp;1: Files and folders created by <code>renv</code> when initialized
 <h3 data-number="1.2.1" class="anchored" data-anchor-id="what-does-pak-do"><span class="header-section-number">1.2.1</span> What does <code>{pak}</code> do?</h3>
 <p><a href="https://pak.r-lib.org/" target="_blank"><code>{pak}</code></a> can be used instead of R’s default <code>install.packages()</code> to install R packages and their dependencies faster.</p>
 <p>It can also serve as a so-called “backend” for <a href="#renv"><code>{renv}</code></a>, that is it will help <code>{renv}</code> to install packages and their dependencies much faster when you, or someone who reproduces your code, such as your collaborator, use <code>{renv}</code> to fully restore the R package environment of a project on a new computer.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>If you would like to enable <code>{pak}</code> as a backend for <code>{renv}</code>, you can find which <code>{renv}</code> options to set in the <a href="https://rstudio.github.io/renv/reference/config.html?q=pak#renv-config-pak-enabled" target="_blank"><code>{renv}</code> documentation</a>, however, as this is still experimental, please do not use it in this tutorial, as we will not have time to debug it if something does not work.</p>
+</div>
+</div>
 </section>
 </section>
 </section>
@@ -520,9 +532,9 @@ Important
 </section>
 <section id="install-packages" class="level3" data-number="2.2.6">
 <h3 data-number="2.2.6" class="anchored" data-anchor-id="install-packages"><span class="header-section-number">2.2.6</span> Try installing packages</h3>
-<p>Now you can try to install a new package to see if <code>{renv}</code> works as expected. In the next exercise, we will need the <code>{targets}</code> package, so we can try installing it:</p>
+<p>Now you can try to install a new package to see if <code>{renv}</code> works as expected. In the next exercise, we will need the <code>{targets}</code> and <code>{usethis}</code> packages, so we can try installing them:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"targets"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">"targets"</span>, <span class="st">"usethis"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>You should see in the <code>R</code> console:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>The following <span class="fu">package</span>(s) will be installed<span class="sc">:</span></span>
@@ -534,7 +546,7 @@ Important
 <span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>These packages will be installed into <span class="st">"path-to-your-project/renv/library/macos/R-4.4/aarch64-apple-darwin20"</span>.</span>
 <span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>Do you want to proceed? [Y<span class="sc">/</span>n]<span class="sc">:</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Agree and wait for the <code>{targets}</code> package and it’s dependencies to be installed.</p>
+<p>Agree and wait for the packages and their dependencies to be installed.</p>
 <p>You can check that the <code>{targets}</code> package is installed by trying to load it:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(targets)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -567,7 +579,7 @@ Note
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -576,7 +588,7 @@ Hint
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>You basically need all lines from <a href="https://github.com/jschoeley/openscience25/blob/main/layer2-communal/example_2-1/code/00-install_dependencies.R" target="_blank">https://github.com/jschoeley/openscience25/blob/main/layer2-communal/example_2-1/code/00-install_dependencies.R</a> except for the last three where Jonas saves the package list to a csv file. You do not need it, as we are using <code>{renv}</code> to manage packages.</p>
 </div>
@@ -613,7 +625,7 @@ Hint
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>Consider reinstalling these packages before snapshotting the lockfile.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>If you get something like this, you should install the missing package(s) and then run <code>renv::snapshot()</code> again.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">"cpp11"</span>, <span class="st">"progress"</span>, <span class="st">"RcppArmadillo"</span>))</span>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">"cpp11"</span>, <span class="st">"progress"</span>, <span class="st">"RcppArmadillo"</span>, <span class="st">"qs2"</span>))</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">snapshot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then check the status again:</p>
