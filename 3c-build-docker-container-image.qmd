@@ -136,7 +136,7 @@ If you are on `macOS` on a recent `arm64` (Apple Silicon) chip, you will need to
 docker build --platform linux/amd64 -f Dockerfile4build/Dockerfile -t rocker-443-custom .
 ```
 
-This will take some time.
+The container image will take about 3-6 minutes to build.
 
 
 
@@ -150,7 +150,6 @@ Let us break down this command:
 | `-t rocker-443-custom` | The `-t` flag stands for "tag". `rocker-443-custom` is the name of the image. You can choose any other name. |
 | `.`                      | this very important `.` (dot) specifies the build context, which is the current directory. Docker will look for a `Dockerfile` in this directory to create the image.                                                                                                                                                                                                                                         |
 
-The container image will take about 3-6 minutes to build.
 
 When the build is finished, you can check that it was added to the local container image storage:
 
