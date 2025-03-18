@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>3c. Build your own Docker container image and run it locally – Projects’ workflow for reproducibility and replicability using R</title>
+<title>3d. Try Docker in a web browser via Play with Docker – Projects’ workflow for reproducibility and replicability using R</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -64,7 +64,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./3b-reproducible-github-repo-in-binder.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -134,7 +133,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./3-containers.html">3. Containerizing R and R Packages for Ultimate Reproducibility</a></li><li class="breadcrumb-item"><a href="./3c-build-docker-container-image.html">3c. Build your own <code>Docker</code> container image and run it locally</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">
+      Projects’ workflow for reproducibility and replicability using R
+      </li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -210,7 +211,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./3c-build-docker-container-image.html" class="sidebar-item-text sidebar-link active">
+  <a href="./3c-build-docker-container-image.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3c. Build your own <code>Docker</code> container image and run it locally</span></a>
   </div>
 </li>
@@ -226,27 +227,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#the-goal" id="toc-the-goal" class="nav-link active" data-scroll-target="#the-goal">The Goal</a></li>
+  <li><a href="#goal" id="toc-goal" class="nav-link active" data-scroll-target="#goal">Goal</a></li>
   <li><a href="#instructions" id="toc-instructions" class="nav-link" data-scroll-target="#instructions">Instructions</a>
   <ul>
-  <li><a href="#choose-the-rocker-image-version" id="toc-choose-the-rocker-image-version" class="nav-link" data-scroll-target="#choose-the-rocker-image-version">Choose the Rocker Image version</a></li>
-  <li><a href="#create-the-dockerfile" id="toc-create-the-dockerfile" class="nav-link" data-scroll-target="#create-the-dockerfile">Create the <code>Dockerfile</code></a>
-  <ul class="collapse">
-  <li><a href="#build-the-docker-container-image" id="toc-build-the-docker-container-image" class="nav-link" data-scroll-target="#build-the-docker-container-image">Build the Docker Container Image</a></li>
+  <li><a href="#start-the-play-with-docker-environment" id="toc-start-the-play-with-docker-environment" class="nav-link" data-scroll-target="#start-the-play-with-docker-environment">Start the Play with Docker Environment</a></li>
+  <li><a href="#clone-the-repository" id="toc-clone-the-repository" class="nav-link" data-scroll-target="#clone-the-repository">Clone the Repository</a></li>
+  <li><a href="#check-the-dockerfile" id="toc-check-the-dockerfile" class="nav-link" data-scroll-target="#check-the-dockerfile">Check the <code>Dockerfile</code></a></li>
+  <li><a href="#build-the-container-image-from-the-dockerfile" id="toc-build-the-container-image-from-the-dockerfile" class="nav-link" data-scroll-target="#build-the-container-image-from-the-dockerfile">Build the Container Image from the <code>Dockerfile</code></a></li>
   <li><a href="#run-the-docker-container-from-your-image" id="toc-run-the-docker-container-from-your-image" class="nav-link" data-scroll-target="#run-the-docker-container-from-your-image">Run the Docker Container from your Image</a></li>
+  <li><a href="#login-to-the-containerized-rstudio" id="toc-login-to-the-containerized-rstudio" class="nav-link" data-scroll-target="#login-to-the-containerized-rstudio">Login to the Containerized RStudio</a></li>
+  <li><a href="#test-the-containerized-rstudio" id="toc-test-the-containerized-rstudio" class="nav-link" data-scroll-target="#test-the-containerized-rstudio">Test the Containerized RStudio</a></li>
   <li><a href="#stop-the-container" id="toc-stop-the-container" class="nav-link" data-scroll-target="#stop-the-container">Stop the container</a></li>
   </ul></li>
-  </ul></li>
-  <li><a href="#final-expected-result" id="toc-final-expected-result" class="nav-link" data-scroll-target="#final-expected-result">Final expected result</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./3-containers.html">3. Containerizing R and R Packages for Ultimate Reproducibility</a></li><li class="breadcrumb-item"><a href="./3c-build-docker-container-image.html">3c. Build your own <code>Docker</code> container image and run it locally</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">3c. Build your own <code>Docker</code> container image and run it locally</h1>
+<h1 class="title">3d. Try <code>Docker</code> in a web browser via <code>Play with Docker</code></h1>
 </div>
 
 
@@ -294,136 +295,79 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <hr>
-<p><img src="media/images/blocks-containers.png" class="img-fluid"></p>
-<p>First, make sure you got <a href="./3a-how-docker-and-binder-work.html">familiar with how Docker containers work</a>.</p>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Warning
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>This task can only be done on your own computer.</p>
-<p>For this tutorial you cannot use the <a href="https://labs.play-with-docker.com/" target="_blank">Play with Docker Labs Environment</a>, you can only follow along on your own computer, if you have <a href="https://docs.docker.com/get-docker/" target="_blank">Docker</a>, <a href="https://orbstack.dev/download" target="_blank">OrbStack</a> (recommended alternative for <code>macOS</code>), or other Docker-compatible software installed. Using the <code>Play with Docker Labs</code> environment is free and does not require any installation, only a web browser and a Docker Hub account, but the compute nodes they provide are limited in size and do not allow to build large container images, which in this case is essential. You can however experiment with a smaller container image</p>
-</div>
-</div>
-<section id="the-goal" class="level1">
-<h1>The Goal</h1>
-<p>Build your own Docker container image with the packages we require for the project built-into it. You can continue with your own project or you can reuse our snapshot of the expected results of the section 2 exercise on setting up a simple <code>targets</code> pipeline located at <a href="https://github.com/e-kotov/2025-mpidr-workflows-reference-02" target="_blank">https://github.com/e-kotov/2025-mpidr-workflows-reference-02</a>.</p>
-<p>We are doing this for the scenario of preserving the environment of the original code in order to share the complete container image as a file that is completely self-contained including the operating system (<code>Ubuntu (Linux)</code> in this case), all system dependencies, <code>R</code> packages required for the analysis and even the <code>RStudio</code> IDE (Integrated Development Environment).</p>
+<section id="goal" class="level1">
+<h1>Goal</h1>
+<p>The goal of this task is to build a simple <code>Docker</code> container image and run it as if it were used locally on your computer.</p>
 </section>
 <section id="instructions" class="level1">
 <h1>Instructions</h1>
-<section id="choose-the-rocker-image-version" class="level2">
-<h2 class="anchored" data-anchor-id="choose-the-rocker-image-version">Choose the Rocker Image version</h2>
-<p>Go to <a href="https://hub.docker.com/r/rocker/geospatial/tags" target="_blank">Rocker Project’s Docker Hub</a> and find an appropriate version of the <code>RStudio</code> image. Since we are using modern R version and no trying to recreate an environment for an older version of R back from 2020, you can just use the most recent container image.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
+<section id="start-the-play-with-docker-environment" class="level2">
+<h2 class="anchored" data-anchor-id="start-the-play-with-docker-environment">Start the Play with Docker Environment</h2>
+<p>Go to <a href="https://labs.play-with-docker.com/" target="_blank">https://labs.play-with-docker.com/</a> and log in with your Docker Hub account.</p>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="media/images/labs-play-with-docker-login.png" class="quarto-figure quarto-figure-left figure-img" height="200"></p>
+</figure>
 </div>
-<div class="callout-title-container flex-fill">
-Note
+<p>If it is the first time you are logging in, Play With Docker will request access to your Docker account. Click on the “Accept” button to proceed. Than click the large green “Start” button to start the environment.</p>
+<p>Click on the “Add New Instance” button to start a new Docker container instance.</p>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="media/images/pwd-add-instance.png" class="quarto-figure quarto-figure-left figure-img" height="200"></p>
+</figure>
 </div>
-</div>
-<div class="callout-body-container callout-body">
-<p>If you wanted to reconstruct the environment from several years ago, we would advice to also use the <code>R</code> version that was used then, like we did in the <a href="https://github.com/e-kotov/demographic-research.44-19-containerized" target="_blank">repository</a> where we recreated <code>R</code> 4.2.2 from 2022 to run Jonas’s old code.</p>
-</div>
-</div>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Tip
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>If you want to figure things out on your own and adpat the existing code you can look at our <code>Dockerfile</code> in the repository for Jonas’s old code at <a href="https://github.com/e-kotov/demographic-research.44-19-containerized/blob/main/Dockerfile4build/Dockerfile" target="_blank">https://github.com/e-kotov/demographic-research.44-19-containerized/blob/main/Dockerfile4build/Dockerfile</a>. Otherwise, continue following the steps below.</p>
-</div>
+<p>You should get a new terminal window with a prompt that looks like this:</p>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="media/images/pwd-instance-started.png" class="quarto-figure quarto-figure-left figure-img" height="400"></p>
+</figure>
 </div>
 </section>
-<section id="create-the-dockerfile" class="level2">
-<h2 class="anchored" data-anchor-id="create-the-dockerfile">Create the <code>Dockerfile</code></h2>
-<p>Create an empty text file called <code>Dockerfile</code> in a new folder <code>Dockerfile4build</code>.</p>
-<p>The first line for the <code>Dockerfile</code> should be the instruction on which existing <code>Docker</code> container image to use. For the most recent <code>Rocker Geospatial</code> image, you can use the following code:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode dockerfile code-with-copy"><code class="sourceCode dockerfile"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> rocker/geospatial:4.4.3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Next, we need to create a temporary project in the container image, so that we could use it to activate <code>{renv}</code> and install the packages.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode dockerfile code-with-copy"><code class="sourceCode dockerfile"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="fu">mkdir</span> <span class="at">-p</span> /home/rstudio/project <span class="kw">&amp;&amp;</span> <span class="ex">\ </span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    chown -R rstudio:rstudio /home/rstudio/project</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /home/rstudio/project</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>We also need to copy the <code>{renv}</code>-specific files into the container image.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode dockerfile code-with-copy"><code class="sourceCode dockerfile"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> <span class="op">--chown=rstudio:rstudio</span> ../renv.lock renv.lock</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="fu">mkdir</span> <span class="at">-p</span> renv</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> <span class="op">--chown=rstudio:rstudio</span> ../.Rprofile .Rprofile</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> <span class="op">--chown=rstudio:rstudio</span> ../renv/activate.R renv/activate.R</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> <span class="op">--chown=rstudio:rstudio</span> ../renv/settings.json renv/settings.json</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Finally, we need to run <code>R</code> within the container image to install the packages.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode dockerfile code-with-copy"><code class="sourceCode dockerfile"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">R</span> <span class="at">-e</span> <span class="st">"renv::restore(library = '/usr/local/lib/R/site-library')"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
+<section id="clone-the-repository" class="level2">
+<h2 class="anchored" data-anchor-id="clone-the-repository">Clone the Repository</h2>
+<p>Use our repository at <a href="https://github.com/e-kotov/2025-mpidr-workflows-reference-03pwd" target="_blank">https://github.com/e-kotov/2025-mpidr-workflows-reference-03pwd</a> and copy the https link for cloning it:</p>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="media/images/github-copy-clone-url.png" class="quarto-figure quarto-figure-left figure-img" height="200"></p>
+</figure>
 </div>
-<div class="callout-title-container flex-fill">
-Note
+<p>Now clone the repository by pasting the following command into the terminal (adjust for your own repository if neccessary):</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/e-kotov/2025-mpidr-workflows-reference-03pwd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Switch to the new directory:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> 2025-mpidr-workflows-reference-03pwd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>List files:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-alh</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You should get:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ls <span class="at">-alh</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">total</span> 40K    </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">drwxr-xr-x</span>    5 root     root          88 Mar 18 06:47 .</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">drwx------</span>    1 root     root          65 Mar 18 06:48 ..</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="ex">-rw-r--r--</span>    1 root     root          26 Mar 18 06:47 .Rprofile</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="ex">drwxr-xr-x</span>    8 root     root         163 Mar 18 06:47 .git</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="ex">drwxr-xr-x</span>    2 root     root          24 Mar 18 06:47 Dockerfile4build</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="ex">drwxr-xr-x</span>    2 root     root          63 Mar 18 06:47 renv</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="ex">-rw-r--r--</span>    1 root     root       34.1K Mar 18 06:47 renv.lock</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="check-the-dockerfile" class="level2">
+<h2 class="anchored" data-anchor-id="check-the-dockerfile">Check the <code>Dockerfile</code></h2>
+<p>Find the editor button in the middle of the screen and click on it.</p>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="media/images/pwd-find-editor.png" class="quarto-figure quarto-figure-left figure-img" height="400"></p>
+</figure>
 </div>
+<p>A very simple file browser and editor (displayed when you click a file) will appear. You can edit the files in the repository directly in the browser. It will not have any syntax highlighting. Remember to save changes with a Save button in that window if you edit a file.</p>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="media/images/pwd-editor.png" height="400" class="figure-img"></p>
+<figcaption>Example of editing the <code>Dockerfile</code>, please disregard the text in the screenshot</figcaption>
+</figure>
 </div>
-<div class="callout-body-container callout-body">
-<p>Let us break down the most recent line in the <code>Dockerfile</code>:</p>
-<ul>
-<li><p><code>R</code> - starts <code>R</code></p></li>
-<li><p><code>-e</code> - executes the command that follows next</p></li>
-<li><p><code>renv::restore(library = '/usr/local/lib/R/site-library')</code> - installs the packages listed in the <code>renv.lock</code> file. The trick here is that we are installing the packages into the system library, which is <code>/usr/local/lib/R/site-library</code>, instead of a project library. This way, the packages will be integrated into the container image and will be seen by an R session. When you later connect your project folder to this container image, you will not need to install the packages or use <code>{renv}</code> anymore (in fact, you will need to deactivate <code>{renv}</code>).</p></li>
-</ul>
-</div>
-</div>
-<p>Now we also remove the temporary project folder from the container image:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode dockerfile code-with-copy"><code class="sourceCode dockerfile"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="fu">chmod</span> <span class="at">-R</span> u+w /home/rstudio/project <span class="kw">&amp;&amp;</span> <span class="fu">rm</span> <span class="at">-rf</span> /home/rstudio/project</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>And finally we reuse the lines that instruct <code>Docker</code> how to run the container image <a href="https://github.com/rocker-org/rocker-versioned2/blob/abe4fc1f3fb1c50281f9de5b3636f8a117126f98/dockerfiles/geospatial_4.4.3.Dockerfile#L39-L40" target="_blank">from the original <code>Dockerfile</code></a>:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode dockerfile code-with-copy"><code class="sourceCode dockerfile"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">EXPOSE</span> 8787</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">"/init"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>This exposes the port <code>8787</code> (on which the <code>RStudio Sever</code>, which is actually the thing that you see as the <code>RStudio</code> in the web browser, runs) so that you would be able to access it at <code>http://localhost:8787</code> in a web browser.</p>
-<p>Remember to save the changes.</p>
-<p>So your final <code>Dockerfile</code> should look like this:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode dockerfile code-with-copy"><code class="sourceCode dockerfile"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> rocker/geospatial:4.4.3</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="fu">mkdir</span> <span class="at">-p</span> /home/rstudio/project <span class="kw">&amp;&amp;</span> <span class="ex">\ </span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    chown -R rstudio:rstudio /home/rstudio/project</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /home/rstudio/project</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> <span class="op">--chown=rstudio:rstudio</span> ../renv.lock renv.lock</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="fu">mkdir</span> <span class="at">-p</span> renv</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> <span class="op">--chown=rstudio:rstudio</span> ../.Rprofile .Rprofile</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> <span class="op">--chown=rstudio:rstudio</span> ../renv/activate.R renv/activate.R</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> <span class="op">--chown=rstudio:rstudio</span> ../renv/settings.json renv/settings.json</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">R</span> <span class="at">-e</span> <span class="st">"renv::restore(library = '/usr/local/lib/R/site-library')"</span></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="fu">chmod</span> <span class="at">-R</span> u+w /home/rstudio/project <span class="kw">&amp;&amp;</span> <span class="fu">rm</span> <span class="at">-rf</span> /home/rstudio/project</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<section id="build-the-docker-container-image" class="level3">
-<h3 class="anchored" data-anchor-id="build-the-docker-container-image">Build the Docker Container Image</h3>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>For the following commands to work, you need to start the <a href="https://docs.docker.com/get-docker/" target="_blank">Docker</a> application on your computer. For <code>macOS</code> you can use <a href="https://orbstack.dev/download" target="_blank">OrbStack</a> instead.</p>
-</div>
-</div>
-<p>To build the <code>Docker</code> container image from the <code>Dockerfile</code>, run the following command in the terminal (you can use any name instead of <code>rocker-443-custom</code> - this is just a tag that you can use to refer to the container image later):</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-f</span> Dockerfile4build/Dockerfile <span class="at">-t</span> rocker-443-custom .</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>If you are on <code>macOS</code> on a recent <code>arm64</code> (Apple Silicon) chip, you will need to add an extra parameter to build this container image, as it is intended to be of a <code>x86_64</code> processor architecture:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">--platform</span> linux/amd64 <span class="at">-f</span> Dockerfile4build/Dockerfile <span class="at">-t</span> rocker-443-custom .</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="build-the-container-image-from-the-dockerfile" class="level2">
+<h2 class="anchored" data-anchor-id="build-the-container-image-from-the-dockerfile">Build the Container Image from the <code>Dockerfile</code></h2>
+<p>To build the <code>Docker</code> container image from the <code>Dockerfile</code>, run the following command in the <code>Play with Docker</code> terminal (you can use any name instead of <code>rstudio-custom</code> - this is just a tag that you can use to refer to the container image later):</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-f</span> Dockerfile4build/Dockerfile <span class="at">-t</span> rstudio-custom .</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The container image will take about 3-6 minutes to build.</p>
 <p>Let us break down this command:</p>
 <table class="caption-top table">
@@ -443,32 +387,32 @@ Note
 <td>This is the base command used to build a Docker image from a Dockerfile.</td>
 </tr>
 <tr class="even">
-<td><code>--platform linux/amd64</code></td>
-<td>This is a parameter that is only needed on <code>macOS</code> on a recent <code>arm64</code> (Apple Silicon) chip. It is intended to build the container image for a <code>x86_64</code> processor architecture.</td>
-</tr>
-<tr class="odd">
 <td><code>-f Dockerfile4build/Dockerfile</code></td>
 <td>The <code>-f</code> flag stands for “file”. <code>Dockerfile4build/Dockerfile</code> is the path to the Dockerfile.</td>
 </tr>
-<tr class="even">
-<td><code>-t rocker-443-custom</code></td>
-<td>The <code>-t</code> flag stands for “tag”. <code>rocker-443-custom</code> is the name of the image. You can choose any other name.</td>
-</tr>
 <tr class="odd">
+<td><code>-t rstudio-custom</code></td>
+<td>The <code>-t</code> flag stands for “tag”. <code>rstudio-custom</code> is the name of the image. You can choose any other name.</td>
+</tr>
+<tr class="even">
 <td><code>.</code></td>
 <td>this very important <code>.</code> (dot) specifies the build context, which is the current directory. Docker will look for a <code>Dockerfile</code> in this directory to create the image.</td>
 </tr>
 </tbody>
 </table>
 <p>When the build is finished, you can check that it was added to the local container image storage:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="run-the-docker-container-from-your-image" class="level3">
-<h3 class="anchored" data-anchor-id="run-the-docker-container-from-your-image">Run the Docker Container from your Image</h3>
+<section id="run-the-docker-container-from-your-image" class="level2">
+<h2 class="anchored" data-anchor-id="run-the-docker-container-from-your-image">Run the Docker Container from your Image</h2>
 <p>Now you have a container image that you can run from the command line. To do so, run the following command in the terminal:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--platform</span> linux/amd64 <span class="at">--rm</span> <span class="at">-p</span> 8787:8787 <span class="at">-v</span> <span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span>:/home/rstudio <span class="at">-e</span> PASSWORD=somepass rocker-443-custom</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--rm</span> <span class="at">-p</span> 8787:8787 <span class="at">-v</span> <span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span>:/home/rstudio <span class="at">-e</span> PASSWORD=somepass rstudio-custom</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Let us break down this command:</p>
 <table class="caption-top table">
+<colgroup>
+<col style="width: 29%">
+<col style="width: 70%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>part of command</th>
@@ -480,87 +424,37 @@ Note
 <td><code>docker run</code></td>
 <td>This is the base command used to run a Docker container from local or remote container image storage.</td>
 </tr>
-<tr class="even">
-<td><code>--platform linux/amd64</code></td>
-<td>This is a parameter that is only needed on <code>macOS</code> on a recent <code>arm64</code> (Apple Silicon) chip. It is intended to build the container image for a <code>x86_64</code> processor architecture..</td>
-</tr>
-<tr class="odd">
-<td><code>--rm</code></td>
-<td>This makes the container temporary. It will be destroyed after you stop it. You can explore other options (e.g.&nbsp;how to name containers, make them persistent and re-run the same ones after stopping) in the <a href="https://docs.docker.com/engine/reference/run/">Docker documentation</a>. But for now we want a disposable container that is destroyed after stopping.</td>
-</tr>
-<tr class="even">
-<td><code>-p 8787:8787</code></td>
-<td>This flag specifies that the port inside the container is mapped to your computer, so that you can access RStudio in a web browser. Briefly, RStudio in a container is actually a server software that works over a network and it is not exactly the same as RStudio on your laptop, even though it feels that way. This is why ports are necessary, but do not worry about it too much at the moment.</td>
-</tr>
-<tr class="odd">
-<td><code>-v $(pwd):/home/rstudio</code></td>
-<td>This maps the current directory (designated by <code>$(pwd)</code>) from which you are running the command to a folder inside the container (<code>/home/rstudio</code>). Thanks to this, when you use the containerized RStudio, you will have access to your local folder and will be able to run scripts and edit them. Instead of the current directory (designated by <code>$(pwd)</code>) you can provide <code>/path/to/any/folder/on/your/computer</code>.</td>
-</tr>
-<tr class="even">
-<td><code>-e PASSWORD=somepass</code></td>
-<td>Sets the password. Better use a good password, even though you are running locally.</td>
-</tr>
-<tr class="odd">
-<td><code>rocker-443-custom</code></td>
-<td>The final part is the name and tag that you assigned earlier when you were creating the container image.</td>
-</tr>
 </tbody>
 </table>
-<p>The container starts almost instantly. You can now open a browser and go to <code>http://localhost:8787</code> and use the password you set. The username is <code>rstudio</code>, the password is <code>somepass</code>.</p>
-<p>Once it is loaded, you will see the message in R console:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Bootstrapping renv 1.1.1 ---------------------------------------------------</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> Downloading renv ... OK</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> Installing renv  ... OK</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> Project <span class="st">'~/'</span> loaded. [renv <span class="dv">1</span>.<span class="fl">1.1</span>]</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> One or more packages recorded <span class="cf">in</span> the lockfile are not installed.</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> Use <span class="st">`</span><span class="at">renv::status()</span><span class="st">`</span> <span class="cf">for</span> more details.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Please ignore it, and just run:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">deactivate</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Warning
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><code>renv::deactivate()</code> will remove the line that activates <code>renv</code> from the <code>.Rprofile</code> file, or even remove the file entirely if this was the only line in it. This will happen in your project folder on your computer, because we have attached the project folder to the container image. So to reactivate <code>renv</code>, you need to run <code>renv::activate()</code> later.</p>
-</div>
-</div>
-<p>The <code>R</code> session will automatically restart and you will have access to all the packages we have previously snapshotted and installed into the container. So you can run <code>targets::tar_visnetwork()</code> and <code>targets::tar_make()</code>.</p>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Warning
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>In this scenario, when you edit the files from within the container, because you have attached the project folder to the container image, the changes will be saved to the files in the project folder on your computer.</p>
-</div>
-</div>
+<div class="line-block"><code>--rm</code> | This makes the container temporary. It will be destroyed after you stop it. You can explore other options (e.g.&nbsp;how to name containers, make them persistent and re-run the same ones after stopping) in the <a href="https://docs.docker.com/engine/reference/run/">Docker documentation</a>. But for now we want a disposable container that is destroyed after stopping. |<br>
+<code>-p 8787:8787</code> | This flag specifies that the port inside the container is mapped to your computer, so that you can access RStudio in a web browser. Briefly, RStudio in a container is actually a server software that works over a network and it is not exactly the same as RStudio on your laptop, even though it feels that way. This is why ports are necessary, but do not worry about it too much at the moment. |<br>
+<code>-v $(pwd):/home/rstudio</code> | This maps the current directory (designated by <code>$(pwd)</code>) from which you are running the command to a folder inside the container (<code>/home/rstudio</code>). Thanks to this, when you use the containerized RStudio, you will have access to your local folder and will be able to run scripts and edit them. Instead of the current directory (designated by <code>$(pwd)</code>) you can provide <code>/path/to/any/folder/on/your/computer</code>. |<br>
+<code>-e PASSWORD=somepass</code> | Sets the password. Better use a good password, even though you are running locally. |<br>
+<code>rstudio-custom</code> | The final part is the name and tag that you assigned earlier when you were creating the container image. |</div>
+<p>When you see in the terminal:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">[cont-init.d]</span> done.</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">[services.d]</span> starting services</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">[services.d]</span> done.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="stop-the-container" class="level3">
-<h3 class="anchored" data-anchor-id="stop-the-container">Stop the container</h3>
+<section id="login-to-the-containerized-rstudio" class="level2">
+<h2 class="anchored" data-anchor-id="login-to-the-containerized-rstudio">Login to the Containerized RStudio</h2>
+<p>You can push the big <code>OPEN PORT</code> button in the top of <code>Play with Docker</code> page, enter <code>8787</code> and press ok. This will open a new browser tab for you. You will have to accept that the website is not enctypted and eventually you will see the RStudio window. You can login with <code>rstudio</code> as a user and <code>somepass</code> as password (unles you have changed the password in the command above).</p>
+</section>
+<section id="test-the-containerized-rstudio" class="level2">
+<h2 class="anchored" data-anchor-id="test-the-containerized-rstudio">Test the Containerized RStudio</h2>
+<p>You can now check if the <code>RStudio</code> running in this cloud container works as expected.</p>
+</section>
+<section id="stop-the-container" class="level2">
+<h2 class="anchored" data-anchor-id="stop-the-container">Stop the container</h2>
 <p>To stop the container, click the “power” button in the top right corner of the <code>RStudio</code> window in the browser. Close the web browser tab with <code>RStudio</code>. Click in the terminal and press <code>Ctrl+C</code> or <code>Ctrl+\</code> to stop the container.</p>
 <p>You should see:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">[s6-finish]</span> waiting for services.</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">[s6-finish]</span> sending all processes the TERM signal.</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="ex">[s6-finish]</span> sending all processes the KILL signal and exiting.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">[s6-finish]</span> waiting for services.</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">[s6-finish]</span> sending all processes the TERM signal.</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">[s6-finish]</span> sending all processes the KILL signal and exiting.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>And then the terminal will be active again.</p>
-</section>
-</section>
-</section>
-<section id="final-expected-result" class="level1">
-<h1>Final expected result</h1>
-<p>You can find the final expected result of this exercise at <a href="https://github.com/e-kotov/2025-mpidr-workflows-reference-03" target="_blank">https://github.com/e-kotov/2025-mpidr-workflows-reference-03</a>. Note that it also includes a <code>Dockerfile</code> for the other tutorial <a href="./3b-reproducible-github-repo-in-binder.html">3b. Make your own git repository reproducible in <code>Binder</code></a>.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -1166,15 +1060,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
-      <a href="./3b-reproducible-github-repo-in-binder.html" class="pagination-link" aria-label="3b. Make your own git repository reproducible in `Binder`">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">3b. Make your own git repository reproducible in <code>Binder</code></span>
-      </a>          
-  </div>
-  <div class="nav-page nav-page-next">
-  </div>
-</nav>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
