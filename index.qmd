@@ -12,6 +12,8 @@ This tutorial includes the following sections:
 2. ["Building analysis pipelines with `targets`"](2-analysis-pipeline.qmd), which covers the [`{targets}`](https://docs.ropensci.org/targets/){target="_blank"} R package for structuring the analysis code in a clean and modular way;
 3. ["Containerizing R and R Packages for Ultimate Reproducibility"](3-containers.qmd), which covers `Docker` (or `Docker`-compatible tools) for building containers that include all operating system files, R installation, any additional system depenencies and R packages in a single file that can be used to run the analysis even if some software becomes outdated or even unavailable for installation in the future.
 
+- **2025-05-17 UPDATE:** A simple example of a reproducible repository for Python using [`uv`](https://docs.astral.sh/uv/){target="_blank"} package and project manager: [https://github.com/e-kotov/rocker-binder-uv-example](https://github.com/e-kotov/rocker-binder-uv-example){target="_blank"}.
+
 To participate in the workshop, we recommend that you have a [GitHub](https://github.com/){target="_blank"} account and a [Docker Hub](https://hub.docker.com/){target="_blank"} account (the latter is optional and only needed for the last section on `Docker`).
 
 For the section 3 on `Docker`, you may also want to install [Docker](https://docs.docker.com/get-docker/){target="_blank"} on your computer (for Windows, macOS or Linux). For `macOS` we also highly recommend the free version of [OrbStack](https://orbstack.dev/download){target="_blank"} as a complete and lightweight `Docker Desktop` replacement.
